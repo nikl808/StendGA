@@ -1,0 +1,11 @@
+C:\Users\df\Desktop\stend-working\stend\bin\Debug\stend.exe
+C:\Users\df\Desktop\stend-working\stend\bin\Debug\stend.pdb
+C:\Users\df\Desktop\stend-working\stend\bin\Debug\PACNET.DLL
+C:\Users\df\Desktop\stend-working\stend\bin\Debug\PACNET.xml
+C:\Users\df\Desktop\stend-working\stend\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.Properties.Resources.resources
+C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.csproj.GenerateResource.Cache
+C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.exe
+C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.pdb
+C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.MainForm.resources
+C:\Users\df\Desktop\stend-working\stend\bin\Debug\nModbusCE.dll

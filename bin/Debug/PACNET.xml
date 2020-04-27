@@ -1,0 +1,1582 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PACNET</name>
+    </assembly>
+    <members>
+        <member name="T:PACNET.Interrupt">
+            <summary>Interrupt API</summary>
+        </member>
+        <member name="F:PACNET.Interrupt.INTR_RISING_TRIG">
+            <summary>Rising edge trigger(default)</summary>
+        </member>
+        <member name="F:PACNET.Interrupt.INTR_LEVEL_TRIG">
+            <summary>Level trigger</summary>
+        </member>
+        <member name="F:PACNET.Interrupt.INTR_Falling_TRIG">
+            <summary>Falling edge trigger</summary>
+        </member>
+        <member name="M:PACNET.Interrupt.EnableSlotInterrupt(System.Byte,System.Boolean)">
+            <summary>
+            This function performs hardware operations necessary to enable the specified hardware interrupt.
+            </summary>
+            <param name="slot">[in] Specify the index of slot to enable interrupt or disable.</param>
+            <param name="bEnable">[in] Specify the Slot interrupt turning on or not.</param>
+        </member>
+        <member name="M:PACNET.Interrupt.GetSlotInterruptEvent(System.Byte)">
+            <summary>
+            This function retrieves the slot event handle which registered by pac_InterruptInitialize.
+            </summary>
+            <param name="slot">[in] Specify the index of slot to retrieve the event handle.</param>
+            <returns>Return a handle to the event object if success, otherwise, false.</returns>
+        </member>
+        <member name="M:PACNET.Interrupt.GetSlotInterruptID(System.Byte)">
+            <summary>
+            This function retrieves the slot interrupt ID.
+            </summary>
+            <param name="slot">[in] Specify the slot.</param>
+            <returns>Return the slot interrupt ID.</returns>
+        </member>
+        <member name="M:PACNET.Interrupt.InterruptDone(System.Byte)">
+            <summary>
+            This function signals to the kernel that interrupt processing has been completed.
+            </summary>
+            <param name="slot">[in] Specify the slot.</param>
+        </member>
+        <member name="M:PACNET.Interrupt.InterruptInitialize(System.Byte)">
+            <summary>
+            This function initializes a slot interrupt with the kernel. This initialization allows the slot to
+            register an event and enable the interrupt.
+            </summary>
+            <param name="slot">[in] Specify the index of slot to initialize.</param>
+            <returns>Return true if success, otherwise false.</returns>
+        </member>
+        <member name="M:PACNET.Interrupt.RegisterSlotInterrupt(System.Byte,PACNET.PAC_CALLBACK_FUNC)">
+            <summary>
+            This function registers slot interrupt service route and turns on slot interrupt.
+            </summary>
+            <param name="slot">[in] Specify the index of slot.</param>
+            <param name="f">A callback function.</param>
+            <returns>Return true if success, otherwise false.</returns>           
+        </member>
+        <member name="M:PACNET.Interrupt.SetSlotInterruptEvent(System.Byte,System.IntPtr)">
+            <summary>
+            This function allows a device driver to assign the slot event handle.
+            </summary>
+            <param name="slot">[in] Specify the index of slot to retrieve the event handle.</param>
+            <param name="hEvent">[in] Event to be signaled.</param>         
+        </member>
+        <member name="M:PACNET.Interrupt.SetSlotInterruptPriority(System.Byte,System.Int32)">
+             <summary>
+             This function sets the priority for a real-time thread on a thread by thread basis.
+             </summary>
+             <param name="slot">[in] Specify the index of slot to set priority.</param>
+             <param name="nPriority">[in] Priority to set for the thread.
+            This value can range from 0 through 255, with 0 as the highest priority.</param>         
+             <returns>Return true if success, otherwise false.</returns>           
+        </member>
+        <member name="M:PACNET.Interrupt.SetTriggerType(System.Byte,System.Int32)">
+            <summary>
+            This function can assign the pulse trigger type.
+            </summary>
+            <param name="slot">[in] Specify the index of slot.</param>
+            <param name="iType">[in] Specify the pulse trigger type.
+            0: Rising edge trigger(default)
+            1: Level trigger
+            2: Falling edge trigger</param>                  
+        </member>
+        <member name="M:PACNET.Interrupt.UnregisterSlotInterrupt(System.Byte)">
+            <summary>
+            This function unregisters slot interrupt service route and diables a hardware interrupt as
+            specified by its interrupt identifier.
+            </summary>
+            <param name="slot">[in] Specify the index of slot.</param>  
+            <returns>Return true if success, otherwise false.</returns>          
+        </member>
+        <member name="T:PACNET.Sys">
+            <summary>Backplane API</summary>
+            <summary>Buzzer API</summary>
+            <summary></summary>
+            <summary>System Information API</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_PARALLEL">
+            <summary>Genernal I-8000W module</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_PARALLEL_RW">
+            <summary>I-8000RW module (R version: Provide PowerOn and Safe value)</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_SCAN">
+            <summary>No module defined</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_DI32">
+            <summary>I-8000W module with 32 DI channels</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_32BIT">
+            <summary></summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_DO32">
+            <summary>I-8000W module with 32 DO channels</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_DI16DO16">
+            <summary>I-8000W module with 16 DI channels and 16 DO channels</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_DI16">
+            <summary>I-8000W module with 16 DI channels</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_DO16">
+            <summary>I-8000W module with 16 DO channels</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_DI8DO8">
+            <summary>I-8000W module with 8 DI channels and 8 DO channels</summary>
+        </member>
+        <member name="F:PACNET.Sys.PAC_8K">
+            <summary></summary>
+        </member>
+        <member name="F:PACNET.Sys.LX800">
+            <summary>
+            CPU type only XPAC CE6
+            </summary>
+        </member>
+        <member name="F:PACNET.Sys.ATOM">
+            <summary>
+            CPU type only XPAC CE6
+            </summary>
+        </member>
+        <member name="M:PACNET.Sys.EnableRetrigger(System.Byte)">
+            <summary>
+            This function reboots the device.
+            </summary>
+            <param name="iValues">[in] Decide turning on or not.</param>
+        </member>
+        <member name="M:PACNET.Sys.GetBackplaneID(System.Byte[])">
+            <summary>
+            This function retrieves the backplane ID.
+            </summary>
+            <param name="backplaneID">[out] the pointer to a buffer to receive the backplane version.</param>
+        </member>
+        <member name="M:PACNET.Sys.GetBackplaneID">
+            <summary>
+            This function retrieves the backplane ID.
+            </summary>
+            <returns>Return the backplane ID.</returns> 
+        </member>
+        <member name="M:PACNET.Sys.GetBatteryLevel(System.Int32)">
+            <summary>
+            This function retrieves the backplane battery status.
+            </summary>
+            <param name="nBattery">[in] Specifies the index of battery. 
+            1: means first battery, 2: means second battery</param>
+            <returns>1: means high voltage, 2: means low voltage</returns> 
+        </member>
+        <member name="M:PACNET.Sys.GetDIPSwitch">
+            <summary>
+            This function retrieves the dip switch.
+            </summary>
+            <returns>Return Values of the DIP switch.</returns> 
+        </member>
+        <member name="M:PACNET.Sys.GetSlotCount">
+            <summary>
+            This function retrieves the number of slot.
+            </summary>
+            <returns>Return the number of slots available.</returns> 
+        </member>
+        <member name="M:PACNET.Sys.RegistryHotPlug(System.UInt32,System.UInt32)">
+            <summary>
+            This function retrieves the number of slot.
+            </summary>
+            <param name="hWnd">[in] User specifies the handle ID.</param>
+            <param name="msgID"></param>
+        </member>
+        <member name="M:PACNET.Sys.UnregistryHotPlug(System.UInt32)">
+            <summary>
+            This function deletes the registry key after turning off the hot plug.
+            </summary>
+            <param name="hWnd">[in] User specifies the handle ID.</param>
+        </member>
+        <member name="M:PACNET.Sys.BackwardCompatible">
+            <summary>
+            This function retrieves the PAC running in the backward compatible mode or not.
+            </summary>
+            <returns>Return true if the PAC is running in a backward compatible mode, otherwise false.</returns>      
+        </member>
+        <member name="M:PACNET.Sys.ChangeSlot(System.Byte)">
+            <summary>
+            This function specifies the slot from one to another.
+            </summary>
+            <param name="slotNo">[in]Specifies the slot number.</param>
+        </member>
+        <member name="M:PACNET.Sys.EnableLED(System.Boolean)">
+            <summary>
+            This function decides the LED turning on or not.
+            </summary>
+            <param name="bFlag">[in] True: On, False:Off</param>
+        </member>
+        <member name="M:PACNET.Sys.EnableLEDs(System.Int32,System.Boolean)">
+            <summary>
+            This function decides the LED turning on or not.
+            </summary>
+            <param name="pin">[in] 0: L1 LED, 1:L2 LED</param>
+            <param name="bFlag">[in] True: On, False:Off</param>
+        </member>
+        <member name="M:PACNET.Sys.GetCPUVersion(System.Byte[])">
+            <summary>
+            This function retrieves the CPU version.
+            </summary>
+            <param name="cpu_version">[out]Retrieves the CPU version of the PAC.</param>
+        </member>
+        <member name="M:PACNET.Sys.GetCPUVersion">
+            <summary>
+            This function retrieves the CPU version.
+            </summary>
+            <returns>Return the CPU version.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetEbootVersion(System.Byte[])">
+            <summary>
+            This function retrieves the eboot version.
+            </summary>
+            <param name="eboot_version">[out]Retrieves the Eboot version.</param>
+        </member>
+        <member name="M:PACNET.Sys.GetEbootVersion">
+            <summary>
+            This function retrieves the eboot version.
+            </summary>
+            <returns>Return the eboot version.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetMacAddress(System.Byte,System.Byte[])">
+            <summary>
+            This function retrieves the Mac address.
+            </summary>
+            <param name="LAN">[in] Specifies the LAN number.</param>
+            <param name="MacAddr">[out] Retrieves the MAC address of the specified LAN port.</param>
+        </member>
+        <member name="M:PACNET.Sys.GetMacAddress(System.Byte)">
+            <summary>
+            This function retrieves the Mac address.
+            </summary>
+            <param name="LAN">Specifies the LAN number.</param>
+            <returns>Return the Mac address.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetModuleName(System.Byte,System.Byte[])">
+            <summary>
+            This function is used to retrieve the name of an 8000 series I/O module, which is plugged
+            into a specific I/O slot in the Pac system. This function supports the collection of system
+            hardware configurations.
+            </summary>
+            <param name="slot">[in] Specify the slot number where the I/O module is plugged into.</param>
+            <param name="strName">[out] The pointer to a buffer to receive the name of the I/O module.</param>
+            <returns>Return 255 if the module is I-8K series module, otherwise, undefined.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetModuleName(System.Byte,System.String@)">
+            <summary>
+            This function is used to retrieve the name of an 8000 series I/O module, which is plugged
+            into a specific I/O slot in the Pac system. This function supports the collection of system
+            hardware configurations.
+            </summary>
+            <param name="slot">[in]Specify the slot number where the I/O module is plugged into.</param>
+            <param name="strName">[out]The pointer to a buffer to receive the name of the I/O module.</param>
+            <returns>Return 255 if the module is I-8K series module, otherwise, undefined.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetModuleName(System.Byte)">
+            <summary>
+            This function is used to retrieve the name of an 8000 series I/O module, which is plugged
+            into a specific I/O slot in the Pac system. This function supports the collection of system
+            hardware configurations.
+            </summary>
+            <param name="slot">[in]Specify the slot number where the I/O module is plugged into.</param>
+            <returns>Return the name of the I/O module.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetModuleType(System.Int32)">
+            <summary>
+            This function is used to retrieve the type of I/O modules.
+            </summary>
+            <param name="slot">[in] Specify the slot number where the I/O module is plugged into.</param>  
+        </member>
+        <member name="M:PACNET.Sys.GetOSVersion(System.Byte[])">
+            <summary>
+            This function retrieves the OS version.
+            </summary>
+            <param name="os_version">[out] Retrieves the OS version of the PAC.</param>
+        </member>
+        <member name="M:PACNET.Sys.GetOSVersion">
+            <summary>
+            This function retrieves the OS version.
+            </summary>
+            <returns>Return the OS version.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetRotaryID">
+            <summary>
+            This function retrieves the rotary switch ID.
+            </summary>
+            <returns>Return the position of the rotary switch.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetSerialNumber(System.Byte[])">
+            <summary>
+            This function retrieves the serial number.
+            </summary>
+            <param name="SerialNumber">[out] Retrieves the serial number of the PAC.</param>
+        </member>
+        <member name="M:PACNET.Sys.GetSerialNumber">
+            <summary>
+            This function retrieves the serial number.
+            </summary>
+            <returns>Return the serial number.</returns>   
+        </member>
+        <member name="M:PACNET.Sys.GetPacNetVersion">
+            <summary>
+            This function retrieves the version of the PacNet.dll.
+            </summary>
+            <returns>Return the version of the PacNet.dll.</returns>    
+        </member>
+        <member name="M:PACNET.Sys.GetSDKVersion(System.Byte[])">
+            <summary>
+            This function retrieves the SDK version.
+            </summary>
+            <param name="sdk_version">[out] Retrieves the version of the PacSDK.</param>   
+        </member>
+        <member name="M:PACNET.Sys.GetPacSDKVersion">
+            <summary>
+            This function retrieves the SDK version.
+            </summary>
+            <returns>Return the SDK version.</returns> 
+        </member>
+        <member name="M:PACNET.Sys.Reboot">
+            <summary>
+            This function reboots the device.
+            </summary>
+        </member>
+        <member name="M:PACNET.Sys.CheckSDKVersion(System.UInt32)">
+            <summary>
+            This function specifies the application not access the XPacSDK.dll which is wrong version.
+            </summary>
+            <param name="version">[in] Specifies SDK version.</param>   
+            <returns>Return TRUE, if the version is correctly. Otherwise, return false.</returns> 
+        </member>
+        <member name="M:PACNET.Sys.ModuleExists(System.IntPtr,System.Byte)">
+            <summary>
+            This function specifies the IO module whether exist or not, no matter the module is local or remote.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            It your IO module is located at local, this Parameter should be 0.</param>   
+            <param name="slot">[in] The slot in which module is to check exists or not.
+            If the IO module is remote, please input the module’s ID.</param>   
+            <returns>Return TRUE, if the module exists. Otherwise, return false.</returns> 
+        </member>
+        <member name="M:PACNET.Sys.GetModuleVersion(System.Int32,System.Byte[])">
+            <summary>
+            </summary>
+            <param name="slot"></param>   
+            <param name="strName"></param>   
+            <returns></returns> 
+        </member>
+        <member name="M:PACNET.Sys.get_CPUtype">
+            <summary>
+            Get CPU type only XPAC CE6
+            </summary>
+        </member>
+        <member name="M:PACNET.Sys.GetCPUTempureture">
+            <summary> 
+            </summary>
+        </member>
+        <member name="M:PACNET.Sys.ResetSystemToDefault">
+            <summary> 
+            </summary>
+        </member>
+        <member name="M:PACNET.Sys.inp(System.Int32)">
+            <summary> 
+            </summary>
+        </member>
+        <member name="M:PACNET.Sys.outp(System.Int32,System.Int32)">
+            <summary> 
+            </summary>
+        </member>
+        <member name="M:PACNET.Sys.slot_inp(System.Int32)">
+            <summary> 
+            </summary>
+        </member>
+        <member name="M:PACNET.Sys.slot_outp(System.Int32,System.Int32,System.Int32)">
+            <summary> 
+            </summary>
+        </member>
+        <member name="T:PACNET.Sys.Buzzer">
+            <summary>Buzzer API</summary>
+        </member>
+        <member name="M:PACNET.Sys.Buzzer.BuzzerBeep(System.Int32,System.Int64)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.Sys.Buzzer.BuzzerBeep">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.Sys.Buzzer.StopBuzzer">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.Sys.Buzzer.SetBuzzerFreqDuty(System.Int32,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.Sys.Buzzer.GetBuzzerFreqDuty(System.Int32@,System.Int32@)">
+            <summary></summary>
+        </member>
+        <member name="T:PACNET.Sys.WDT">
+            <summary>Watchdog API</summary>
+        </member>
+        <member name="F:PACNET.Sys.WDT.PAC_WDT_HW">
+            <summary>WDT_HW</summary>
+        </member>
+        <member name="F:PACNET.Sys.WDT.PAC_WDT_OS">
+            <summary>WDT_OS</summary>
+        </member>
+        <member name="M:PACNET.Sys.WDT.DisableWatchDog(System.Int32)">
+            <summary>
+            This function turns off the watchdog operation.
+            </summary>
+            <param name="wdt">[in] Specifies the Watchdog type:
+            0: pac_WDT_HW, 1: pac_WDT_OS</param>
+            <returns>The return value specifies the memory size.</returns>    
+        </member>
+        <member name="M:PACNET.Sys.WDT.EnableWatchDog(System.Int32,System.UInt32)">
+            <summary>
+            This function turns on the watchdog operation.
+            </summary>
+            <param name="wdt">[in] Specifies the Watchdog type:
+            0: pac_WDT_HW, 1: pac_WDT_OS</param>
+            <param name="value">[in] Specifies the watchdog time.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.Sys.WDT.GetWatchDogState(System.Int32)">
+            <summary>
+            This function retrieves the watchdog state.
+            </summary>
+            <param name="wdt">[in] Specifies the Watchdog type:
+            0: pac_WDT_HW, 1: pac_WDT_OS</param>
+            <returns>The return value specifies the watchdog state.
+            If turning on, return true, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.Sys.WDT.GetWatchDogTime(System.Int32)">
+            <summary>
+            This function retrieves the watchdog time.
+            </summary>
+            <param name="wdt">[in] Specifies the Watchdog type:
+            0: pac_WDT_HW, 1: pac_WDT_OS</param>
+            <returns>The return value is the watchdog time which has been assigned by
+            pac_EnableWatchDog or pac_SetWatchDogTime.</returns>    
+        </member>
+        <member name="M:PACNET.Sys.WDT.RefreshWatchDog(System.Int32)">
+            <summary>
+            This function refreshes the watchdog.
+            </summary>
+            <param name="wdt">[in] Specifies the Watchdog type:
+            0: pac_WDT_HW, 1: pac_WDT_OS</param>
+        </member>
+        <member name="M:PACNET.Sys.WDT.SetWatchDogTime(System.Int32,System.UInt32)">
+            <summary>
+            This function retrieves the watchdog time.
+            </summary>
+            <param name="wdt">[in] Specifies the Watchdog type:
+            0: pac_WDT_HW, 1: pac_WDT_OS</param>
+            <returns>The return value is the watchdog time which has been assigned by
+            pac_EnableWatchDog or pac_SetWatchDogTime.</returns>    
+            <param name="value">[in] Specifies the watchdog time.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="T:PACNET.ErrHandling">
+            <summary>Error Handling APII</summary>
+        </member>
+        <member name="M:PACNET.ErrHandling.GetErrorMessage(System.UInt32,System.String)">
+            <summary>
+            This function retrieves a message string.
+            </summary>
+            <param name="dwMessageID">[in] Specifies the 32-bit message identifier for the requested message.</param>
+            <param name="lpBuffer">[out] Pointer to a buffer for the error message.</param>
+        </member>
+        <member name="M:PACNET.ErrHandling.GetErrorMessage(System.UInt32)">
+            <summary>
+            Get a message string  
+            </summary>
+            <param name="dwMessageID">Specifies the 32-bit message identifier for the requested message  </param>
+            <returns>Error message string  </returns>
+        </member>
+        <member name="M:PACNET.ErrHandling.GetLastError">
+            <summary>
+            This function returns the last-error code value.
+            </summary>
+            <returns>The Return Value section of each reference page notes the conditions under which the
+            function sets the last-error code.</returns>      
+        </member>
+        <member name="M:PACNET.ErrHandling.SetLastError(System.UInt32)">
+            <summary>
+            This function sets the last-error code.
+            </summary>
+            <param name="errno">[in] Specifies the last-error code.</param>
+        </member>
+        <member name="M:PACNET.ErrHandling.ClearLastError">
+            <summary>
+            This function clears the last-error code.
+            </summary>
+        </member>
+        <member name="T:PACNET.ErrCode">
+            <summary>Error Codes</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_SUCCESS">
+            <summary>No Error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UNKNOWN">
+            <summary>Unknow Error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_SLOT_REGISTERED">
+            <summary>Slot registered error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_SLOT_NOT_REGISTERED">
+            <summary>Slot not registered error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UNKNOWN_MODULE">
+            <summary>Unknown Module</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_INVALID_MAC">
+            <summary>Module doesn't exist</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_INVALID_COMPORT_NUMBER">
+            <summary>Invalid COM port number</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_FUNCTION_NOT_SUPPORT">
+            <summary>Function not supported</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_MODULE_UNEXISTS">
+            <summary>Module doesn't exist</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_INVALID_SLOT_NUMBER">
+            <summary>Slot not registered error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_EEP_INVALID_ADDRESS">
+            <summary>EEPROM accesses invalid address</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_SRAM_INVALID_ADDRESS">
+            <summary>SRAM accesses invalid address</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_MEMORY_INVALID_TYPE">
+            <summary>SRAM accesses invalid type</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_NVRAM_INVALID_ADDRESS">
+            <summary>NVRAM accesses invalid address</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_EEP_WRITE_PROTECT">
+            <summary>EEPROM write protection</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_EEP_WRITE_FAIL">
+            <summary>EEPROM write fail</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_EEP_READ_FAIL">
+            <summary>EEPROM read fail</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_WDT_INVALID_VALUE">
+            <summary>The input value is invalid</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_WDT_UNEXIST">
+            <summary>The wdt doesn't exist</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_WDT_BASE_NOT_SET">
+            <summary>The wdt init error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_INTR_CREATE_EVENT_FAILURE">
+            <summary>Create interrupt's event failure</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_CHECKSUM">
+            <summary>Uart check sum error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_READ_TIMEOUT">
+            <summary>Uart read timeout</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_RESPONSE">
+            <summary>Uart response error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_UNDER_INPUT_RANGE">
+            <summary>Uart under input range</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_EXCEED_INPUT_RANGE">
+            <summary>Uart exceed input range</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_OPEN_FAILED">
+            <summary>Uart open filed</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_GET_COMM_STATUS_ERROR">
+            <summary>Uart get Comm Modem status error</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_INVALID_VALUE">
+            <summary>Uart get wrong line status</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_UART_INTERNAL_BUFFER_OVERFLOW">
+            <summary>Uart internal buffer overflow</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_NOT_SUPPORT">
+            <summary>IO card does not support this API function</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_ID">
+            <summary>API unsupport this IO card</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_SLOT">
+            <summary>Slot's value exceeds its range</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_CHANNEL">
+            <summary>Channel's value exceeds its range</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_GAIN">
+            <summary>Gain's value exceeds its range</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_INT_MODE">
+            <summary>Unsupported interrupt mode</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_VALUE_OUT_OF_RANGE">
+            <summary>I/O value is out of the range</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_CHANNEL_OUT_OF_RANGE">
+            <summary>I/O channel is out of the range</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_DO_CANNOT_OVERWRITE">
+            <summary>DI/O channel can't overwrite</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_IO_AO_CANNOT_OVERWRITE">
+            <summary>AI/O channel can't overwrite</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_BPTIMER_REGISTERED">
+            <summary>Backplane Timer registed</summary>
+        </member>
+        <member name="F:PACNET.ErrCode.PAC_ERR_BPTIMER_NOT_REGISTERED">
+            <summary>Backplane Timer not registed</summary>
+        </member>
+        <member name="T:PACNET.BPTimer">
+            <summary>Backplane timer API</summary>
+        </member>
+        <member name="F:PACNET.BPTimer.TIMEROUT">
+            <summary>TIMEROUT</summary>
+        </member>
+        <member name="F:PACNET.BPTimer.TIMER1">
+            <summary>TIMER1</summary>
+        </member>
+        <member name="F:PACNET.BPTimer.TIMER2">
+            <summary>TIMER2</summary>
+        </member>
+        <member name="M:PACNET.BPTimer.GetBPTimerTimeTick_ms">
+            <summary>
+            This function returns the number of milliseconds since the device booted, excluding any
+            time that the system was suspended.
+            </summary>
+            <returns>The number of milliseconds indicates success.</returns>
+        </member>
+        <member name="M:PACNET.BPTimer.GetBPTimerTimeTick_us">
+            <summary>
+            This function returns the number of microsecond since the device booted, excluding any
+            time that the system was suspended.
+            </summary>
+            <returns>The number of microseconds indicates success.</returns>
+        </member>
+        <member name="M:PACNET.BPTimer.KillBPTimer(System.Int32)">
+            <summary>
+            This function kills the timer event identified by type, set by an earlier call to
+            pac_SetBPTimer.
+            </summary>
+            <param name="type">[in] Two type timer, 1 microsecond timer and 10 microsecond timer</param>
+        </member>
+        <member name="M:PACNET.BPTimer.SetBPTimer(System.Int32,System.UInt32,PACNET.PAC_CALLBACK_FUNC)">
+            <summary>
+            This function installs a hardware timer. A time-out value is specified, and every time a
+            time-out occurs, the system posts an interrupt signal to the system and the pass the
+            message to an application-defined callback function.
+            </summary>
+            <param name="type">[in] Two type timer, 1 microsecond timer and 10 microseconds timer</param>
+            <param name="uElapse">[in] Timer 1: Specifies the elapses time value for a timerout signal 0~65535, in microseconds.
+            Timer 2: Specifies the elapses time value for a timerout signal 0~65535, in 10 microseconds.</param>
+            <param name="f">Specifies the address of the application-supplied f callback function.</param>
+            <returns>The value is true if the function was installed successfully. It is zero and the function
+            cannot be installed.</returns>
+        </member>
+        <member name="M:PACNET.BPTimer.SetBPTimerOut(System.UInt32,System.UInt32,PACNET.PAC_CALLBACK_FUNC)">
+            <summary>
+            The timerout pin on each slot will be triggered while a timerout signal has been outputted.
+            The timeourput pin can be used to acquire the synchronized data on each slot.
+            </summary>
+            <param name="uHighElapse">[in] Specifies the elapses time value for a high wave of the timerout signal 0~65535, in microseconds.</param>
+            <param name="uLOwElapse">[in] Specifies the elapses time value for a low wave of the timerout signal 0~65535, in microseconds.</param>
+            <param name="f">Specifies the address of the application-supplied f callback function.</param>
+            <returns>The value is true if the function was installed successfully. It is zero and the function
+            cannot be installed.</returns>
+        </member>
+        <member name="M:PACNET.BPTimer.SetBPTimerInterruptPriority(System.Int32,System.Int32)">
+            <summary>
+            This function sets the priority for a real-time thread of the backplane timer        
+            </summary>
+            <param name="type">[in] Specifies the backplane timer type. 0: Timerout, 1: Timer 1, 2: Timer 2</param>
+            <param name="nPriority">[in] Return true if success, otherwise false.This value can range from 0 through 255, with 0 as the highest priority.</param>
+            <returns>Return true if success, otherwise false.</returns>
+        </member>
+        <member name="T:PACNET.PAC_CALLBACK_FUNC">
+            <summary></summary>
+        </member>
+        <member name="T:PACNET.PAC_Reg">
+            <summary>Registry API</summary>
+        </member>
+        <member name="F:PACNET.PAC_Reg.PKT_NONE">
+            <summary>NONE</summary>
+        </member>
+        <member name="F:PACNET.PAC_Reg.PKT_KEY">
+            <summary>KEY</summary>
+        </member>
+        <member name="F:PACNET.PAC_Reg.PKT_STRING">
+            <summary>STRING</summary>
+        </member>
+        <member name="F:PACNET.PAC_Reg.PKT_DWORD">
+            <summary>DWORD</summary>
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegCountKey(System.String)">
+            <summary>
+            This function retrieves the specified registry key which has how many sub keys.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key which you want to count.</param>
+            <returns>Return the number of subkeys contained by the specified key.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegCountValue(System.String)">
+            <summary>
+            This function retrieves the specified registry key which has how many values.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key which you want to count.</param>
+            <returns>Return the number of values associated with the key.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegCreateKey(System.String)">
+            <summary>
+            This function creates the specified registry key.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key which you want to create.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegDeleteKey(System.String)">
+            <summary>
+            This function deletes a named subkey from the specified registry key.
+            </summary>
+            <param name="KeyName">[in] Specifics the path of registry key which you want to delete.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegDeleteValue(System.String)">
+            <summary>
+            This function removes a named value from the specified registry key.
+            </summary>
+            <param name="KeyName">[in] Specifics the path of registry key which you want to delete.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegGetDWORD(System.String)">
+            <summary>
+            This function retrieves value of the specified registry key.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key.</param>
+            <returns>Return the value of the specific key.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegGetKeyByIndex(System.String,System.UInt32,System.String)">
+            <summary>
+            This function retrieves the name of specified index of registry key.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key.</param>
+            <param name="dwIndex">[in] Specific the index of registry key.</param>
+            <param name="lpName">[out] Assign a buffer to retrieves the specific the key name.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegGetKeyInfo(System.String)">
+            <summary>
+            This function retrieves the type of specified index of registry key.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key.</param>
+            <returns>We define four types about the return value:
+            0: PKT_NONE, 1: PKT_KEY, 2: PKT_STRING, 3: PKT_DWORD</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegGetString(System.String,System.String,System.UInt32)">
+            <summary>
+            This function retrieves value of the specified registry key.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key.</param>
+            <param name="lpData">[out] Pointer to a buffer that receives the value's data.</param>
+            <param name="dwLength">[in] Specific the size of data.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegGetValueByIndex(System.String,System.UInt32,System.String)">
+            <summary>
+            This function retrieves the value of specified index of registry key.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key.</param>
+            <param name="dwIndex">[in] Specific the index of value.</param>
+            <param name="lpName">[out] Pointer to a buffer that receives the value's data.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegKeyExist(System.String)">
+            <summary>
+            This function determinants the specified registry key exist or not.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key which you want to check whether it exists or not.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegSave(System.String)">
+            <summary>
+            This function writes all the attributes of the specified open registry key into the registry.
+            </summary>
+            <param name="KeyName">[in] Handle to a currently open key or one of the following predefined reserved handle
+            values:</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegSetString(System.String,System.String,System.UInt32)">
+            <summary>
+            This function assigns the specified registry key data whose type is string.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key which you want to assign data.</param>
+            <param name="assignStr">[in] Specific the data.</param>
+            <param name="dwLength">[in] Specific the size of data.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_Reg.RegSetDWORD(System.String,System.UInt32)">
+            <summary>
+            This function assigns the specified registry key data whose type is DWORD.
+            </summary>
+            <param name="KeyName">[in] Specific the path of registry key which you want to assign data.</param>
+            <param name="assignStr">[in] Specific the data.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="T:PACNET.PAC_IO">
+            <summary>PAC_IO API</summary>
+            <summary>i8KR IO API</summary>
+            <summary>PAC_IO API</summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteDO_MF(System.IntPtr,System.Int32,System.Int32,System.UInt32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDIO_MF(System.IntPtr,System.Int32,System.Int32,System.Int32,System.UInt32@,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDI_MF(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDO_MF(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDICNT_MF(System.IntPtr,System.Int32,System.Int32,System.Int32,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ClearDICNT_MF(System.IntPtr,System.Int32,System.Int32,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadModulePowerOnValueDO_MF(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteModulePowerOnValueDO_MF(System.IntPtr,System.Int32,System.Int32,System.UInt32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadModuleSafeValueDO_MF(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteModuleSafeValueDO_MF(System.IntPtr,System.Int32,System.Int32,System.UInt32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadAO_MF(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteAO_MF(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadModulePowerOnValueAO_MF(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteModulePowerOnValueAO_MF(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadModuleSafeValueAO_MF(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteModuleSafeValueAO_MF(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.InitModuleWDTInterrupt(System.Int32,PACNET.PAC_CALLBACK_FUNC)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.SetModuleWDTInterruptStatus(System.Int32,System.Int16)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.GetModuleWDTInterruptStatus(System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.GetModuleLastOutputSource(System.IntPtr,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.GetModuleWDTStatus(System.IntPtr,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.GetModuleWDTConfig(System.IntPtr,System.Int32,System.Int16@,System.Int32@,System.Int32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.SetModuleWDTConfig(System.IntPtr,System.Int32,System.Int16,System.Int32,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ResetModuleWDT(System.IntPtr,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.RefreshModuleWDT(System.IntPtr,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadModuleSafeValueDO(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteModuleSafeValueDO(System.IntPtr,System.Int32,System.Int32,System.UInt32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadModuleSafeValueAO(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteModuleSafeValueAO(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteModulePowerOnValueDO(System.IntPtr,System.Int32,System.Int32,System.UInt32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadModulePowerOnValueDO(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteModulePowerOnValueAO(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadModulePowerOnValueAO(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.PAC_REMOTE_IO(System.Int32)">
+            <summary>
+            remote mode, the address need call a macro.
+            </summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.PAC_REMOTE_UNIT(System.Int32,System.Int32)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PACNET.PAC_IO.GetBit(System.Int32,System.Int32)">
+            <summary>
+            The function can retrieve the value which in specific bit.
+            </summary>
+            <param name="value">Which IO result wants to get bit.</param>
+            <param name="index">Specific bit to retrieve.</param>
+            <returns>The value of specific index.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteDO(System.IntPtr,System.Int32,System.Int32,System.UInt32)">
+            <summary>
+            This function writes the DO values to DO modules.
+            </summary>
+            <param name="hPort">[in] the serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO (Address).</param>
+            <param name="iDO_TotalCh">[in] The total number of DO channels of the DO modules.</param>
+            <param name="lDO_Value">[in] A 8-digit hexadecimal value, where bit 0 corresponds to DO0, bit 31 corresponds to
+            DO31, etc. When the bit is 1, it denotes that the digital output channel is on, and 0
+            denotes that the digital output channel is off.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteDOBit(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            This function writes a single bit of value to the DO module, that is, only the channel
+            corresponding to the bit is changed.
+            </summary>
+            <param name="hPort">[in] the serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iDO_TotalCh">[in] The total number of DO channels of the DO modules.</param>
+            <param name="iChannel">[in] The DO channel to change.</param>
+            <param name="iBitValue">[in] 1 is to turn on the DO channel; 0 is off.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDO(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary>
+            This function reads the DO value of the DO module.
+            </summary>
+            <param name="hPort">[in] the serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iDO_TotalCh">[in] The total number of DO channels of the DO modules.</param>
+            <param name="lDO_Value">[in] The pointer of the DO value to read from the DO module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDI(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary>
+            This function reads the DI value of the DI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iDO_TotalCh">[in] The total channels of the DI module.</param>
+            <param name="lDO_Value">[out] The pointer to DI value to read back.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDIO(System.IntPtr,System.Int32,System.Int32,System.Int32,System.UInt32@,System.UInt32@)">
+            <summary>
+            This function reads the DI and the DO values of the DIO module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iDI_TotalCh">[in] The total number of DI channels of the DIO module.</param>
+            <param name="iDO_TotalCh">[in] The total number of DO channels of the DIO module.</param>
+            <param name="lDI_Value">[out] The pointer to the value of DI read back.</param>
+            <param name="lDO_Value">[out] The pointers to the value of DO read back.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDILatch(System.IntPtr,System.Int32,System.Int32,System.Int32,System.UInt32@)">
+            <summary>
+            This function reads the DI latch value of the DI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iDI_TotalCh">[in] The total number of the DI channels of the DI module.</param>
+            <param name="iLatchType">[in] The latch type specified to read latch value back.
+            1: latched high status, 0: latched low status</param>
+            <param name="lDI_Latch_Value">[out] The pointer to the latch value read back from the DI module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ClearDILatch(System.IntPtr,System.Int32)">
+            <summary>
+            This function clears the latch value of the DI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDIOLatch(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32,System.UInt32@,System.UInt32@)">
+            <summary>
+            This function reads the latch values of the DI and DO channels of the DIO module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iDI_TotalCh">[in] The total number of the DI channels of the DIO module.</param>
+            <param name="iDO_TotalCh">[in] The total number of the DO channels of the DIO module.</param>
+            <param name="iLatchType">[in] The type of the latch value read back.</param>
+            <param name="lDI_Latch_Value">[out] The pointer to the DI latch value read back.</param>
+            <param name="lDO_Latch_Value">[out] The pointer to the DO latch value read back.</param>
+        </member>
+        <member name="M:PACNET.PAC_IO.ClearDIOLatch(System.IntPtr,System.Int32)">
+            <summary>
+            This function clears the latch values of DI and DO channels of the DIO module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadDICNT(System.IntPtr,System.Int32,System.Int32,System.Int32,System.UInt32@)">
+            <summary>
+            This function reads the counts of the DI channels of the DI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] The channel that the counter value belongs.</param>
+            <param name="iDI_TotalCh">[in] Total number of the DI channels of the DI module.</param>
+            <param name="lCounter_Value">[out] The pointer to the counter value.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ClearDICNT(System.IntPtr,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            This function clears the counter value of the DI channel of the DI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] The channel that the counter value belongs.</param>
+            <param name="iDI_TotalCh">[in] Total number of the DI channels of the DI module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.WriteAO(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single)">
+            <summary>
+            This function writes the AO value to the AO modules.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] The channel that is written thee AO value to.</param>
+            <param name="iAO_TotalCh">[in] The total number of the AO channels of the AO module.</param>
+            <param name="fValue">[in] The AO value to write to the AO module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadAO(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single@)">
+            <summary>
+            This function reads the AO value of the AO module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] Read the AO value from the channel.</param>
+            <param name="iAO_TotalCh">[in] The total number of the AO channels of the AO module.</param>
+            <param name="fValue">[in] The pointer to the AO value that is read back from the AO module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadAI(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Single@)">
+            <summary>
+            This function reads the engineering-mode AI value of the AI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] Read the AI value from the channel.</param>
+            <param name="iAI_TotalCh">[in] The total number of the AI channels of the AI module.</param>
+            <param name="fValue">[in] The pointer to the AI value that is read back from the AI module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadAIHex(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32@)">
+            <summary>
+            This function reads the 2's complement-mode AI value of the AI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] Read the AI value from the channel.</param>
+            <param name="iAI_TotalCh">[in] The total number of the AI channels of the AI module.</param>
+            <param name="iValue">[in] The pointer to the AI value that is read back from the AI module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadAIAll(System.IntPtr,System.Int32,System.Single[])">
+            <summary>
+            This function reads all the AI values of all channels in engineering-mode of the AI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="fValue">[out] The array contains the AI values that read back from the AI module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadAIAllHex(System.IntPtr,System.Int32,System.Int32[])">
+            <summary>
+            This function reads all the AI values of all channels in 2's complement-mode of the AI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iValue">[out] The array contains the AI values that read back from the AI module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadCNT(System.IntPtr,System.Int32,System.Int32,System.UInt32@)">
+            <summary>
+            This function reads the counter values of the counter/frequency modules.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] The channel that reads the counter value back from the counter/frequency module.</param>
+            <param name="lCounter_Value">[out] The pointer to the counter value that reads back from the counter/frequency module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ClearCNT(System.IntPtr,System.Int32,System.Int32)">
+            <summary>
+            This function clears the counter values of the counter/frequency modules.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] The channel that clears the counter value back from the counter/frequency module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadCNTOverflow(System.IntPtr,System.Int32,System.Int32,System.Int32@)">
+            <summary>
+            This function clears the counter values of the counter/frequency modules.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iChannel">[in] The channel that reads the counter overflows value back from the counter/frequency module.</param>
+            <param name="iOverflow">[out] The pointer to the counter overflow that is read back from the counter/frequency module.</param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadAIAllExt(System.IntPtr,System.Int32,System.Single[],System.Int32,System.Int32@)">
+            <summary>
+            This function reads all the AI values of all channels in engineering-mode of the AI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="fValue">[out] The array contains the AI values that read back from the AI module.</param>
+            <param name="Buff_Len"></param>
+            <param name="Channel"></param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="M:PACNET.PAC_IO.ReadAIAllHexExt(System.IntPtr,System.Int32,System.Int32[],System.Int32,System.Int32@)">
+            <summary>
+            This function reads all the AI values of all channels in 2's complement-mode of the AI module.
+            </summary>
+            <param name="hPort">[in] The serial port HANDLE opened by uart_Open().
+            0, if the module is 8k modules in local</param>
+            <param name="slot">[in] The slot in which module is to receive the command. Default is local.
+            If the IO module is remote, please use the macro, pac_REMOTE_IO(0...255).</param>
+            <param name="iValue">[out] The array contains the AI values that read back from the AI module.</param>
+            <param name="Buff_Len"></param>
+            <param name="Channel"></param>
+            <returns>Return true if success, otherwise false.</returns>  
+        </member>
+        <member name="T:PACNET.Memory">
+            <summary>Memory Access API</summary>
+            <summary>microSD Management API</summary>
+        </member>
+        <member name="F:PACNET.Memory.PAC_MEM_SRAM">
+            <summary>SRAM</summary>
+        </member>
+        <member name="F:PACNET.Memory.PAC_MEM_EEPROM">
+            <summary>EEPROM</summary>
+        </member>
+        <member name="F:PACNET.Memory.PAC_MEM_NVRAM">
+            <summary>NVRAM</summary>
+        </member>
+        <member name="M:PACNET.Memory.GetMemorySize(System.Int32)">
+            <summary>
+            This function retrieves the size of the specified memory.
+            </summary>
+            <param name="mem_type">[in] Handle to a currently type memory.
+            0: pac_MEM_SRAM, 1: pac_MEM_EEPROM</param>
+            <returns>The return value specifies the memory size.</returns>    
+        </member>
+        <member name="M:PACNET.Memory.ReadMemory(System.UInt32,System.Byte*,System.UInt32,System.Int32)">
+            <summary>
+            This function retrieves the size of the specified memory.
+            </summary>
+            <param name="address">[in] Specifies the memory address where read from.</param>
+            <param name="lpBuffer">[in] A pointer to a buffer that receives the memory data.</param>
+            <param name="dwLength">[in] Number of characters to be read.</param>
+            <param name="mem_type">[in] Handle to a currently type memory.
+            0: pac_MEM_SRAM, 1: pac_MEM_EEPROM</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.Memory.ReadMemory(System.UInt32,System.Byte[],System.UInt32,System.Int32)">
+            <summary>
+            This function retrieves the size of the specified memory.
+            </summary>
+            <param name="index">[in] Specifies the memory address where read from.</param>
+            <param name="Buffer">[in] A pointer to a buffer that receives the memory data.</param>
+            <param name="Length">[in] Number of characters to be read.</param>
+            <param name="mem_type">[in] Handle to a currently type memory.</param>
+        </member>
+        <member name="M:PACNET.Memory.WriteMemory(System.UInt32,System.Byte*,System.UInt32,System.Int32)">
+            <summary>
+            This function retrieves the size of the specified memory.
+            </summary>
+            <param name="address">[in] Specifies the memory address where write from.</param>
+            <param name="lpBuffer">[in] A pointer to the buffer containing the data to be written to the memory.</param>
+            <param name="dwLength">[in] Number of characters to be written.</param>
+            <param name="mem_type">[in] Handle to a currently type memory.
+            0: pac_MEM_SRAM, 1: pac_MEM_EEPROM</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.Memory.WriteMemory(System.UInt32,System.Byte[],System.UInt32,System.Int32)">
+            <summary>
+            This function retrieves the size of the specified memory.
+            </summary>
+            <param name="address">[in] Specifies the memory address where write from.</param>
+            <param name="lpBuffer">[in] A pointer to the buffer containing the data to be written to the memory.</param>
+            <param name="dwLength">[in] Number of characters to be written.</param>
+            <param name="mem_type">[in] Handle to a currently type memory.
+            0: pac_MEM_SRAM, 1: pac_MEM_EEPROM</param>
+        </member>
+        <member name="M:PACNET.Memory.EnableEEPROM(System.Boolean)">
+            <summary>
+            This function turns on/off EEPROM.
+            </summary>
+            <param name="bEnable">[in] To turn on or protect EEPROM.
+            True: To turn on EEPROM, False: To protect EEPROM.</param>
+        </member>
+        <member name="M:PACNET.Memory.SDExists">
+            <summary>
+            This function is used to check that the Micro SD whether has been standby ready or not.
+            </summary>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.Memory.SDMount(System.String)">
+            <summary>
+            This function is used to mount Micro SD if the Micro SD has been inserting to the device
+            without mounting.
+            </summary>
+            <param name="szPartitionName">[in] Name of the partition. Example Part00.</param>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.Memory.SDOnside">
+            <summary>
+            This function is used to check the Micro SD whether on-side or not.
+            </summary>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="M:PACNET.Memory.SDUnmount">
+            <summary>
+            This function is used to dismount Micro SD if the Micro SD has been mounted.
+            </summary>
+            <returns>Return true if success, otherwise false.</returns>    
+        </member>
+        <member name="T:PACNET.PWM">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SetPWMDuty(System.IntPtr,System.Int32,System.Int16,System.Single)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.GetPWMDuty(System.IntPtr,System.Int32,System.Int16,System.Single@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SetPWMFrequency(System.IntPtr,System.Int32,System.Int16,System.UInt32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.GetPWMFrequency(System.IntPtr,System.Int32,System.Int16,System.UInt32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SetPWMMode(System.IntPtr,System.Int32,System.Int16,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.GetPWMMode(System.IntPtr,System.Int32,System.Int16,System.Int32@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SetPWMDITriggerConfig(System.IntPtr,System.Int32,System.Int16,System.Int16)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.GetPWMDITriggerConfig(System.IntPtr,System.Int32,System.Int16,System.Int16@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SetPWMStart(System.IntPtr,System.Int32,System.Int16)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SetPWMSynChannel(System.IntPtr,System.Int32,System.Int16,System.Int16)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.GetPWMSynChannel(System.IntPtr,System.Int32,System.Int16,System.Int16@)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SyncPWMStart(System.IntPtr,System.Int32,System.Int16)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SavePWMConfig(System.IntPtr,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.GetPWMDIOStatus(System.IntPtr,System.Int32,System.Byte[],System.Byte[])">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.SetPWMPulseCount(System.IntPtr,System.Int32,System.Int16,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="M:PACNET.PWM.GetPWMPulseCount(System.IntPtr,System.Int32,System.Int16,System.Int32@)">
+            <summary></summary>
+        </member>
+        <member name="T:PACNET.MISC">
+            <summary>MISC API</summary>
+        </member>
+        <member name="M:PACNET.MISC.AnsiString(System.String)">
+            <summary>
+            This function can convert unicode string to ansi byte array.
+            </summary>
+            <param name="str">[in] A pointer to a buffer that stores unicode string.</param>
+            <returns>Return ansi byte array.</returns>      
+        </member>
+        <member name="M:PACNET.MISC.DoEvents">
+            <summary>
+            When you run a Windows Form, it creates the new form, which then waits for events
+            to handle. Each time the form handles an event, it processes all the code associated
+            with that event. All other events wait in the queue. While your code handles the event,
+            your application does not respond. If you call pac_DoEvents in your code, your
+            application can handle the other events.
+            </summary>
+        </member>
+        <member name="M:PACNET.MISC.WideString(System.Byte[])">
+            <summary>
+            This function can convert ansi byte array to unicode string.
+            </summary>
+            <param name="CharStr">[in] A pointer to a buffer that stores ansi byte array.</param>
+            <returns>Return unicode string.</returns>      
+        </member>
+        <member name="M:PACNET.MISC.GetAppPath">
+            <summary>get app path</summary>
+        </member>
+        <member name="M:PACNET.MISC.GetCurrentDirectory">
+            <summary>get current directory</summary>
+        </member>
+        <member name="T:PACNET.UART">
+            <summary>UART API</summary>
+        </member>
+        <member name="F:PACNET.UART.IN_DATA">
+            <summary>IN_DATA</summary>
+        </member>
+        <member name="F:PACNET.UART.OUT_DATA">
+            <summary>OUT_DATA</summary>
+        </member>
+        <member name="F:PACNET.UART.CTS">
+            <summary>CTS</summary>
+        </member>
+        <member name="F:PACNET.UART.DSR">
+            <summary>DSR</summary>
+        </member>
+        <member name="F:PACNET.UART.RI">
+            <summary>RI</summary>
+        </member>
+        <member name="F:PACNET.UART.CD">
+            <summary>CD</summary>
+        </member>
+        <member name="F:PACNET.UART.CTO_TIMEOUT_ALL">
+            <summary>CTO_TIMEOUT_ALL</summary>
+        </member>
+        <member name="F:PACNET.UART.CTO_READ_RETRY_TIMEOUT">
+            <summary>CTO_READ_RETRY_TIMEOUT</summary>
+        </member>
+        <member name="F:PACNET.UART.CTO_READ_TOTAL_TIMEOUT">
+            <summary>CTO_READ_TOTAL_TIMEOUT</summary>
+        </member>
+        <member name="F:PACNET.UART.CTO_WRITE_TOTAL_TIMEOUT">
+            <summary>CTO_WRITE_TOTAL_TIMEOUT</summary>
+        </member>
+        <member name="M:PACNET.UART.BinRecv(System.IntPtr,System.Byte[],System.UInt32)">
+            <summary>
+            This function is applied to receive the fix length response.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="buf">[out] A pointer to a buffer that receives the data.</param>
+            <param name="in_Len">[in] The length of result string.</param>
+            <returns>1: indicates success, 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.BinSend(System.IntPtr,System.Byte[],System.UInt32)">
+            <summary>
+            Send out the command string by fix length, which is controlled by the Parameters “in_Len”.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="buf">[in] A pointer to a buffer that send the data.</param>
+            <param name="in_Len">[in] The length of result string.</param>
+            <returns>1: indicates success, 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.BinSendCmd(System.IntPtr,System.Byte[],System.UInt32,System.Byte[],System.UInt32)">
+            <summary>
+            This function is used to Send binary command and receive binary data with the fixed length.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM.</param>
+            <param name="ByteCmd">[in] A pointer to a command.</param>
+            <param name="in_Len">[in] The length of command string.</param>
+            <param name="ByteResult">[out] A pointer to a buffer that receives the data.</param>
+            <param name="out_Len">[in] The length of result string.</param>
+            <returns>1: indicates success, 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.Close(System.IntPtr)">
+            <summary>
+            This function closes the COM port which has been opened.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port to close.</param>
+            <returns>1: indicates success, 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.EnableCheckSum(System.IntPtr,System.Boolean)">
+            <summary>
+            This function turns on the check sum or not.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port to close.</param>
+            <param name="bEnable">[in] Decide the check sum turning on or not. Default is disabling.</param>
+        </member>
+        <member name="M:PACNET.UART.GetDataSize(System.IntPtr,System.Int32)">
+            <summary>
+            This function retrieves the number of bytes received by the serial provider but not yet read
+            by a uart_Recv operation, or of user data remaining to transmit for write operations.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="data_type">[in] A value specifies to retrieve in or out buffer.
+            This Parameters can be following values, 0: IN_DATA, 1: #define OUT_DATA</param>
+            <returns>The number of bytes in/out buffer but not yet read/write.</returns>   
+        </member>
+        <member name="M:PACNET.UART.GetLineStatus(System.IntPtr,System.Int32)">
+            <summary>
+            This function retrieves the modem control-register values.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="pin">[in] A variable specifies state of a pin of the COM port.
+            This Parameters can be following values, 0: CTS, 1: DSR, 2: RI 3:CD</param>
+            <returns>TRUE indicates the pin’s state is ON. 0 indicates OFF.</returns>   
+        </member>
+        <member name="M:PACNET.UART.Open(System.String)">
+            <summary>
+            This function opens the COM port and specifies the baud rate, parity bits, data bits, and stop bits.
+            </summary>
+            <param name="ConnectionString">[in] Specifies the COM port, baud rate, parity bits, data bits, and stop bits.</param>
+            <returns>TRUE indicates the pin’s state is ON. 0 indicates OFF.</returns>   
+        </member>
+        <member name="M:PACNET.UART.Recv(System.IntPtr,System.Byte[])">
+            <summary>
+            This function retrieves data through the COM port which have been opened.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="buf">[out] A pointer to a buffer that receives the data.</param>
+            <returns>1: indicates success. 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.Send(System.IntPtr,System.Byte[])">
+            <summary>
+            This function sends data through the COM port which have been opened.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="buf">[in] A pointer to a buffer that send the data, 2048 bytes maximum.</param>
+            <returns>1: indicates success. 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.SendCmd(System.IntPtr,System.Byte[],System.Byte[])">
+            <summary>
+            This function sends commands through the COM port which have been opened.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM.</param>
+            <param name="cmd">[in] A pointer to a command.</param>
+            <param name="szResult">[out] A pointer to a buffer that receives the data.</param>
+            <returns>1: indicates success. 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.SetTerminator(System.IntPtr,System.Byte[])">
+            <summary>
+            This function sets the terminate characters.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="szTerm">[in] Pointer the terminate characters. Default is CR (0x0D).</param> 
+        </member>
+        <member name="M:PACNET.UART.SetTimeOut(System.IntPtr,System.UInt32,System.Int32)">
+            <summary>
+            This function sets the time out timer.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="msec">[in] millisecond to the timer.</param>
+            <param name="ctoType">[in] Specifies the time out timer type as following:
+            0: CTO_TIMEOUT_ALL, 1: CTO_READ_RETRY_TIMEOUT, 2: CTO_READ_TOTAL_TIMEOUT, 3: CTO_WRITE_TOTAL_TIMEOUT</param>
+        </member>
+        <member name="M:PACNET.UART.RecvExt(System.IntPtr,System.Byte[],System.UInt32)">
+            <summary>
+            This function is applied to receive the fix length response.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="buf">[out] A pointer to a buffer that receives the data.</param>
+            <param name="in_Len">[in] The length of result string.</param>
+            <returns>1: indicates success, 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.SendExt(System.IntPtr,System.Byte[],System.UInt32)">
+            <summary>
+            Send out the command string by fix length, which is controlled by the Parameters “in_Len”.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM port.</param>
+            <param name="buf">[in] A pointer to a buffer that send the data.</param>
+            <param name="out_Len">[in] The length of result string.</param>
+            <returns>1: indicates success, 0: indicates failure.</returns>   
+        </member>
+        <member name="M:PACNET.UART.SendCmdExt(System.IntPtr,System.Byte[],System.UInt32,System.Byte[],System.UInt32)">
+            <summary>
+            This function is used to Send string command and receive string data with the fixed length.
+            </summary>
+            <param name="hPort">[in] Handle to the open COM.</param>
+            <param name="ByteCmd">[in] A pointer to a command.</param>
+            <param name="in_Len">[in] The length of command string.</param>
+            <param name="ByteResult">[out] A pointer to a buffer that receives the data.</param>
+            <param name="out_Len">[in] The length of result string.</param>
+            <returns>1: indicates success, 0: indicates failure.</returns>   
+        </member>
+    </members>
+</doc>
