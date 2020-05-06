@@ -12,8 +12,10 @@ namespace stend
     abstract class FileReader
     {
         public T ReadFile<T>(string filenamePath) { return Read<T>(filenamePath); }
+        public string[] ReadFile(string filenamePath, int numLines) { return Read(filenamePath, numLines); }
 
         protected abstract T Read<T>(string filenamePath);
+        protected abstract string[] Read(string filenamePath, int numLines);
     }
 
     class XMLFileReader : FileReader
@@ -37,29 +39,42 @@ namespace stend
             {
                 if(fs!=null)fs.Close();
             }
-        }   
+        }
+
+        protected override string[] Read(string filenamePath, int numLines)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     class GenericFileReader : FileReader
     {
-        protected override T Read<T>(string filenamePath) 
+        protected override string[] Read(string filenamePath, int numLines) 
         {
             FileInfo file = new FileInfo(@filenamePath); 
             StreamReader txt_reader = null;
             try
             {
                 txt_reader = file.OpenText();
-                return (T)Convert.ChangeType(txt_reader.ReadToEnd(), typeof(T),new CultureInfo("en-US"));
+                string[] fStr = new string[numLines];
+                int i = 0;
+                while ((fStr[i] = txt_reader.ReadLine()) != null) { i++; } 
+
+                return fStr;
             }
             catch (Exception ex)
             {
                 Error.instance.HandleExceptionMessage(ex);
-                return default(T);
+                return new string[0];
             }
             finally
             {
                 if (txt_reader != null) txt_reader.Close();
             }
-        }   
+        }
+        protected override T Read<T>(string filenamePath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

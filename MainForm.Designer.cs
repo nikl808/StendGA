@@ -31,7 +31,7 @@
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.SettingsMenu = new System.Windows.Forms.MenuItem();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.MainPage = new System.Windows.Forms.TabPage();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -83,12 +83,13 @@
             // 
             // menuItem1
             // 
-            this.menuItem1.MenuItems.Add(this.menuItem2);
+            this.menuItem1.MenuItems.Add(this.SettingsMenu);
             this.menuItem1.Text = "Options";
             // 
-            // menuItem2
+            // SettingsMenu
             // 
-            this.menuItem2.Text = "General settings";
+            this.SettingsMenu.Text = "General settings";
+            this.SettingsMenu.Click += new System.EventHandler(this.SettingsMenu_Click);
             // 
             // MainTabControl
             // 
@@ -429,7 +430,7 @@
         #endregion
 
         private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.MenuItem menuItem2;
+        private System.Windows.Forms.MenuItem SettingsMenu;
         private System.Windows.Forms.TabControl MainTabControl;
         private System.Windows.Forms.TabPage MainPage;
         private System.Windows.Forms.TabPage ControlPage;
