@@ -88,7 +88,7 @@
             // 
             // SettingsMenu
             // 
-            this.SettingsMenu.Text = "General settings";
+            this.SettingsMenu.Text = "Hardware settings";
             this.SettingsMenu.Click += new System.EventHandler(this.SettingsMenu_Click);
             // 
             // MainTabControl

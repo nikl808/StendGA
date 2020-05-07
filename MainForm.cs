@@ -49,7 +49,7 @@ namespace stend
 
         private void SettingsMenu_Click(object sender, EventArgs e)
         {
-            ConfigForm form = new ConfigForm(curHw);
+            SettingsForm form = new SettingsForm(curHw);
             form.Show();
         }   
     }

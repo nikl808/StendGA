@@ -13,144 +13,111 @@ using System.Reflection;
 
 namespace stend
 {
-    public partial class ConfigForm : Form
+    public partial class SettingsForm : Form
     {
         Hardware currCfg = new Hardware();
-        //TabElement[] TabElements = new TabElement[4];
-        Dictionary <string, Items[]> items = new Dictionary<string,Items[]>();
-        Dictionary<string, string[]> ParseItems = new Dictionary<string, string[]>();
-        Dictionary<int, int> ModNumCh = new Dictionary<int, int>();
-        //string configFilenamePath = "null";
+       
         
-        public ConfigForm(Hardware config)
+        public SettingsForm(Hardware config)
         {
             InitializeComponent();
             //currCfg = DeepClone<Hardware>(config);
         }
 
-        private void ConfigForm_Load(object sender, EventArgs e)
+        private void SettingsForm_Load(object sender, EventArgs e)
         {
-            ConfigFileParser parser = new ConfigFileParser();
-            FileReader reader = new GenericFileReader();
-            parser.Parse(reader.ReadFile("System_Disk2\\StandGA\\System\\settings.ini", 20));
-            ParseItems = parser.GetSetting("HWSettings");
-            
-            //Fill in the dictionary of the number of module channels
-            //ModNumCh.Add(currCfg.page[0].config[1].Slot, currCfg.page[0].config[1].numChannels);
-            //ModNumCh.Add(currCfg.page[0].config[2].Slot, currCfg.page[0].config[2].numChannels);
-            //ModNumCh.Add(currCfg.page[0].config[3].Slot, currCfg.page[0].config[3].numChannels);
-
-            foreach(KeyValuePair<string,string[]> keyVal in ParseItems)
             {
-                Items[] tmp = new Items[keyVal.Value.Length];
-                for(int i =0; i<keyVal.Value.Length; i++)tmp[i] = new Items{type = keyVal.Value[i],unitOrId = i};
-                items.Add(keyVal.Key,tmp);
-            }
+                ConfigFileParser parser = new ConfigFileParser();
+                FileReader reader = new GenericFileReader();
+                Dictionary<string, string[]> ParseItems = new Dictionary<string, string[]>();
+                Dictionary <string, Items[]> items = new Dictionary<string,Items[]>();
+                parser.Parse(reader.ReadFile("System_Disk2\\StandGA\\System\\settings.ini", 20));
+                ParseItems = parser.GetSetting("HWSettings");
 
-            //Create comboboxes
-            foreach(KeyValuePair<string,Items[]> keyVal in items)
-            {
-                switch(keyVal.Key)
+                foreach (KeyValuePair<string, string[]> keyVal in ParseItems)
                 {
-                    case "ModuleType":
-                        ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB1, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB2, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB3, keyVal.Value);
-                        break;
-                    case "External":
-                        ControlFactory.CreateControl<ComboBoxElement>(ExtComCB1, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(ExtComCB2, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(ExtComCB3, keyVal.Value);
-                        break;
-                    case "BackPlane":
-                        ControlFactory.CreateControl<ComboBoxElement>(BackplCB, keyVal.Value);
-                        break;
-                    case "Baudrate":
-                        ControlFactory.CreateControl<ComboBoxElement>(BaudCB1, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(BaudCB2, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(BaudCB3, keyVal.Value);
-                        break;
-                    case "UartProtocol":
-                        ControlFactory.CreateControl<ComboBoxElement>(UProtocCB1, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(UProtocCB2, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(UProtocCB3, keyVal.Value);
-                        break;
-                    case "EthProtocol":
-                        ControlFactory.CreateControl<ComboBoxElement>(EProtocCB1, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(EProtocCB2, keyVal.Value);
-                        break;
-                    case "LoadCellUnit":
-                         ControlFactory.CreateControl<ComboBoxElement>(LCUnitCB, keyVal.Value);
-                        break;
-                    case "PressureUnit":
-                        ControlFactory.CreateControl<ComboBoxElement>(ComprUnitCB, keyVal.Value);
-                        ControlFactory.CreateControl<ComboBoxElement>(StrUnitCB, keyVal.Value);
-                        break;
-                    case "MovingUnit":
-                        ControlFactory.CreateControl<ComboBoxElement>(MovUnitCB, keyVal.Value);
-                        break;
-                    case "SpeedUnit":
-                        ControlFactory.CreateControl<ComboBoxElement>(SpdUnitCB, keyVal.Value);
-                        break;                    
-                    default: break;
+                   
+                    Items[] tmp = new Items[keyVal.Value.Length];
+                    for (int i = 0; i < keyVal.Value.Length; i++) tmp[i] = new Items { ItemName = keyVal.Value[i], unitOrId = i };
+                    items.Add(keyVal.Key, tmp);
+                }
+            
+                //Create comboboxes
+                foreach (KeyValuePair<string, Items[]> keyVal in items)
+                {
+                    switch (keyVal.Key)
+                    {
+                        case "ModuleType":
+                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB1, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB2, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB3, (Items[])keyVal.Value.Clone());
+                            break;
+                        case "External":
+                            ControlFactory.CreateControl<ComboBoxElement>(ExtComCB1, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(ExtComCB2, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(ExtComCB3, (Items[])keyVal.Value.Clone());
+                            break;
+                        case "BackPlane":
+                            ControlFactory.CreateControl<ComboBoxElement>(BackplCB, (Items[])keyVal.Value.Clone());
+                            break;
+                        case "Baudrate":
+                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB1, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB2, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB3, (Items[])keyVal.Value.Clone());
+                            break;
+                        case "UartProtocol":
+                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB1, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB2, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB3, (Items[])keyVal.Value.Clone());
+                            break;
+                        case "EthProtocol":
+                            ControlFactory.CreateControl<ComboBoxElement>(EProtocCB1, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(EProtocCB2, (Items[])keyVal.Value.Clone());
+                            break;
+                        case "LoadCellUnit":
+                            ControlFactory.CreateControl<ComboBoxElement>(LCUnitCB, keyVal.Value);
+                            break;
+                        case "PressureUnit":
+                            ControlFactory.CreateControl<ComboBoxElement>(ComprUnitCB, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(StrUnitCB, (Items[])keyVal.Value.Clone());
+                            break;
+                        case "MovingUnit":
+                            ControlFactory.CreateControl<ComboBoxElement>(MovUnitCB, keyVal.Value);
+                            break;
+                        case "SpeedUnit":
+                            ControlFactory.CreateControl<ComboBoxElement>(SpdUnitCB, keyVal.Value);
+                            break;
+                        default: break;
+                    }
                 }
             }
 
-            ControlFactory.CreateControl<ComboBoxElement>(LCmodCB);
-            ControlFactory.CreateControl<ComboBoxElement>(CompModCB);
-            ControlFactory.CreateControl<ComboBoxElement>(StrModCB);
-            ControlFactory.CreateControl<ComboBoxElement>(MovFmodCB);
-            ControlFactory.CreateControl<ComboBoxElement>(MovBmodCB);
-            ControlFactory.CreateControl<ComboBoxElement>(MovSmodCB);
-            ControlFactory.CreateControl<ComboBoxElement>(PumpModCB);
-            ControlFactory.CreateControl<ComboBoxElement>(HiPressCB);
-            ControlFactory.CreateControl<ComboBoxElement>(LoPressCB);
-            
-            //Setup save event
-            SaveCfgBtn.Click += SaveCfgBtn_Click;
+            /*Working with config
+             * ConfigManager cfgMan = new ConfigManager();
+               ConfigModifier mod = new ConfigModifier();
+               cfgMan.SetModifier(new ConfigOnCommand(mod));
+               cfgMan.Change();
+               cfgMan.UndoChanges();
+            */
         }
-
-        //service function
-        /*private static T DeepClone<T>(T obj)
-        {
-            using (var ms = new MemoryStream())
-            {
-                XmlSerializer xs = new XmlSerializer(typeof(T));
-                xs.Serialize(ms, obj);
-                ms.Position = 0;
-                return (T)xs.Deserialize(ms);
-            }
-        }*/
 
         private void ComboBoxSelected(object sender, EventArgs e)
         {
-           /* ComboBox ctrl = sender as ComboBox;
+           ComboBox ctrl = sender as ComboBox;
+           Items currItem = (Items)ctrl.SelectedItem;
 
-            foreach (KeyValuePair<ComboBox, string> keyValue in comboConformity)
-            {
-                if (keyValue.Key.Name == ctrl.Name && keyValue.Value == "Slot" ||
-                    keyValue.Value == "Channel")
-                {
-                    if (int.Parse(keyValue.Value) != ctrl.SelectedIndex)
-                    {
-                        comboConformity[keyValue.Key] = ctrl.SelectedIndex.ToString();
-                        comboIsChanged = true;
-                        break;
-                    }
-                }
+           /*
+           switch (ctrl.Name)
+           {
+               case "SlotTypeCB1":
+                   if(currItem.ItemName == currCfg.page[0].config[0].Name)
+                       //add name to ConfigManager dictionary
+                   break;
 
-                else if (keyValue.Key.Name == ctrl.Name &&
-                    keyValue.Value != ctrl.SelectedItem.ToString())
-                {
-                    comboConformity[keyValue.Key] = ctrl.SelectedItem.ToString();
-                    comboIsChanged = true;
-                    if (keyValue.Key.Tag.ToString() == "ExtProtocol" || keyValue.Key.Tag.ToString() == "ExtBaud")
-                        MessageBox.Show("To apply changes, re-program the interface");
-                    break;
-                }
-            }
-            if (comboIsChanged) updateConfig(ctrl);
-            */
+               default: break;
+           }*/
+
+          
         }
 
         private void TextChanges(object sender, EventArgs e)
@@ -227,56 +194,13 @@ namespace stend
             }*/
         }
 
-        //Form events 
-        private void SaveCfgBtn_Click(object sender, EventArgs e)
+        private void OkBtn_Click(object sender, EventArgs e)
         {
-           /* if ((guiElements[0].comboIsChanged || guiElements[0].textIsChanged) || (guiElements[1].comboIsChanged || guiElements[1].textIsChanged)
-                || (guiElements[2].comboIsChanged || guiElements[2].textIsChanged))
-            {
-                if (saveConfigDialog.ShowDialog() == DialogResult.OK)
-                {
-                    XmlSerializer formatter = new XmlSerializer(typeof(Hardware));
-                    configFilenamePath = saveConfigDialog.FileName;
-                    using (FileStream fs = new FileStream(configFilenamePath, FileMode.Create)) formatter.Serialize(fs, currCfg);
-                    for (int i = 0; i < guiElements.Length; i++)
-                    {
-                        guiElements[i].comboIsChanged = false;
-                        guiElements[i].textIsChanged = false;
-                    }
-                }
-            }*/
+            XMLFileWriter fw = new XMLFileWriter();
+            fw.WriteFile<Hardware>("System_Disk2\\StandGA\\TestConfigs\\test.xml", currCfg);
         }
 
-        private void ConfigForm_Closing(object sender, CancelEventArgs e)
-        {
-            /*if ((guiElements[0].comboIsChanged || guiElements[0].textIsChanged) || (guiElements[1].comboIsChanged || guiElements[1].textIsChanged)
-                || (guiElements[2].comboIsChanged || guiElements[2].textIsChanged))
-            {
-                DialogResult result = MessageBox.Show("Configuration is changed, Do you want to save?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.None, MessageBoxDefaultButton.Button1);
-                if (result == DialogResult.Yes)
-                {
-                    if (saveConfigDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        XmlSerializer formatter = new XmlSerializer(typeof(Hardware));
-                        configFilenamePath = saveConfigDialog.FileName;
-                        using (FileStream fs = new FileStream(configFilenamePath, FileMode.Create)) formatter.Serialize(fs, currCfg);
-                        for (int i = 0; i < guiElements.Length; i++)
-                        {
-                            guiElements[i].comboIsChanged = false;
-                            guiElements[i].textIsChanged = false;
-
-                        }
-                    }
-                }
-            }
-            //return filenmame to parent form
-            if (configFilenamePath != "null")
-            {
-                MainForm form = this.Owner as MainForm;
-                form.Init("Sensors", configFilenamePath);
-            }*/
-        }
-
+       
         private void LirSetting_Click(object sender, EventArgs e)
         {
            // LinInterfaceSetup progForm = new LinInterfaceSetup(currCfg.page[0].config[0].extInterface, currCfg.page[0].config[0].extProtocol,
@@ -284,16 +208,22 @@ namespace stend
             //progForm.Show();
         }
 
+        private void UndoBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CancelBtn_Click(object sender, EventArgs e) { this.Close(); }
     }
 
     //combobox items
-    class Items
+    class Items : ICloneable
     {
-        public string type { get; set; }
+        public string ItemName { get; set; }
         public int unitOrId { get; set; }
+        public object Clone() { return this.MemberwiseClone(); }
     }
 
-    
     //Controls factory methods
     abstract class ControlConstruct
     {
@@ -312,21 +242,10 @@ namespace stend
             combo = control as ComboBox;
             //filled combo with items
             combo.DataSource = items;
-            combo.DisplayMember = "type";
+            combo.DisplayMember = "ItemName";
             combo.ValueMember = "unitOrId";
         }
-        protected internal override void LoadElement(Control control)
-        {
-            combo = control as ComboBox;
-            if (control.Name.Contains("mod") || control.Name.Contains("Mod")) for (int i = 1; i <= 3; i++) combo.Items.Add(i);
-
-            /*else if (control.Name.Contains("chan")||control.Name.Contains("Chan"))
-            {
-                foreach (KeyValuePair<int, int> keyValue1 in numChannels)
-                    if (currCfg.Slot == keyValue.Key)
-                        for (int i = 0; i < keyValue.Value; i++) combo.Items.Add(i);
-            }*/
-        }
+        protected internal override void LoadElement(Control control) {/*throw error*/}
     }
     
     class TextBoxElement: ControlConstruct
@@ -365,9 +284,6 @@ namespace stend
 		    }
 	    }
     }
-
-    
-
 /* 
     class TabElement
     {

@@ -201,4 +201,161 @@ namespace stend
             Enable = activate;
         }
     }
+
+    //command
+    interface ICommand
+    {
+        void Execute();
+	    void Undo();
+    } 
+
+    //Receiver
+    class ConfigModifier
+    {
+        public void ChangeConfig()
+	    {
+            /*
+		    Config currcfg = null;
+            int origConfIndex = 0;
+
+            for (int i = 0; i < Conf.Length; i++)
+            {
+                if (ctrl.Parent.Tag.ToString() == Conf[i].Tag)
+                {
+                    currcfg = Conf[i];
+                    origConfIndex = i;
+                }
+            }
+
+            if (ctrl is ComboBox)
+            {
+                foreach (KeyValuePair<ComboBox, string> keyValue in comboConformity)
+                {
+                    if (ctrl.Name == keyValue.Key.Name)
+                    {
+                        switch (keyValue.Key.Tag.ToString())
+                        {
+                            case "Backplane":
+                                if (keyValue.Value != currcfg.Backplane)
+                                    Conf[origConfIndex].Backplane = keyValue.Value;
+                                break;
+                            case "ExtCom":
+                                if (keyValue.Value != currcfg.extInterface)
+                                    Conf[origConfIndex].extInterface = keyValue.Value;
+                                break;
+                            case "ExtBaud":
+                                if (keyValue.Value != currcfg.extBaudrate)
+                                    Conf[origConfIndex].extBaudrate = keyValue.Value;
+                                break;
+                            case "ExtProtocol":
+                                if (keyValue.Value != currcfg.extProtocol)
+                                    Conf[origConfIndex].extProtocol = keyValue.Value;
+                                break;
+                            case "SlotType":
+                                if (keyValue.Value != currcfg.Type)
+                                    Conf[origConfIndex].Type = keyValue.Value;
+                                break;
+                            case "SlotRange":
+                                if (keyValue.Value != currcfg.Range)
+                                    Conf[origConfIndex].Range = keyValue.Value;
+                                break;
+                            case "Slot":
+                                if (int.Parse(keyValue.Value) != currcfg.Slot)
+                                    Conf[origConfIndex].Slot = int.Parse(keyValue.Value);
+                                break;
+                            case "Channel":
+                                if (int.Parse(keyValue.Value) != currcfg.Channel)
+                                    Conf[origConfIndex].Channel = int.Parse(keyValue.Value);
+                                break;
+                            case "UnitF":
+                                if (keyValue.Value != currcfg.Unit)
+                                    Conf[origConfIndex].Unit = keyValue.Value;
+                                break;
+
+                            case "UnitP":
+                                if (keyValue.Value != currcfg.Unit)
+                                    Conf[origConfIndex].Unit = keyValue.Value;
+                                break;
+
+                            case "UnitL":
+                                if (keyValue.Value != currcfg.Unit)
+                                    Conf[origConfIndex].Unit = keyValue.Value;
+                                break;
+
+                            case "UnitS":
+                                if (keyValue.Value != currcfg.Unit)
+                                    Conf[origConfIndex].Unit = keyValue.Value;
+                                break;
+                            default:
+                                break;
+                        }
+         * }
+                }
+            }
+
+            if (ctrl is TextBox)
+            {
+                foreach (KeyValuePair<TextBox, string> keyValue in textConformity)
+                {
+                    if (ctrl.Name == keyValue.Key.Name)
+                    {
+                        switch (keyValue.Key.Tag.ToString())
+                        {
+                            case "MBusIp":
+                                if (keyValue.Value != currcfg.modbusIp)
+                                    Conf[origConfIndex].modbusIp = keyValue.Value;
+                                break;
+                            case "SNumCh":
+                                if (keyValue.Value != currcfg.numChannels.ToString())
+                                    Conf[origConfIndex].numChannels = int.Parse(keyValue.Value);
+                                break;
+
+                            case "minMeas":
+                                if (keyValue.Value != currcfg.MeasureValMin)
+                                    Conf[origConfIndex].MeasureValMin = keyValue.Value;
+                                break;
+
+                            case "maxMeas":
+                                if (keyValue.Value != currcfg.MeasureValMax)
+                                    Conf[origConfIndex].MeasureValMax = keyValue.Value;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }//end class*/
+	    }
+	
+	    public void UndoAll()
+	    {
+	    	//Reset to default
+	    }
+    }
+
+    //concrete command
+    class ConfigOnCommand : ICommand
+    {
+        ConfigModifier cfgMod;
+	
+	    public ConfigOnCommand(ConfigModifier modSet){ cfgMod = modSet; }
+	
+	    public void Execute(){cfgMod.ChangeConfig();}
+	    public void Undo(){cfgMod.UndoAll();}
+    }
+
+    //Invoker
+    class ConfigManager
+    {
+        ICommand command;
+	
+	    public ConfigManager(){}
+	
+	    public void SetModifier(ICommand com){ command = com; }
+	
+	    public void Change(){ command.Execute(); }
+	    public void UndoChanges(){command.Undo();}
+    }
 }
