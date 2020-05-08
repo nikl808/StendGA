@@ -10,195 +10,122 @@ using System.Diagnostics;
 namespace stend
 {
     [Serializable()]
-    [XmlRoot("Hardware")]
-    public class Hardware:IDisposable
+    public class Hardware
     {
-        [XmlArrayItem("page", typeof(tabPage))]
-        public tabPage[] page { get; set; }
-
-        [NonSerialized]
-        private bool disposed = false;
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    GC.Collect();
-                }
-            }
-            disposed = true;
-        }
-        ~Hardware()
-        {
-            Dispose(false);
-        }
-    }
-
-    [Serializable()]
-    public class tabPage
-    {
-        [XmlAttribute]
-        public string tabTag { get; set; }
-
-        [XmlArrayItem("config",typeof(Config))]
+        [XmlArrayItem("config", typeof(Config))]
         public Config[] config;
 
-        public tabPage() { }
+        public Hardware() { }
 
-        public tabPage(string tag, int numCfgs)
+        public Hardware(int numCfgs) { config = new Config[numCfgs]; }
+
+        public IEnumerator<Config> GetEnumerator()
         {
-            tabTag = tag;
-            config = new Config[numCfgs];
-        }
-        ~tabPage()
-        {
-            GC.Collect();
+            for (int i = 0; i < config.Length; i++)
+            {
+                yield return config[i];
+            }
         }
     }
-
+    
+    
     [Serializable]
-    [XmlInclude(typeof(cConfig))]
+    [XmlInclude(typeof(uConfig))]
+    [XmlInclude(typeof(tConfig))]
     [XmlInclude(typeof(mConfig))]
-    [XmlInclude(typeof(iConfig))]
-    [XmlInclude(typeof(oConfig))]
+    [XmlInclude(typeof(sConfig))]
     public abstract class Config
     {
         [XmlAttribute]
-        public string Tag { get; set; }
+        public string Name { get; set; }
 
         public Config() { }
 
-        public Config(string tag)
-        {
-            Tag = tag;
-        }
+        public Config(string name){ Name = name; }
 
-        public virtual string Backplane { get; set; }
-        public virtual string extInterface { get; set; }
-        public virtual string extBaudrate { get; set; }
-        public virtual string extProtocol { get; set; }
-        public virtual string modbusIp { get; set; }
-        public virtual string Name { get; set; }
+        public virtual string uartBaudrate { get; set; }
+        public virtual string uartProtocol { get; set; }        
+        public virtual string ethProtocol { get; set; }
+        public virtual string slaveIP { get; set; }
+        public virtual string masterIP { get; set; }
         public virtual string Type { get; set; }
-        public virtual string Range { get; set; }
-        public virtual string Unit { get; set; }
-        public virtual string MeasureValMin { get; set; }
-        public virtual string MeasureValMax { get; set; }
-        public virtual int numChannels { get; set; }
-        public virtual int Channel { get; set; }
-        public virtual int Slot { get; set; }
-        public virtual bool Enable { get; set; }
+        public virtual string SensorUnit { get; set; }
+        public virtual int SenRangeUnitMin { get; set; }
+        public virtual int SenRangeUnitMax { get; set; }
+        public virtual int ModRangeUnitMin { get; set; }
+        public virtual int ModRangeUnitMax { get; set; }
+        public virtual int slaveID { get; set; }
     }
 
-    //controller config
-    public class cConfig : Config
+    //uart com config
+    public class uConfig : Config
     {
-        public override string Backplane { get; set; }
-        public override string extInterface { get; set; }
-        public override string extBaudrate { get; set; }
-        public override string extProtocol { get; set; }
-        public override string modbusIp { get; set; }
+        public override string uartBaudrate { get; set; }
+        public override string uartProtocol { get; set; }
         
-        public cConfig() { }
+        public uConfig() { }
 
-        public cConfig(string tag, string backplane, string extCom, string extBaud,string extProt,string modIp)
-            : base(tag)
+        public uConfig(string comName, string baudrate,string protocol)
+            : base(comName)
         {
-            Backplane = backplane.ToUpper();
-            extInterface = extCom.ToUpper();
-            extBaudrate = extBaud;
-            extProtocol = extProt;
-            modbusIp = modIp;
+            uartBaudrate = baudrate;
+            uartProtocol = protocol;   
+        }
+    }
+
+    //tcp config
+    public class tConfig : Config
+    {
+        public override int slaveID { get; set; }
+        public override string ethProtocol { get; set; }
+        public override string slaveIP { get; set; }
+        public override string masterIP { get; set; }
+
+        public tConfig() { }
+        
+        public tConfig(string ethName, string protocol, int ID, string slaveAddr, string masterAddr )
+            :base(ethName)
+        {
+            slaveID = ID;
+            ethProtocol = protocol;
+            slaveIP = slaveAddr;
+            masterIP = masterAddr;
         }
     }
 
     //onboard module config
     public class mConfig: Config
     {
-        public override string Name { get; set; }
+        public override int ModRangeUnitMin { get; set; }
+        public override int ModRangeUnitMax { get; set; }
         public override string Type { get; set; }
-        public override string Range { get; set; }
-        public override int numChannels { get; set; }
-        public override int Slot { get; set; }
-
+        
         public mConfig() { }
 
-        public mConfig(string tag, string moduleName, string type, string range, int slot, int maxChannels )
-            :base(tag)
+        public mConfig(string Slot, string type, int rangeUnitMin, int rangeUnitMax)
+            :base(Slot)
         {
-            Name = moduleName;
             Type = type;
-            Range = range;
-            numChannels = maxChannels;
-            Slot = slot;
-        }
-
-        public mConfig(string tag, string moduleName, string type, int slot, int maxChannels )
-            : base(tag)
-        {
-            Name = moduleName;
-            Type = type;
-            Range = "null";
-            numChannels = maxChannels;
-            Slot = slot;
+            ModRangeUnitMin = rangeUnitMin;
+            ModRangeUnitMax = rangeUnitMax;
         }
     }
 
-    //inputs config
-    public class iConfig: Config
+    //sensor config
+    public class sConfig: Config
     {
-        public override string extInterface { get; set; }
-        public override string Unit { get; set; }
-        public override string MeasureValMin { get; set; }
-        public override string MeasureValMax { get; set; }
-        public override int Channel { get; set; }
-        public override int Slot { get; set; }
+        public override string SensorUnit { get; set; }
+        public override int SenRangeUnitMin { get; set; }
+        public override int SenRangeUnitMax { get; set; }
 
-        public iConfig() { }
+        public sConfig() { }
 
-        public iConfig(string tag, string unit, string measureMin, string measureMax, int slot, int channel)
-            :base(tag)
+        public sConfig(string sensorName, string unit, int measureMin, int measureMax)
+            :base(sensorName)
         {
-            extInterface = "null";
-            Unit = unit;
-            MeasureValMin = measureMin;
-            MeasureValMax = measureMax;
-            Channel = channel;
-            Slot = slot;
-        }
-        public iConfig(string tag, string external, string unit): base(tag)
-        {
-            Slot = -1;
-            extInterface = external;
-            Unit = unit;
-            MeasureValMin = "null";
-            MeasureValMax = "null";
-            Channel = -1;
-        }
-    }
-
-    //Outputs config
-    public class oConfig: Config
-    {
-        public override int Slot{ get; set; }
-        public override int Channel { get; set; }
-        public override bool Enable { get; set; }
-
-        public oConfig() { }
-
-        public oConfig(string tag, int slot, int channel,bool activate):base(tag)
-        {
-            Slot = slot;
-            Channel = channel;
-            Enable = activate;
+            SensorUnit = unit;
+            SenRangeUnitMin = measureMin;
+            SenRangeUnitMax = measureMax;
         }
     }
 
@@ -329,7 +256,7 @@ namespace stend
     }//end class*/
 	    }
 	
-	    public void UndoAll()
+	    public void UndoCurr()
 	    {
 	    	//Reset to default
 	    }
@@ -343,15 +270,15 @@ namespace stend
 	    public ConfigOnCommand(ConfigModifier modSet){ cfgMod = modSet; }
 	
 	    public void Execute(){cfgMod.ChangeConfig();}
-	    public void Undo(){cfgMod.UndoAll();}
+	    public void Undo(){cfgMod.UndoCurr();}
     }
 
     //Invoker
-    class ConfigManager
+    class ConfigInvoker
     {
         ICommand command;
-	
-	    public ConfigManager(){}
+
+        public ConfigInvoker() { }
 	
 	    public void SetModifier(ICommand com){ command = com; }
 	

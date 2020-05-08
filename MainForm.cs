@@ -11,7 +11,7 @@ namespace stend
 {
     public partial class MainForm : Form
     {
-        public Hardware curHw = new Hardware();
+        public Hardware cfg = new Hardware(13);
         public MainForm()
         {
             InitializeComponent();
@@ -44,12 +44,33 @@ namespace stend
 
             //ModbusTcpSlave mSlave = new ModbusTcpSlave(1);
             //mSlave.StartSlave();
+
+            /*cfg.config[0] = new uConfig("COM1", "19200", "Generic");
+            cfg.config[1] = new uConfig("COM2", "19200", "Generic");
+            cfg.config[2] = new uConfig("COM3", "19200", "Generic");
+            //tcp
+            cfg.config[3] = new tConfig("Eth0", "Generic", 1, "0.0.0.0", "0.0.0.0");
+            cfg.config[4] = new tConfig("Eth1", "Generic", 1, "0.0.0.0", "0.0.0.0");
+            //module
+            cfg.config[5] = new mConfig("Slot1", "AI/AO", 0, 65535);
+            cfg.config[6] = new mConfig("Slot2", "AI/AO", 0, 65535);
+            cfg.config[7] = new mConfig("Slot3", "AI/AO", 0, 65535);
+            //sensor
+            cfg.config[8] = new sConfig("LoadCell", "kgf", 0, 500);
+            cfg.config[9] = new sConfig("Compression", "Pa", 0, 500);
+            cfg.config[10] = new sConfig("Stretching", "Pa", 0, 500);
+            cfg.config[11] = new sConfig("Moving", "mm", 0, 0);
+            cfg.config[12] = new sConfig("Speed", "mm/s", 0, 0);
+
+            XMLFileWriter fw = new XMLFileWriter();
+            fw.WriteFile<Hardware>("System_Disk2\\StandGA\\TestConfigs\\hardware.xml", cfg);
+            */
         }
         void ListBoxEvent(object sender, MsgListEvent e){ LogList.Items.Add(e.MsgLine); }
 
         private void SettingsMenu_Click(object sender, EventArgs e)
         {
-            SettingsForm form = new SettingsForm(curHw);
+            SettingsForm form = new SettingsForm(cfg);
             form.Show();
         }   
     }

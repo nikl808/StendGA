@@ -16,8 +16,7 @@ namespace stend
     public partial class SettingsForm : Form
     {
         Hardware currCfg = new Hardware();
-       
-        
+
         public SettingsForm(Hardware config)
         {
             InitializeComponent();
@@ -30,65 +29,120 @@ namespace stend
                 ConfigFileParser parser = new ConfigFileParser();
                 FileReader reader = new GenericFileReader();
                 Dictionary<string, string[]> ParseItems = new Dictionary<string, string[]>();
-                Dictionary <string, Items[]> items = new Dictionary<string,Items[]>();
                 parser.Parse(reader.ReadFile("System_Disk2\\StandGA\\System\\settings.ini", 20));
                 ParseItems = parser.GetSetting("HWSettings");
 
                 foreach (KeyValuePair<string, string[]> keyVal in ParseItems)
                 {
-                   
                     Items[] tmp = new Items[keyVal.Value.Length];
-                    for (int i = 0; i < keyVal.Value.Length; i++) tmp[i] = new Items { ItemName = keyVal.Value[i], unitOrId = i };
-                    items.Add(keyVal.Key, tmp);
-                }
-            
-                //Create comboboxes
-                foreach (KeyValuePair<string, Items[]> keyVal in items)
-                {
+                    for (int i = 0; i < tmp.Length; i++) tmp[i] = new Items { ItemName = keyVal.Value[i], unitOrId = i };                
+                   
                     switch (keyVal.Key)
                     {
                         case "ModuleType":
-                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB1, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB2, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB3, (Items[])keyVal.Value.Clone());
-                            break;
-                        case "External":
-                            ControlFactory.CreateControl<ComboBoxElement>(ExtComCB1, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(ExtComCB2, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(ExtComCB3, (Items[])keyVal.Value.Clone());
-                            break;
-                        case "BackPlane":
-                            ControlFactory.CreateControl<ComboBoxElement>(BackplCB, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB1, (Items[])tmp.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB2, (Items[])tmp.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB3, (Items[])tmp.Clone());
                             break;
                         case "Baudrate":
-                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB1, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB2, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB3, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB1, (Items[])tmp.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB2, (Items[])tmp.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB3, (Items[])tmp.Clone());
                             break;
                         case "UartProtocol":
-                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB1, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB2, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB3, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB1, (Items[])tmp.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB2, (Items[])tmp.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB3, (Items[])tmp.Clone());
                             break;
                         case "EthProtocol":
-                            ControlFactory.CreateControl<ComboBoxElement>(EProtocCB1, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(EProtocCB2, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(EProtocCB1, (Items[])tmp.Clone());
                             break;
                         case "LoadCellUnit":
-                            ControlFactory.CreateControl<ComboBoxElement>(LCUnitCB, keyVal.Value);
+                            ControlFactory.CreateControl<ComboBoxElement>(LCUnitCB, (Items[])tmp.Clone());
                             break;
                         case "PressureUnit":
-                            ControlFactory.CreateControl<ComboBoxElement>(ComprUnitCB, (Items[])keyVal.Value.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(StrUnitCB, (Items[])keyVal.Value.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(ComprUnitCB, (Items[])tmp.Clone());
+                            ControlFactory.CreateControl<ComboBoxElement>(StrUnitCB, (Items[])tmp.Clone());
                             break;
                         case "MovingUnit":
-                            ControlFactory.CreateControl<ComboBoxElement>(MovUnitCB, keyVal.Value);
+                            ControlFactory.CreateControl<ComboBoxElement>(MovUnitCB, (Items[])tmp.Clone());
                             break;
                         case "SpeedUnit":
-                            ControlFactory.CreateControl<ComboBoxElement>(SpdUnitCB, keyVal.Value);
+                            ControlFactory.CreateControl<ComboBoxElement>(SpdUnitCB, (Items[])tmp.Clone());
                             break;
                         default: break;
                     }
+                }
+
+                XMLFileReader fw = new XMLFileReader();
+                currCfg = fw.ReadFile<Hardware>("System_Disk2\\StandGA\\System\\hardware.xml");
+
+                foreach (Config iter in currCfg)
+                {
+                    switch (iter.Name)
+                    {
+                        case "Slot1":
+                            SlotTypeCB1.SelectedItem = iter.Type;
+                            ControlFactory.CreateControl<TextBoxElement>(SlotMinRanTB1, iter.ModRangeUnitMin.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(SlotMaxRanTB1, iter.ModRangeUnitMax.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(SlotNameTB1, PACNET.Sys.GetModuleName(1));
+                            break;
+                        case "Slot2":
+                            SlotTypeCB2.SelectedItem = iter.Type;
+                            ControlFactory.CreateControl<TextBoxElement>(SlotMinRanTB2,iter.ModRangeUnitMin.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(SlotMaxRanTB2,iter.ModRangeUnitMax.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(SlotNameTB2,PACNET.Sys.GetModuleName(2));
+                            break;
+                        case "Slot3":
+                            SlotTypeCB3.SelectedItem = iter.Type;
+                            ControlFactory.CreateControl<TextBoxElement>(SlotMinRanTB3, iter.ModRangeUnitMin.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(SlotMaxRanTB3, iter.ModRangeUnitMax.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(SlotNameTB3, PACNET.Sys.GetModuleName(3));
+                            break;
+                        case "COM1":
+                            BaudCB1.SelectedItem = iter.uartBaudrate;
+                            UProtocCB1.SelectedItem = iter.uartProtocol;
+                            break;
+                        case "COM2":
+                            BaudCB2.SelectedItem = iter.uartBaudrate;
+                            UProtocCB2.SelectedItem = iter.uartProtocol;
+                            break;
+                        case "COM3":
+                            BaudCB3.SelectedItem = iter.uartBaudrate;
+                            UProtocCB3.SelectedItem = iter.uartProtocol;
+                            break;
+                        case "Eth0":
+                            EProtocCB1.SelectedItem = iter.ethProtocol;
+                            ControlFactory.CreateControl<TextBoxElement>(MbusSlvIDTB, iter.slaveID.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(MbusSlvIPTB, iter.slaveIP);
+                            ControlFactory.CreateControl<TextBoxElement>(MbusMasIPTB, iter.masterIP);
+                            break;
+                        case "Eth1":
+                            break;
+                        case "LoadCell":
+                            LCUnitCB.SelectedItem = iter.SensorUnit;
+                            ControlFactory.CreateControl<TextBoxElement>(LCminMeasTB, iter.SenRangeUnitMin.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(LCmaxMeasTB, iter.SenRangeUnitMax.ToString());
+                            break;
+                        case "Compression":
+                            ComprUnitCB.SelectedItem = iter.SensorUnit;
+                            ControlFactory.CreateControl<TextBoxElement>(CompMinMeasTB, iter.SenRangeUnitMin.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(CompMaxMeasTB, iter.SenRangeUnitMax.ToString());
+                            break;
+                        case "Stretching":
+                            StrUnitCB.SelectedItem = iter.SensorUnit;
+                            ControlFactory.CreateControl<TextBoxElement>(StrMinMeasTB, iter.SenRangeUnitMin.ToString());
+                            ControlFactory.CreateControl<TextBoxElement>(StrMaxMeasTB, iter.SenRangeUnitMax.ToString());
+                            break;
+                        case "Moving":
+                            MovUnitCB.SelectedItem = iter.SensorUnit;
+                            break;
+                        case "Speed":
+                            SpdUnitCB.SelectedItem = iter.SensorUnit;
+                            break;
+                        default: break;
+                    }
+                   
                 }
             }
 
@@ -228,7 +282,7 @@ namespace stend
     abstract class ControlConstruct
     {
         protected internal abstract void LoadElement(Control control, Items[] items);
-        protected internal abstract void LoadElement(Control control);
+        protected internal abstract void LoadElement(Control control, string currText);
     }
 
     class ComboBoxElement : ControlConstruct
@@ -245,7 +299,7 @@ namespace stend
             combo.DisplayMember = "ItemName";
             combo.ValueMember = "unitOrId";
         }
-        protected internal override void LoadElement(Control control) {/*throw error*/}
+        protected internal override void LoadElement(Control control, string currText) {/*throw error*/}
     }
     
     class TextBoxElement: ControlConstruct
@@ -254,17 +308,21 @@ namespace stend
         private TextBox text;
 
         protected internal override void LoadElement(Control control,Items[] items){/*throw error*/}
-        protected internal override void LoadElement(Control control) { }
+        protected internal override void LoadElement(Control control, string currText) 
+        {
+            text = control as TextBox;
+            text.Text = currText;
+        }
     }
  
     static class ControlFactory
     {
-        public static void CreateControl<T>(Control control) where T : ControlConstruct, new()
+        public static void CreateControl<T>(Control control, string currText) where T : ControlConstruct, new()
         {
             try
             {
                 var t = new T();
-                t.LoadElement(control);
+                t.LoadElement(control, currText);
             }
             catch (TargetInvocationException e)
             {
