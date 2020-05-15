@@ -10,8 +10,6 @@ namespace stend
 {
     abstract class FileWriter
     {
-        protected QuestionMessage _question = new QuestionMessage();
-        
         public void WriteFile<T>(string filenamePath, T obj)
         {
             CheckDir(filenamePath);
@@ -29,54 +27,33 @@ namespace stend
         }
 
         protected abstract void Write<T>(string filenamePath, T obj);
-        protected delegate bool AskOperation(string caption, string text);
     }
 
     class XMLFileWriter : FileWriter
     {
         protected override void Write<T>(string filenamePath, T obj)
-        { 
-            XmlSerializer formatter = new XmlSerializer(typeof (T));
+        {
+            XmlSerializer formatter = new XmlSerializer(typeof(T));
             FileStream fs = null;
 
-            if (File.Exists(filenamePath))
+            if (File.Exists(filenamePath)) File.Delete(@filenamePath);
+
+            try
             {
-                AskOperation answer = _question.Message;
-                if (answer("Warning", filenamePath + " is exist. Do you want overwrite it?"))
-                {
-                    try
-                    {
-                        fs = new FileStream(@filenamePath, FileMode.Open);
-                        formatter.Serialize(fs, obj);
-                    }
-                    catch (Exception ex)
-                    {
-                        Error.instance.HandleExceptionMessage(ex);
-                    }
-                    finally
-                    {
-                        if(fs!=null)fs.Close();
-                    }
-                }
+                fs = new FileStream(@filenamePath, FileMode.Create);
+                formatter.Serialize(fs, obj);
             }
-            else    
+            catch (Exception ex)
             {
-                try
-                {
-                     fs = new FileStream(@filenamePath, FileMode.Create);
-                     formatter.Serialize(fs, obj);
-                }
-                catch (Exception ex)
-                {
-                    Error.instance.HandleExceptionMessage(ex);
-                }
-                finally
-                {
-                    if(fs!=null)fs.Close();
-                }
+                Error.instance.HandleExceptionMessage(ex);
+            }
+            finally
+            {
+                if (fs != null) fs.Close();
             }
         }
     }
+    
 
     class ConfigFileWriter : FileWriter
     {

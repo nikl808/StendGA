@@ -90,19 +90,19 @@
     <Compile Include="ModbusTCP.cs" />
     <Compile Include="ModbusFunctions.cs" />
     <Compile Include="Uart.cs" />
-    <Compile Include="LirProg.cs">
+    <Compile Include="LirProgForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LirProg.Designer.cs">
-      <DependentUpon>LirProg.cs</DependentUpon>
+    <Compile Include="LirProgForm.Designer.cs">
+      <DependentUpon>LirProgForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LirProg.resx">
-      <DependentUpon>LirProg.cs</DependentUpon>
+    <EmbeddedResource Include="LirProgForm.resx">
+      <DependentUpon>LirProgForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

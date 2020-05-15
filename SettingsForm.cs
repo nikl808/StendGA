@@ -10,778 +10,362 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Reflection;
+using System.Net;
+using System.Net.Sockets;
 
 namespace stend
 {
     public partial class SettingsForm : Form
     {
         Hardware currCfg = new Hardware();
-
+        Dictionary<string, string[]> Units = new Dictionary<string, string[]>();
+       
         public SettingsForm(Hardware config)
         {
             InitializeComponent();
-            //currCfg = DeepClone<Hardware>(config);
+            currCfg = ConfigClone.Clone(config);
+            SettingsForm_Init();
         }
 
-        private void SettingsForm_Load(object sender, EventArgs e)
+        //initialize form components 
+        private void SettingsForm_Init()
         {
             {
+                //Open settings file
                 ConfigFileParser parser = new ConfigFileParser();
                 FileReader reader = new GenericFileReader();
-                Dictionary<string, string[]> ParseItems = new Dictionary<string, string[]>();
                 parser.Parse(reader.ReadFile("System_Disk2\\StandGA\\System\\settings.ini", 20));
-                ParseItems = parser.GetSetting("HWSettings");
+                Dictionary<string, string[]> ParseItems = new Dictionary<string, string[]>();
 
+                //get gui items
+                ParseItems = parser.GetSetting("HWSettings");
+                //get units
+                Units = parser.GetSetting("Units");
+               
+                //Initialize comboboxes
                 foreach (KeyValuePair<string, string[]> keyVal in ParseItems)
                 {
-                    Items[] tmp = new Items[keyVal.Value.Length];
-                    for (int i = 0; i < tmp.Length; i++) tmp[i] = new Items { ItemName = keyVal.Value[i], unitOrId = i };                
-                   
                     switch (keyVal.Key)
                     {
                         case "ModuleType":
-                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB1, (Items[])tmp.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB2, (Items[])tmp.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(SlotTypeCB3, (Items[])tmp.Clone());
+                            FillItems(SlotTypeCombo1, (string[])keyVal.Value.Clone());
+                            FillItems(SlotTypeCombo2, (string[])keyVal.Value.Clone());
+                            FillItems(SlotTypeCombo3, (string[])keyVal.Value.Clone());
                             break;
                         case "Baudrate":
-                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB1, (Items[])tmp.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB2, (Items[])tmp.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(BaudCB3, (Items[])tmp.Clone());
+                            FillItems(BaudCombo1, (string[])keyVal.Value.Clone());
+                            FillItems(BaudCombo2, (string[])keyVal.Value.Clone());
+                            FillItems(BaudCombo3, (string[])keyVal.Value.Clone());
                             break;
                         case "UartProtocol":
-                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB1, (Items[])tmp.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB2, (Items[])tmp.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(UProtocCB3, (Items[])tmp.Clone());
+                            FillItems(UProtocCombo1, (string[])keyVal.Value.Clone());
+                            FillItems(UProtocCombo2, (string[])keyVal.Value.Clone());
+                            FillItems(UProtocCombo3, (string[])keyVal.Value.Clone());
                             break;
                         case "EthProtocol":
-                            ControlFactory.CreateControl<ComboBoxElement>(EProtocCB1, (Items[])tmp.Clone());
+                            FillItems(EProtocCombo, (string[])keyVal.Value.Clone());
                             break;
                         case "LoadCellUnit":
-                            ControlFactory.CreateControl<ComboBoxElement>(LCUnitCB, (Items[])tmp.Clone());
+                            FillItems(SLUnitCombo, (string[])keyVal.Value.Clone());
                             break;
                         case "PressureUnit":
-                            ControlFactory.CreateControl<ComboBoxElement>(ComprUnitCB, (Items[])tmp.Clone());
-                            ControlFactory.CreateControl<ComboBoxElement>(StrUnitCB, (Items[])tmp.Clone());
+                            FillItems(PressUnitCombo, (string[])keyVal.Value.Clone());
                             break;
                         case "MovingUnit":
-                            ControlFactory.CreateControl<ComboBoxElement>(MovUnitCB, (Items[])tmp.Clone());
+                            FillItems(MovUnitCombo, (string[])keyVal.Value.Clone());
                             break;
                         case "SpeedUnit":
-                            ControlFactory.CreateControl<ComboBoxElement>(SpdUnitCB, (Items[])tmp.Clone());
+                            FillItems(SpdUnitCombo, (string[])keyVal.Value.Clone());
                             break;
                         default: break;
                     }
                 }
 
-                XMLFileReader fw = new XMLFileReader();
-                currCfg = fw.ReadFile<Hardware>("System_Disk2\\StandGA\\System\\hardware.xml");
-
+                //fill textboxes and select items in comboboxes
                 foreach (Config iter in currCfg)
                 {
                     switch (iter.Name)
                     {
+                        case "COM3":
+                            BaudCombo1.SelectedItem = iter.uartBaudrate;
+                            UProtocCombo1.SelectedItem = iter.uartProtocol;
+                            break;
+                        case "COM4":
+                            BaudCombo2.SelectedItem = iter.uartBaudrate;
+                            UProtocCombo2.SelectedItem = iter.uartProtocol;
+                            break;
+                        case "COM5":
+                            BaudCombo3.SelectedItem = iter.uartBaudrate;
+                            UProtocCombo3.SelectedItem = iter.uartProtocol;
+                            break;
+                        case "Eth":
+                            EProtocCombo.SelectedItem = iter.ethProtocol;
+                            SlvIDText.Text = iter.slaveID.ToString();
+                            SlvIPText.Text = iter.slaveIP;
+                            IPAddress addr = IPAddress.Parse("127.0.0.1");
+                            foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+                            {
+                                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                                {
+                                    addr = ip;
+                                    break;
+                                }
+                            }
+                            EthIpText.Text = addr.ToString();
+                            //set master checkbox
+                            TcpMasterCheck.Checked = iter.asMaster;
+                            if (iter.ethProtocol == "ModbusTCP" && TcpMasterCheck.Enabled == false)
+                            {
+                                TcpMasterCheck.Enabled = true;
+                                if (TcpMasterCheck.Checked == true && (SlvIDText.ReadOnly == true | SlvIPText.ReadOnly == true))
+                                {
+                                    SlvIDText.ReadOnly = false;
+                                    SlvIPText.ReadOnly = false;
+                                }
+                            }
+                            break;
                         case "Slot1":
-                            SlotTypeCB1.SelectedItem = iter.Type;
-                            ControlFactory.CreateControl<TextBoxElement>(SlotMinRanTB1, iter.ModRangeUnitMin.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(SlotMaxRanTB1, iter.ModRangeUnitMax.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(SlotNameTB1, PACNET.Sys.GetModuleName(1));
+                            SlotTypeCombo1.SelectedItem = iter.Type;
+                            SlotMinRanText1.Text = iter.ModRangeUnitMin.ToString();
+                            SlotMaxRanText1.Text = iter.ModRangeUnitMax.ToString();
+                            SlotNameText1.Text = PACNET.Sys.GetModuleName(1);
                             break;
                         case "Slot2":
-                            SlotTypeCB2.SelectedItem = iter.Type;
-                            ControlFactory.CreateControl<TextBoxElement>(SlotMinRanTB2,iter.ModRangeUnitMin.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(SlotMaxRanTB2,iter.ModRangeUnitMax.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(SlotNameTB2,PACNET.Sys.GetModuleName(2));
+                            SlotTypeCombo2.SelectedItem = iter.Type;
+                            SlotMinRanText2.Text = iter.ModRangeUnitMin.ToString();
+                            SlotMaxRanText2.Text = iter.ModRangeUnitMax.ToString();
+                            SlotNameText2.Text = PACNET.Sys.GetModuleName(2);
                             break;
                         case "Slot3":
-                            SlotTypeCB3.SelectedItem = iter.Type;
-                            ControlFactory.CreateControl<TextBoxElement>(SlotMinRanTB3, iter.ModRangeUnitMin.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(SlotMaxRanTB3, iter.ModRangeUnitMax.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(SlotNameTB3, PACNET.Sys.GetModuleName(3));
+                            SlotTypeCombo3.SelectedItem = iter.Type;
+                            SlotMinRanText3.Text = iter.ModRangeUnitMin.ToString();
+                            SlotMaxRanText3.Text = iter.ModRangeUnitMax.ToString();
+                            SlotNameText3.Text = PACNET.Sys.GetModuleName(3);
                             break;
-                        case "COM1":
-                            BaudCB1.SelectedItem = iter.uartBaudrate;
-                            UProtocCB1.SelectedItem = iter.uartProtocol;
+                        case "StrainLoad":
+                            SLUnitCombo.SelectedItem = iter.SensorUnit;
+                            SLminMeasText.Text = iter.SenRangeUnitMin.ToString();
+                            SLmaxMeasText.Text = iter.SenRangeUnitMax.ToString();
                             break;
-                        case "COM2":
-                            BaudCB2.SelectedItem = iter.uartBaudrate;
-                            UProtocCB2.SelectedItem = iter.uartProtocol;
-                            break;
-                        case "COM3":
-                            BaudCB3.SelectedItem = iter.uartBaudrate;
-                            UProtocCB3.SelectedItem = iter.uartProtocol;
-                            break;
-                        case "Eth0":
-                            EProtocCB1.SelectedItem = iter.ethProtocol;
-                            ControlFactory.CreateControl<TextBoxElement>(MbusSlvIDTB, iter.slaveID.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(MbusSlvIPTB, iter.slaveIP);
-                            ControlFactory.CreateControl<TextBoxElement>(MbusMasIPTB, iter.masterIP);
-                            break;
-                        case "Eth1":
-                            break;
-                        case "LoadCell":
-                            LCUnitCB.SelectedItem = iter.SensorUnit;
-                            ControlFactory.CreateControl<TextBoxElement>(LCminMeasTB, iter.SenRangeUnitMin.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(LCmaxMeasTB, iter.SenRangeUnitMax.ToString());
-                            break;
-                        case "Compression":
-                            ComprUnitCB.SelectedItem = iter.SensorUnit;
-                            ControlFactory.CreateControl<TextBoxElement>(CompMinMeasTB, iter.SenRangeUnitMin.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(CompMaxMeasTB, iter.SenRangeUnitMax.ToString());
-                            break;
-                        case "Stretching":
-                            StrUnitCB.SelectedItem = iter.SensorUnit;
-                            ControlFactory.CreateControl<TextBoxElement>(StrMinMeasTB, iter.SenRangeUnitMin.ToString());
-                            ControlFactory.CreateControl<TextBoxElement>(StrMaxMeasTB, iter.SenRangeUnitMax.ToString());
+                        case "Pressure":
+                            PressUnitCombo.SelectedItem = iter.SensorUnit;
+                            PressMinMeasText.Text = iter.SenRangeUnitMin.ToString();
+                            PressMaxMeasText.Text = iter.SenRangeUnitMax.ToString();
                             break;
                         case "Moving":
-                            MovUnitCB.SelectedItem = iter.SensorUnit;
+                            MovUnitCombo.SelectedItem = iter.SensorUnit;
                             break;
                         case "Speed":
-                            SpdUnitCB.SelectedItem = iter.SensorUnit;
+                            SpdUnitCombo.SelectedItem = iter.SensorUnit;
                             break;
                         default: break;
                     }
-                   
                 }
             }
-
-            /*Working with config
-             * ConfigManager cfgMan = new ConfigManager();
-               ConfigModifier mod = new ConfigModifier();
-               cfgMan.SetModifier(new ConfigOnCommand(mod));
-               cfgMan.Change();
-               cfgMan.UndoChanges();
-            */
         }
 
+        private void FillItems(ComboBox ctrl, string[] items) { for (int i = 0; i < items.Length; i++) ctrl.Items.Add(items[i]); }
+
+        private void RestorePrevText(TextBox ctrl, Config itr)
+        {
+            if ((ctrl.Name == "SlotMinRanText1" && itr.Name == "Slot1") |
+                (ctrl.Name == "SlotMinRanText2" && itr.Name == "Slot2") |
+                (ctrl.Name == "SlotMinRanText3" && itr.Name == "Slot3")) ctrl.Text = itr.ModRangeUnitMin.ToString();
+
+            if ((ctrl.Name == "SlotMaxRanText1" && itr.Name == "Slot1") |
+                (ctrl.Name == "SlotMaxRanText2" && itr.Name == "Slot2") |
+                (ctrl.Name == "SlotMaxRanText3" && itr.Name == "Slot3")) ctrl.Text = itr.ModRangeUnitMax.ToString();
+
+            if ((ctrl.Name == "SLminMeasText" && itr.Name == "StrainLoad") |
+                (ctrl.Name == "PressMinMeasText" && itr.Name == "Pressure")) ctrl.Text = itr.SenRangeUnitMin.ToString();
+
+            if ((ctrl.Name == "SLmaxMeasText" && itr.Name == "StrainLoad") |
+                (ctrl.Name == "PressMaxMeasText" && itr.Name == "Pressure")) ctrl.Text = itr.SenRangeUnitMax.ToString();
+
+            if (ctrl.Name == "SlvIDText" && itr.Name == "Eth") ctrl.Text = itr.slaveID.ToString();
+            if (ctrl.Name == "SlvIPText" && itr.Name == "Eth") ctrl.Text = itr.slaveIP;
+        }
+
+        //Form events
         private void ComboBoxSelected(object sender, EventArgs e)
         {
            ComboBox ctrl = sender as ComboBox;
-           Items currItem = (Items)ctrl.SelectedItem;
 
-           /*
-           switch (ctrl.Name)
+           foreach (Config itr in currCfg)
            {
-               case "SlotTypeCB1":
-                   if(currItem.ItemName == currCfg.page[0].config[0].Name)
-                       //add name to ConfigManager dictionary
-                   break;
+               if ((ctrl.SelectedItem.ToString() != itr.uartBaudrate) && (ctrl.Name == "BaudCombo1" && itr.Name == "COM3") |
+                   (ctrl.Name == "BaudCombo2" && itr.Name == "COM4") | (ctrl.Name == "BaudCombo3" && itr.Name == "COM5"))
+                   itr.uartBaudrate = ctrl.SelectedItem.ToString();
 
-               default: break;
-           }*/
+               if ((ctrl.SelectedItem.ToString() != itr.uartProtocol) && (ctrl.Name == "UProtocCombo1" && itr.Name == "COM3") |
+                   (ctrl.Name == "UProtocCombo2" && itr.Name == "COM4") | (ctrl.Name == "UProtocCombo3" && itr.Name == "COM5")) 
+                   itr.uartProtocol = ctrl.SelectedItem.ToString();
 
-          
+               if ((ctrl.SelectedItem.ToString() != itr.ethProtocol) && (ctrl.Name == "EProtocCombo" && itr.Name == "Eth"))
+               {
+                   itr.ethProtocol = ctrl.SelectedItem.ToString();
+
+                   //enable/disable controls
+                   if (ctrl.SelectedItem.ToString() == "ModbusTCP")
+                   {
+                       TcpMasterCheck.Enabled = true;
+                       if (TcpMasterCheck.Checked == true && (SlvIDText.ReadOnly == true | SlvIPText.ReadOnly == true))
+                       {
+                           SlvIDText.ReadOnly = false;
+                           SlvIPText.ReadOnly = false;
+                       }
+                   }
+                   else if (ctrl.SelectedItem.ToString() == "Generic")
+                   {
+                       TcpMasterCheck.Enabled = false;
+                       if (SlvIDText.ReadOnly == false | SlvIPText.ReadOnly == false)
+                       {
+                           SlvIDText.ReadOnly = true;
+                           SlvIPText.ReadOnly = true;
+                       }
+                   }
+               }
+
+               if ((ctrl.SelectedItem.ToString() != itr.Type) && (ctrl.Name == "SlotTypeCombo1" && itr.Name == "Slot1") |
+                   (ctrl.Name == "SlotTypeCombo2" && itr.Name == "Slot2") | (ctrl.Name == "SlotTypeCombo3" && itr.Name == "Slot3"))
+                   itr.Type = ctrl.SelectedItem.ToString();
+           }
         }
 
-        private void TextChanges(object sender, EventArgs e)
+        private void UnitComboEvents(object sender, EventArgs e)
         {
-            /*
-             TextBox txt = sender as TextBox;
-
-            if (e.KeyCode == Keys.Return)
+            ComboBox ctrl = sender as ComboBox;
+           
+            foreach (Config itr in currCfg)
             {
-                foreach (KeyValuePair<TextBox, string> keyValue in textConformity)
+                if (ctrl.SelectedItem.ToString() != itr.SensorUnit)
                 {
-                    if (keyValue.Key.Name == txt.Name && keyValue.Value != txt.Text)
+                    if (itr.Name == "StrainLoad" | itr.Name == "Pressure")
                     {
-                        if (keyValue.Key.Tag.ToString() == "SNumCh")
-                        {
-                            if (OnlNum.IsMatch(txt.Text))
-                            {
-                                textConformity[keyValue.Key] = txt.Text;
-                                textIsChanged = true;
-                                MessageBox.Show("to apply the changes, save the file and reopen the window");
-                                break;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Current input does not match format '[1-99]'");
-                                txt.Text = textConformity[keyValue.Key];
-                            }
-                        }
+                        itr.SensorUnit = ctrl.SelectedItem.ToString();
 
-                        else if (keyValue.Key.Tag.ToString() == "MBusIp")
+                        foreach (KeyValuePair<string, string[]> keyVal in Units)
                         {
-                            if (IpReg.IsMatch(txt.Text))
+                            if (keyVal.Key == itr.SensorUnit)
                             {
-                                textConformity[keyValue.Key] = txt.Text;
-                                textIsChanged = true;
-                                break;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Current input does not match format '[0-999].[0-999].[0-999].[0-999]'");
-                                txt.Text = textConformity[keyValue.Key];
-                            }
-                        }
-
-                        else if (keyValue.Key.Tag.ToString() == "minMeas" || keyValue.Key.Tag.ToString() == "maxMeas")
-                        {
-                            if (NumReg.IsMatch(txt.Text) && !(StrReg.IsMatch(txt.Text)))
-                            {
-                                textConformity[keyValue.Key] = txt.Text;
-                                textIsChanged = true;
-                                break;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Current input does not match format '+/-9999'");
-                                txt.Text = textConformity[keyValue.Key];
+                                float val = float.Parse(keyVal.Value[0]);
+                                float min = itr.SenRangeUnitMin * val;
+                                float max = itr.SenRangeUnitMax * val;
+                                itr.SenRangeUnitMin = (float)Math.Round(min, 1);
+                                itr.SenRangeUnitMax = (float)Math.Round(max, 1);
+                                if (ctrl.Name == "SLUnitCombo")
+                                {
+                                    SLminMeasText.Text = itr.SenRangeUnitMin.ToString();
+                                    SLmaxMeasText.Text = itr.SenRangeUnitMax.ToString();
+                                }
+                                if(ctrl.Name == "PressUnitCombo")
+                                {
+                                    PressMinMeasText.Text = itr.SenRangeUnitMin.ToString();
+                                    PressMaxMeasText.Text = itr.SenRangeUnitMax.ToString();
+                                }
                             }
                         }
                     }
+                        
+                    if(ctrl.Name == "MovUnitCombo" && itr.Name == "Moving") itr.SensorUnit = ctrl.SelectedItem.ToString();
+                    if (ctrl.Name == "SpdUnitCombo" && itr.Name == "Speed") itr.SensorUnit = ctrl.SelectedItem.ToString();
                 }
-                if (textIsChanged) updateConfig(txt);
-                */
+            }
+        }
+
+        private void TextEvent(object sender, KeyEventArgs e)
+        {
+            TextBox ctrl = sender as TextBox;
+            Regex OnlNum = new Regex(@"\d");
+            Regex IpReg = new Regex(@"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}");
+
+            if (e.KeyCode == Keys.Return)
+            {
+                foreach (Config itr in currCfg)
+                {
+                    //check value range (-32768 to +23767,0 to 65535) and slaveID
+                    if (OnlNum.IsMatch(ctrl.Text) && !IpReg.IsMatch(ctrl.Text))
+                    {
+                        int val = Int32.Parse(ctrl.Text);
+                        if ((val >= ushort.MinValue | val <= ushort.MaxValue) | (val >= short.MinValue | val <= short.MaxValue))
+                        {
+                            if ((ctrl.Name == "SlotMinRanText1" && itr.Name == "Slot1") |
+                                (ctrl.Name == "SlotMinRanText2" && itr.Name == "Slot2") |
+                                (ctrl.Name == "SlotMinRanText3" && itr.Name == "Slot3")) itr.ModRangeUnitMin = val;
+
+                            if ((ctrl.Name == "SlotMaxRanText1" && itr.Name == "Slot1") |
+                                (ctrl.Name == "SlotMaxRanText2" && itr.Name == "Slot2") |
+                                (ctrl.Name == "SlotMaxRanText3" && itr.Name == "Slot3")) itr.ModRangeUnitMax = val;
+                                
+                            if ((ctrl.Name == "SLminMeasText" && itr.Name == "StrainLoad") |
+                                (ctrl.Name == "PressMinMeasText" && itr.Name == "Pressure")) itr.SenRangeUnitMin = val;
+
+                            if ((ctrl.Name == "SLmaxMeasText" && itr.Name == "StrainLoad") |
+                                (ctrl.Name == "PressMaxMeasText" && itr.Name == "Pressure")) itr.SenRangeUnitMax = val;
+
+                            if (ctrl.Name == "SlvIDText" && itr.Name == "Eth") itr.slaveID = int.Parse(ctrl.Text);
+                        }
+                    }
+
+                    //check ip address
+                    else if (IpReg.IsMatch(ctrl.Text) && (ctrl.Name == "SlvIPText" && itr.Name == "Eth")) itr.slaveIP = ctrl.Text;
+
+                    //restore previous text
+                    else RestorePrevText(ctrl, itr);
+                }
+            }
         }
 
         private void TextLostFocus(object sender, EventArgs e)
         {
-            /*TextBox txt = new TextBox();
-            txt = sender as TextBox;
+            TextBox ctrl = sender as TextBox;
 
-            foreach (KeyValuePair<TextBox, string> keyValue in textConformity)
-            {
-                if (txt.Name == keyValue.Key.Name && (txt.Text == "" || txt.Text != keyValue.Value))
-                    txt.Text = keyValue.Value;
-            }*/
+            foreach (Config itr in currCfg) { RestorePrevText(ctrl, itr); }
         }
 
         private void OkBtn_Click(object sender, EventArgs e)
         {
             XMLFileWriter fw = new XMLFileWriter();
-            fw.WriteFile<Hardware>("System_Disk2\\StandGA\\TestConfigs\\test.xml", currCfg);
+            fw.WriteFile<Hardware>("System_Disk2\\StandGA\\System\\hardware.xml", currCfg);
+
+            //return currCfg to main form
+           // MainForm form = this.Owner as MainForm;
+           // form.MainForm_Init(currCfg);
+            this.Close();
         }
 
-       
         private void LirSetting_Click(object sender, EventArgs e)
         {
-           // LinInterfaceSetup progForm = new LinInterfaceSetup(currCfg.page[0].config[0].extInterface, currCfg.page[0].config[0].extProtocol,
-              //  currCfg.page[0].config[0].extBaudrate);
-            //progForm.Show();
-        }
-
-        private void UndoBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void CancelBtn_Click(object sender, EventArgs e) { this.Close(); }
-    }
-
-    //combobox items
-    class Items : ICloneable
-    {
-        public string ItemName { get; set; }
-        public int unitOrId { get; set; }
-        public object Clone() { return this.MemberwiseClone(); }
-    }
-
-    //Controls factory methods
-    abstract class ControlConstruct
-    {
-        protected internal abstract void LoadElement(Control control, Items[] items);
-        protected internal abstract void LoadElement(Control control, string currText);
-    }
-
-    class ComboBoxElement : ControlConstruct
-    {
-        public ComboBoxElement() { }
-
-        private ComboBox combo;
-
-        protected internal override void LoadElement(Control control, Items[] items)
-        {
-            combo = control as ComboBox;
-            //filled combo with items
-            combo.DataSource = items;
-            combo.DisplayMember = "ItemName";
-            combo.ValueMember = "unitOrId";
-        }
-        protected internal override void LoadElement(Control control, string currText) {/*throw error*/}
-    }
-    
-    class TextBoxElement: ControlConstruct
-    {
-	    public TextBoxElement(){}
-        private TextBox text;
-
-        protected internal override void LoadElement(Control control,Items[] items){/*throw error*/}
-        protected internal override void LoadElement(Control control, string currText) 
-        {
-            text = control as TextBox;
-            text.Text = currText;
-        }
-    }
- 
-    static class ControlFactory
-    {
-        public static void CreateControl<T>(Control control, string currText) where T : ControlConstruct, new()
-        {
-            try
+            foreach (Config itr in currCfg)
             {
-                var t = new T();
-                t.LoadElement(control, currText);
-            }
-            catch (TargetInvocationException e)
-            {
-                //Error handling
-            }
-        }
-        public static void CreateControl<T>(Control control, Items[] items) where T : ControlConstruct, new()
-	    {
-		    try
-		    {
-			    var t = new T();
-                t.LoadElement(control,items);
-		    }
-		    catch(TargetInvocationException e)
-		    {
-			    //Error handling
-		    }
-	    }
-    }
-/* 
-    class TabElement
-    {
-        private TabPage Tab;
-        private Dictionary<string, Items[]> comboItems;
-        private Dictionary<int, int> numChannels;
-        private Dictionary<ComboBox, string> comboConformity;
-        private Dictionary<TextBox, string> textConformity;
-
-        private Config[] Conf;
-        private Regex NumReg = new Regex(@"^([+-]?(\d+))");
-        private Regex StrReg = new Regex(@"[a-z]|[A-Z]");
-        private Regex OnlNum = new Regex(@"^([1-9]?\d)$");
-        private Regex IpReg = new Regex(@"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}");
-
-        public bool comboIsChanged { get; set; }
-        public bool textIsChanged { get; set; }
-
-        public TabElement(ref TabPage tab, Config[] cfg, Dictionary<string, Items[]> items)
-        {
-            Tab = tab;
-            comboItems = items;
-            numChannels = null;
-            comboConformity = new Dictionary<ComboBox, string>();
-            textConformity = new Dictionary<TextBox, string>();
-            Conf = null;
-            comboIsChanged = false;
-            textIsChanged = false;
-
-            LoadConfig(cfg);
-        }
-
-        public TabElement(ref TabPage tab, Config[] cfg, Dictionary<string, Items[]> items,
-            Dictionary<int, int> numCh)
-        {
-            Tab = tab;
-            comboItems = items;
-            numChannels = numCh;
-            comboConformity = new Dictionary<ComboBox, string>();
-            textConformity = new Dictionary<TextBox, string>();
-            Conf = null;
-            comboIsChanged = false;
-            textIsChanged = false;
-
-            LoadConfig(cfg);
-        }
-
-        public void LoadConfig(Config[] cfg)
-        {
-            comboConformity.Clear();
-            textConformity.Clear();
-            Conf = cfg;
-            LoadGui();
-        }
-
-        private void LoadGui()
-        {
-            //tab iteration
-            foreach (Control panel in Tab.Controls)
-            {
-                if (panel is Panel)
+                if (itr.Name == "COM3" && itr.uartBaudrate == "19200" &&(itr.uartProtocol == "Lir_ASCII" || itr.uartProtocol == "Lir_BCD"))
                 {
-                    Panel currPanel = panel as Panel;
-                    Config currCfg = null;
-
-                    for (int i = 0; i < Conf.Length; i++)
-                        if (panel.Tag.ToString() == Conf[i].Tag) currCfg = Conf[i];
-
-                    //panel iteration    
-                    foreach (Control control in panel.Controls)
-                    {
-                        if (control is ComboBox)
-                        {
-                            ComboBox combo = control as ComboBox;
-
-                            //filled combo with numbers
-                            switch (combo.Tag.ToString())
-                            {
-                                case "Slot":
-                                    for (int i = 1; i <= 3; i++) combo.Items.Add(i);
-                                    break;
-                                case "Channel":
-                                    foreach (KeyValuePair<int, int> keyValue in numChannels)
-                                        if (currCfg.Slot == keyValue.Key)
-                                            for (int i = 0; i < keyValue.Value; i++) combo.Items.Add(i);
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            //filled combo with strings
-                            foreach (KeyValuePair<string, string[]> keyValue in comboItems)
-                            {
-                                if (combo.Tag.ToString() == keyValue.Key)
-                                    for (int i = 0; i < keyValue.Value.Length; i++) combo.Items.Add(keyValue.Value[i]);
-                            }
-
-                            //default combobox seletion
-                            switch (combo.Tag.ToString())
-                            {
-                                case "Backplane":
-                                    comboConformity.Add(combo, currCfg.Backplane);
-                                    break;
-                                case "ExtCom":
-                                    comboConformity.Add(combo, currCfg.extInterface);
-                                    break;
-                                case "ExtBaud":
-                                    comboConformity.Add(combo, currCfg.extBaudrate);
-                                    break;
-                                case "ExtProtocol":
-                                    comboConformity.Add(combo, currCfg.extProtocol);
-                                    break;
-                                case "SlotType":
-                                    comboConformity.Add(combo, currCfg.Type);
-                                    break;
-                                case "SlotRange":
-                                    comboConformity.Add(combo, currCfg.Range);
-                                    break;
-                                case "Slot":
-                                    comboConformity.Add(combo, currCfg.Slot.ToString());
-                                    break;
-                                case "Channel":
-                                    comboConformity.Add(combo, currCfg.Channel.ToString());
-                                    break;
-                                case "UnitF":
-                                    comboConformity.Add(combo, currCfg.Unit);
-                                    break;
-                                case "UnitP":
-                                    comboConformity.Add(combo, currCfg.Unit);
-                                    break;
-                                case "UnitL":
-                                    comboConformity.Add(combo, currCfg.Unit);
-                                    break;
-                                case "UnitS":
-                                    comboConformity.Add(combo, currCfg.Unit);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-
-                        //default text in textbox
-                        else if (control is TextBox)
-                        {
-                            TextBox text = control as TextBox;
-
-                            switch (text.Tag.ToString())
-                            {
-                                case "MBusIp":
-                                    textConformity.Add(text, currCfg.modbusIp);
-                                    break;
-                                case "Slot":
-                                    textConformity.Add(text, currCfg.Name);
-                                    break;
-                                case "SNumCh":
-                                    textConformity.Add(text, currCfg.numChannels.ToString());
-                                    break;
-                                case "minMeas":
-                                    textConformity.Add(text, currCfg.MeasureValMin);
-                                    break;
-                                case "maxMeas":
-                                    textConformity.Add(text, currCfg.MeasureValMax);
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-            //select combo items and fill textBoxes
-            ComboCfgSel();
-            TextCfgFill();
-        }
-
-        private void ComboCfgSel()
-        {
-            foreach (KeyValuePair<ComboBox, string> keyValue in comboConformity)
-            {
-                if (keyValue.Key.Tag.ToString() == "Slot" || keyValue.Key.Tag.ToString() == "Channel")
-                {
-                    if (keyValue.Key.Items.Count >= int.Parse(keyValue.Value))
-                        keyValue.Key.SelectedItem = int.Parse(keyValue.Value);
-                    else MessageBox.Show("Config is damaged, element:" + keyValue.Key.Tag.ToString());
+                    //LirProgForm form = new LirProgForm("COM3", itr.uartProtocol, itr.uartBaudrate);
+                    //form.Show();
+                    break;
                 }
                 else
                 {
-                    if (keyValue.Key.Items.Count >= keyValue.Key.Items.IndexOf(keyValue.Value))
-                        keyValue.Key.SelectedIndex = keyValue.Key.Items.IndexOf(keyValue.Value);
-                    else MessageBox.Show("Config is damaged, element:" + keyValue.Key.Tag.ToString());
-                }
-                keyValue.Key.SelectedIndexChanged += ComboBoxIsChanged;
-            }
-        }
-
-        private void TextCfgFill()
-        {
-            foreach (KeyValuePair<TextBox, string> keyValue in textConformity)
-            {
-                if (keyValue.Key.Tag.ToString() == "Slot") keyValue.Key.Text = keyValue.Value;
-
-                else if (keyValue.Key.Tag.ToString() == "SNumCh")
-                {
-                    if (OnlNum.IsMatch(keyValue.Value)) keyValue.Key.Text = keyValue.Value;
-                    else MessageBox.Show("Config is damaged, element:" + keyValue.Key.Tag.ToString());
-                }
-
-                else if (keyValue.Key.Tag.ToString() == "MBusIp")
-                {
-                    if (IpReg.IsMatch(keyValue.Value)) keyValue.Key.Text = keyValue.Value;
-                    else MessageBox.Show("Config is damaged, element:" + keyValue.Key.Tag.ToString());
-                }
-
-                else
-                {
-                    if (NumReg.IsMatch(keyValue.Value) && !(StrReg.IsMatch(keyValue.Value))) keyValue.Key.Text = keyValue.Value;
-                    else MessageBox.Show("Config is damaged, element:" + keyValue.Key.Tag.ToString());
-                }
-
-                keyValue.Key.Text = keyValue.Value;
-                keyValue.Key.KeyUp += TextChanged;
-                keyValue.Key.LostFocus += TextLostFocus;
-            }
-        }
-
-        //Event handlers
-        public void ComboBoxIsChanged(object sender, EventArgs e)
-        {
-            ComboBox ctrl = sender as ComboBox;
-
-            foreach (KeyValuePair<ComboBox, string> keyValue in comboConformity)
-            {
-                if (keyValue.Key.Name == ctrl.Name && keyValue.Value == "Slot" ||
-                    keyValue.Value == "Channel")
-                {
-                    if (int.Parse(keyValue.Value) != ctrl.SelectedIndex)
-                    {
-                        comboConformity[keyValue.Key] = ctrl.SelectedIndex.ToString();
-                        comboIsChanged = true;
-                        break;
-                    }
-                }
-
-                else if (keyValue.Key.Name == ctrl.Name &&
-                    keyValue.Value != ctrl.SelectedItem.ToString())
-                {
-                    comboConformity[keyValue.Key] = ctrl.SelectedItem.ToString();
-                    comboIsChanged = true;
-                    if (keyValue.Key.Tag.ToString() == "ExtProtocol" || keyValue.Key.Tag.ToString() == "ExtBaud")
-                        MessageBox.Show("To apply changes, re-program the interface");
+                    Error.instance.HandleWarningMessage("Select 'Lir_ASCII' or 'Lir_BCD' protocol for COM3 and baudrate '19200'");
                     break;
                 }
             }
-            if (comboIsChanged) updateConfig(ctrl);
         }
 
-        public void TextLostFocus(object sender, EventArgs e)
+        private void CancelBtn_Click(object sender, EventArgs e) { this.Close(); }
+
+        private void TcpMasterCheck_CheckStateChanged(object sender, EventArgs e)
         {
-            TextBox txt = new TextBox();
-            txt = sender as TextBox;
-
-            foreach (KeyValuePair<TextBox, string> keyValue in textConformity)
+            if (TcpMasterCheck.Checked == true)
             {
-                if (txt.Name == keyValue.Key.Name && (txt.Text == "" || txt.Text != keyValue.Value))
-                    txt.Text = keyValue.Value;
+                SlvIDText.ReadOnly = false;
+                SlvIPText.ReadOnly = false;
+            }
+            else
+            {
+                SlvIDText.ReadOnly = true;
+                SlvIPText.ReadOnly = true;
             }
         }
-
-        public void TextChanged(object sender, KeyEventArgs e)
-        {
-            TextBox txt = sender as TextBox;
-
-            if (e.KeyCode == Keys.Return)
-            {
-                foreach (KeyValuePair<TextBox, string> keyValue in textConformity)
-                {
-                    if (keyValue.Key.Name == txt.Name && keyValue.Value != txt.Text)
-                    {
-                        if (keyValue.Key.Tag.ToString() == "SNumCh")
-                        {
-                            if (OnlNum.IsMatch(txt.Text))
-                            {
-                                textConformity[keyValue.Key] = txt.Text;
-                                textIsChanged = true;
-                                MessageBox.Show("to apply the changes, save the file and reopen the window");
-                                break;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Current input does not match format '[1-99]'");
-                                txt.Text = textConformity[keyValue.Key];
-                            }
-                        }
-
-                        else if (keyValue.Key.Tag.ToString() == "MBusIp")
-                        {
-                            if (IpReg.IsMatch(txt.Text))
-                            {
-                                textConformity[keyValue.Key] = txt.Text;
-                                textIsChanged = true;
-                                break;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Current input does not match format '[0-999].[0-999].[0-999].[0-999]'");
-                                txt.Text = textConformity[keyValue.Key];
-                            }
-                        }
-
-                        else if (keyValue.Key.Tag.ToString() == "minMeas" || keyValue.Key.Tag.ToString() == "maxMeas")
-                        {
-                            if (NumReg.IsMatch(txt.Text) && !(StrReg.IsMatch(txt.Text)))
-                            {
-                                textConformity[keyValue.Key] = txt.Text;
-                                textIsChanged = true;
-                                break;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Current input does not match format '+/-9999'");
-                                txt.Text = textConformity[keyValue.Key];
-                            }
-                        }
-                    }
-                }
-                if (textIsChanged) updateConfig(txt);
-            }
-        }
-
-        //Update functions
-        private void updateConfig(Control ctrl)
-        {
-            Config currcfg = null;
-            int origConfIndex = 0;
-
-            for (int i = 0; i < Conf.Length; i++)
-            {
-                if (ctrl.Parent.Tag.ToString() == Conf[i].Tag)
-                {
-                    currcfg = Conf[i];
-                    origConfIndex = i;
-                }
-            }
-
-            if (ctrl is ComboBox)
-            {
-                foreach (KeyValuePair<ComboBox, string> keyValue in comboConformity)
-                {
-                    if (ctrl.Name == keyValue.Key.Name)
-                    {
-                        switch (keyValue.Key.Tag.ToString())
-                        {
-                            case "Backplane":
-                                if (keyValue.Value != currcfg.Backplane)
-                                    Conf[origConfIndex].Backplane = keyValue.Value;
-                                break;
-                            case "ExtCom":
-                                if (keyValue.Value != currcfg.extInterface)
-                                    Conf[origConfIndex].extInterface = keyValue.Value;
-                                break;
-                            case "ExtBaud":
-                                if (keyValue.Value != currcfg.extBaudrate)
-                                    Conf[origConfIndex].extBaudrate = keyValue.Value;
-                                break;
-                            case "ExtProtocol":
-                                if (keyValue.Value != currcfg.extProtocol)
-                                    Conf[origConfIndex].extProtocol = keyValue.Value;
-                                break;
-                            case "SlotType":
-                                if (keyValue.Value != currcfg.Type)
-                                    Conf[origConfIndex].Type = keyValue.Value;
-                                break;
-                            case "SlotRange":
-                                if (keyValue.Value != currcfg.Range)
-                                    Conf[origConfIndex].Range = keyValue.Value;
-                                break;
-                            case "Slot":
-                                if (int.Parse(keyValue.Value) != currcfg.Slot)
-                                    Conf[origConfIndex].Slot = int.Parse(keyValue.Value);
-                                break;
-                            case "Channel":
-                                if (int.Parse(keyValue.Value) != currcfg.Channel)
-                                    Conf[origConfIndex].Channel = int.Parse(keyValue.Value);
-                                break;
-                            case "UnitF":
-                                if (keyValue.Value != currcfg.Unit)
-                                    Conf[origConfIndex].Unit = keyValue.Value;
-                                break;
-
-                            case "UnitP":
-                                if (keyValue.Value != currcfg.Unit)
-                                    Conf[origConfIndex].Unit = keyValue.Value;
-                                break;
-
-                            case "UnitL":
-                                if (keyValue.Value != currcfg.Unit)
-                                    Conf[origConfIndex].Unit = keyValue.Value;
-                                break;
-
-                            case "UnitS":
-                                if (keyValue.Value != currcfg.Unit)
-                                    Conf[origConfIndex].Unit = keyValue.Value;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-            }
-
-            if (ctrl is TextBox)
-            {
-                foreach (KeyValuePair<TextBox, string> keyValue in textConformity)
-                {
-                    if (ctrl.Name == keyValue.Key.Name)
-                    {
-                        switch (keyValue.Key.Tag.ToString())
-                        {
-                            case "MBusIp":
-                                if (keyValue.Value != currcfg.modbusIp)
-                                    Conf[origConfIndex].modbusIp = keyValue.Value;
-                                break;
-                            case "SNumCh":
-                                if (keyValue.Value != currcfg.numChannels.ToString())
-                                    Conf[origConfIndex].numChannels = int.Parse(keyValue.Value);
-                                break;
-
-                            case "minMeas":
-                                if (keyValue.Value != currcfg.MeasureValMin)
-                                    Conf[origConfIndex].MeasureValMin = keyValue.Value;
-                                break;
-
-                            case "maxMeas":
-                                if (keyValue.Value != currcfg.MeasureValMax)
-                                    Conf[origConfIndex].MeasureValMax = keyValue.Value;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-    }//end class*/
+    }
 }

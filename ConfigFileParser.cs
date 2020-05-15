@@ -41,7 +41,7 @@ namespace stend
                         int next = ReadFile[i].IndexOf(',', start);
                         if (next == -1) next = ReadFile[i].IndexOf(';', start);
                         str[j] = ReadFile[i].Substring(start, next - start);
-                        str[j].Trim();
+                        str[j] = str[j].TrimStart(' ');
                         start = (next + 1);
                         j++;
                     }
@@ -53,13 +53,12 @@ namespace stend
             }
         }
 
+        //return requested settings array
         public Dictionary<string, string[]> GetSetting(string settingName)
         {
-            foreach (KeyValuePair<string, Dictionary<string, string[]>> keyVal in parseCfg)
-            {
-                if (keyVal.Key == settingName) return keyVal.Value;
-                else Error.instance.HandleErrorMessage(settingName + " Not Found");
-            }
+            foreach (KeyValuePair<string, Dictionary<string, string[]>> keyVal in parseCfg) if (keyVal.Key == settingName) return keyVal.Value;
+            
+            Error.instance.HandleErrorMessage(settingName + " Not Found");
             return null;
         }
     }

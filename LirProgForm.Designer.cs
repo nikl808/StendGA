@@ -1,6 +1,6 @@
 ﻿namespace stend
 {
-    partial class LirProg
+    partial class LirProgForm
     {
         /// <summary>
         /// Required designer variable.
@@ -123,7 +123,7 @@
             this.button1.TabIndex = 4;
             this.button1.Text = "Write";
             // 
-            // LirProg
+            // LirProgForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -134,8 +134,8 @@
             this.Controls.Add(this.label6);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "LirProg";
-            this.Text = "Lir setting";
+            this.Name = "LirProgForm";
+            this.Text = "Lir-916 setting";
             this.intSetPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 

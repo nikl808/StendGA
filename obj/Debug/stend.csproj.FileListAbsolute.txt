@@ -9,5 +9,5 @@ C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.exe
 C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.pdb
 C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.MainForm.resources
 C:\Users\df\Desktop\stend-working\stend\bin\Debug\nModbusCE.dll
-C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.LirProg.resources
 C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.SettingsForm.resources
+C:\Users\df\Desktop\stend-working\stend\obj\Debug\stend.LirProgForm.resources
