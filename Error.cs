@@ -40,7 +40,10 @@ namespace stend
 
         public void HandleWarningMessage(string text ) { MessageBox.Show(text, "Warning" ); }
         //Show MessageBox with exception message
-        public void HandleExceptionMessage(Exception ex) { MessageBox.Show("Exception: ", ex.Message); }
+        public void HandleExceptionMessage(Exception ex) { MessageBox.Show(ex.Message,"Exception: "); }
+
+        //Show MessageBox with Error
+        public void HandleErrorMessage(string error) { MessageBox.Show(error, "Error: "); }
         
         //Create new string message with custom error
         public void HandleErrorLog(string caption, string text){ AddNewLine(caption,text); }

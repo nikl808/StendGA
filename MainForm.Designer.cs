@@ -31,10 +31,8 @@
         {
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.SettingsMenu = new System.Windows.Forms.MenuItem();
             this.MainTabControl = new System.Windows.Forms.TabControl();
-            this.MainPage = new System.Windows.Forms.TabPage();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.ControlPage = new System.Windows.Forms.TabPage();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -69,7 +67,6 @@
             this.LogList = new System.Windows.Forms.ListBox();
             this.statusBar1 = new System.Windows.Forms.StatusBar();
             this.MainTabControl.SuspendLayout();
-            this.MainPage.SuspendLayout();
             this.ControlPage.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -83,16 +80,16 @@
             // 
             // menuItem1
             // 
-            this.menuItem1.MenuItems.Add(this.menuItem2);
+            this.menuItem1.MenuItems.Add(this.SettingsMenu);
             this.menuItem1.Text = "Options";
             // 
-            // menuItem2
+            // SettingsMenu
             // 
-            this.menuItem2.Text = "General settings";
+            this.SettingsMenu.Text = "Hardware settings";
+            this.SettingsMenu.Click += new System.EventHandler(this.SettingsMenu_Click);
             // 
             // MainTabControl
             // 
-            this.MainTabControl.Controls.Add(this.MainPage);
             this.MainTabControl.Controls.Add(this.ControlPage);
             this.MainTabControl.Controls.Add(this.LogPage);
             this.MainTabControl.Location = new System.Drawing.Point(0, 44);
@@ -100,22 +97,6 @@
             this.MainTabControl.SelectedIndex = 0;
             this.MainTabControl.Size = new System.Drawing.Size(798, 507);
             this.MainTabControl.TabIndex = 0;
-            // 
-            // MainPage
-            // 
-            this.MainPage.Controls.Add(this.checkBox2);
-            this.MainPage.Location = new System.Drawing.Point(4, 25);
-            this.MainPage.Name = "MainPage";
-            this.MainPage.Size = new System.Drawing.Size(790, 478);
-            this.MainPage.Text = "Plot";
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.Location = new System.Drawing.Point(17, 21);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(100, 20);
-            this.checkBox2.TabIndex = 0;
-            this.checkBox2.Text = "Tracking";
             // 
             // ControlPage
             // 
@@ -416,7 +397,6 @@
             this.Name = "MainForm";
             this.Text = "StendGA";
             this.MainTabControl.ResumeLayout(false);
-            this.MainPage.ResumeLayout(false);
             this.ControlPage.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -429,9 +409,8 @@
         #endregion
 
         private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.MenuItem menuItem2;
+        private System.Windows.Forms.MenuItem SettingsMenu;
         private System.Windows.Forms.TabControl MainTabControl;
-        private System.Windows.Forms.TabPage MainPage;
         private System.Windows.Forms.TabPage ControlPage;
         private System.Windows.Forms.TabPage LogPage;
         private System.Windows.Forms.ListBox LogList;
@@ -464,7 +443,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.StatusBar statusBar1;
     }
 }
