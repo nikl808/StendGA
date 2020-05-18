@@ -11,7 +11,7 @@ namespace stend
 {
     public partial class MainForm : Form
     {
-        public Hardware cfg = new Hardware(12);
+        public Hardware cfg = new Hardware(11);
         public MainForm()
         {
             InitializeComponent();
@@ -45,7 +45,7 @@ namespace stend
             //ModbusTcpSlave mSlave = new ModbusTcpSlave(1);
             //mSlave.StartSlave();
 
-            cfg.config[0] = new uConfig("COM3", "19200", "Generic");
+            /*cfg.config[0] = new uConfig("COM3", "19200", "Generic");
             cfg.config[1] = new uConfig("COM4", "19200", "Generic");
             cfg.config[2] = new uConfig("COM5", "19200", "Generic");
             //tcp
@@ -57,12 +57,11 @@ namespace stend
             //sensor
             cfg.config[7] = new sConfig("StrainLoad", "kgf", 0, 500);
             cfg.config[8] = new sConfig("Pressure", "kPa", 0, 500);
-            cfg.config[9] = new sConfig("Pressure", "kPa", 0, 500);
-            cfg.config[10] = new sConfig("Moving", "mm", 0, 0);
-            cfg.config[11] = new sConfig("Speed", "mm/s", 0, 0);
+            cfg.config[9] = new sConfig("Moving", "mm", 0, 0);
+            cfg.config[10] = new sConfig("Speed", "mm/s", 0, 0);
             
             XMLFileWriter fw = new XMLFileWriter();
-            fw.WriteFile<Hardware>("System_Disk2\\StandGA\\TestConfigs\\hardware.xml", cfg);
+            fw.WriteFile<Hardware>("System_Disk2\\StandGA\\TestConfigs\\hardware.xml", cfg);*/
         }
 
         public void MainForm_Init(Hardware cfg)
@@ -75,8 +74,9 @@ namespace stend
         {
             XMLFileReader fw = new XMLFileReader();
             cfg = fw.ReadFile<Hardware>("System_Disk2\\StandGA\\System\\hardware.xml");
-
+            
             SettingsForm form = new SettingsForm(cfg);
+            form.Owner = this;
             form.Show();
         }   
     }

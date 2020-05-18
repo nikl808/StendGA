@@ -17,155 +17,166 @@ namespace stend
 {
     public partial class SettingsForm : Form
     {
+        #region class field
         Hardware currCfg = new Hardware();
+        //dictionary of values of physical quantities
         Dictionary<string, string[]> Units = new Dictionary<string, string[]>();
-       
+        #endregion
+
+        #region constructor
         public SettingsForm(Hardware config)
         {
             InitializeComponent();
             currCfg = ConfigClone.Clone(config);
             SettingsForm_Init();
         }
+        #endregion
 
+        #region Form initialization
         //initialize form components 
         private void SettingsForm_Init()
         {
+            Dictionary<string, string[]> ParseItems = new Dictionary<string, string[]>();
+
+            using (ConfigFileParser parser = new ConfigFileParser())
             {
                 //Open settings file
-                ConfigFileParser parser = new ConfigFileParser();
-                FileReader reader = new GenericFileReader();
-                parser.Parse(reader.ReadFile("System_Disk2\\StandGA\\System\\settings.ini", 20));
-                Dictionary<string, string[]> ParseItems = new Dictionary<string, string[]>();
-
-                //get gui items
+                using (FileReader reader = new GenericFileReader()) { parser.Parse(reader.ReadFile("System_Disk2\\StandGA\\System\\settings.ini", 20)); }               //get gui items
                 ParseItems = parser.GetSetting("HWSettings");
                 //get units
                 Units = parser.GetSetting("Units");
-               
-                //Initialize comboboxes
-                foreach (KeyValuePair<string, string[]> keyVal in ParseItems)
+            }
+            //Initialize comboboxes
+            foreach (KeyValuePair<string, string[]> keyVal in ParseItems)
+            {
+                switch (keyVal.Key)
                 {
-                    switch (keyVal.Key)
-                    {
-                        case "ModuleType":
-                            FillItems(SlotTypeCombo1, (string[])keyVal.Value.Clone());
-                            FillItems(SlotTypeCombo2, (string[])keyVal.Value.Clone());
-                            FillItems(SlotTypeCombo3, (string[])keyVal.Value.Clone());
-                            break;
-                        case "Baudrate":
-                            FillItems(BaudCombo1, (string[])keyVal.Value.Clone());
-                            FillItems(BaudCombo2, (string[])keyVal.Value.Clone());
-                            FillItems(BaudCombo3, (string[])keyVal.Value.Clone());
-                            break;
-                        case "UartProtocol":
-                            FillItems(UProtocCombo1, (string[])keyVal.Value.Clone());
-                            FillItems(UProtocCombo2, (string[])keyVal.Value.Clone());
-                            FillItems(UProtocCombo3, (string[])keyVal.Value.Clone());
-                            break;
-                        case "EthProtocol":
-                            FillItems(EProtocCombo, (string[])keyVal.Value.Clone());
-                            break;
-                        case "LoadCellUnit":
-                            FillItems(SLUnitCombo, (string[])keyVal.Value.Clone());
-                            break;
-                        case "PressureUnit":
-                            FillItems(PressUnitCombo, (string[])keyVal.Value.Clone());
-                            break;
-                        case "MovingUnit":
-                            FillItems(MovUnitCombo, (string[])keyVal.Value.Clone());
-                            break;
-                        case "SpeedUnit":
-                            FillItems(SpdUnitCombo, (string[])keyVal.Value.Clone());
-                            break;
-                        default: break;
-                    }
+                    case "ModuleType":
+                        FillItems(SlotTypeCombo1, (string[])keyVal.Value.Clone());
+                        FillItems(SlotTypeCombo2, (string[])keyVal.Value.Clone());
+                        FillItems(SlotTypeCombo3, (string[])keyVal.Value.Clone());
+                        break;
+                    case "Baudrate":
+                        FillItems(BaudCombo1, (string[])keyVal.Value.Clone());
+                        FillItems(BaudCombo2, (string[])keyVal.Value.Clone());
+                        FillItems(BaudCombo3, (string[])keyVal.Value.Clone());
+                        break;
+                    case "UartProtocol":
+                        FillItems(UProtocCombo1, (string[])keyVal.Value.Clone());
+                        FillItems(UProtocCombo2, (string[])keyVal.Value.Clone());
+                        FillItems(UProtocCombo3, (string[])keyVal.Value.Clone());
+                        break;
+                    case "EthProtocol":
+                        FillItems(EProtocCombo, (string[])keyVal.Value.Clone());
+                        break;
+                    case "LoadCellUnit":
+                        FillItems(SLUnitCombo, (string[])keyVal.Value.Clone());
+                        break;
+                    case "PressureUnit":
+                        FillItems(PressUnitCombo, (string[])keyVal.Value.Clone());
+                        break;
+                    case "MovingUnit":
+                        FillItems(MovUnitCombo, (string[])keyVal.Value.Clone());
+                        break;
+                    case "SpeedUnit":
+                        FillItems(SpdUnitCombo, (string[])keyVal.Value.Clone());
+                        break;
+                    default: 
+                        Error.instance.HandleErrorMessage("Error setting string: "+keyVal.Key);
+                        break;
                 }
+            }
 
-                //fill textboxes and select items in comboboxes
-                foreach (Config iter in currCfg)
+            //fill textboxes and select items in comboboxes
+            foreach (Config iter in currCfg)
+            {
+                switch (iter.Name)
                 {
-                    switch (iter.Name)
-                    {
-                        case "COM3":
-                            BaudCombo1.SelectedItem = iter.uartBaudrate;
-                            UProtocCombo1.SelectedItem = iter.uartProtocol;
-                            break;
-                        case "COM4":
-                            BaudCombo2.SelectedItem = iter.uartBaudrate;
-                            UProtocCombo2.SelectedItem = iter.uartProtocol;
-                            break;
-                        case "COM5":
-                            BaudCombo3.SelectedItem = iter.uartBaudrate;
-                            UProtocCombo3.SelectedItem = iter.uartProtocol;
-                            break;
-                        case "Eth":
-                            EProtocCombo.SelectedItem = iter.ethProtocol;
-                            SlvIDText.Text = iter.slaveID.ToString();
-                            SlvIPText.Text = iter.slaveIP;
-                            IPAddress addr = IPAddress.Parse("127.0.0.1");
-                            foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+                    case "COM3":
+                        BaudCombo1.SelectedItem = iter.uartBaudrate;
+                        UProtocCombo1.SelectedItem = iter.uartProtocol;
+                        break;
+                    case "COM4":
+                        BaudCombo2.SelectedItem = iter.uartBaudrate;
+                        UProtocCombo2.SelectedItem = iter.uartProtocol;
+                        break;
+                    case "COM5":
+                        BaudCombo3.SelectedItem = iter.uartBaudrate;
+                        UProtocCombo3.SelectedItem = iter.uartProtocol;
+                        break;
+                    case "Eth":
+                        EProtocCombo.SelectedItem = iter.ethProtocol;
+                        SlvIDText.Text = iter.slaveID.ToString();
+                        SlvIPText.Text = iter.slaveIP;
+                        IPAddress addr = IPAddress.Parse("127.0.0.1");
+                        foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+                        {
+                            if (ip.AddressFamily == AddressFamily.InterNetwork)
                             {
-                                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                                {
-                                    addr = ip;
-                                    break;
-                                }
+                                addr = ip;
+                                break;
                             }
-                            EthIpText.Text = addr.ToString();
-                            //set master checkbox
-                            TcpMasterCheck.Checked = iter.asMaster;
-                            if (iter.ethProtocol == "ModbusTCP" && TcpMasterCheck.Enabled == false)
+                        }
+                        EthIpText.Text = addr.ToString();
+                        //set master checkbox
+                        TcpMasterCheck.Checked = iter.asMaster;
+                        if (iter.ethProtocol == "ModbusTCP" && TcpMasterCheck.Enabled == false)
+                        {
+                            TcpMasterCheck.Enabled = true;
+                            if (TcpMasterCheck.Checked == true && (SlvIDText.ReadOnly == true | SlvIPText.ReadOnly == true))
                             {
-                                TcpMasterCheck.Enabled = true;
-                                if (TcpMasterCheck.Checked == true && (SlvIDText.ReadOnly == true | SlvIPText.ReadOnly == true))
-                                {
-                                    SlvIDText.ReadOnly = false;
-                                    SlvIPText.ReadOnly = false;
-                                }
+                                SlvIDText.ReadOnly = false;
+                                SlvIPText.ReadOnly = false;
                             }
-                            break;
-                        case "Slot1":
-                            SlotTypeCombo1.SelectedItem = iter.Type;
-                            SlotMinRanText1.Text = iter.ModRangeUnitMin.ToString();
-                            SlotMaxRanText1.Text = iter.ModRangeUnitMax.ToString();
-                            SlotNameText1.Text = PACNET.Sys.GetModuleName(1);
-                            break;
-                        case "Slot2":
-                            SlotTypeCombo2.SelectedItem = iter.Type;
-                            SlotMinRanText2.Text = iter.ModRangeUnitMin.ToString();
-                            SlotMaxRanText2.Text = iter.ModRangeUnitMax.ToString();
-                            SlotNameText2.Text = PACNET.Sys.GetModuleName(2);
-                            break;
-                        case "Slot3":
-                            SlotTypeCombo3.SelectedItem = iter.Type;
-                            SlotMinRanText3.Text = iter.ModRangeUnitMin.ToString();
-                            SlotMaxRanText3.Text = iter.ModRangeUnitMax.ToString();
-                            SlotNameText3.Text = PACNET.Sys.GetModuleName(3);
-                            break;
-                        case "StrainLoad":
-                            SLUnitCombo.SelectedItem = iter.SensorUnit;
-                            SLminMeasText.Text = iter.SenRangeUnitMin.ToString();
-                            SLmaxMeasText.Text = iter.SenRangeUnitMax.ToString();
-                            break;
-                        case "Pressure":
-                            PressUnitCombo.SelectedItem = iter.SensorUnit;
-                            PressMinMeasText.Text = iter.SenRangeUnitMin.ToString();
-                            PressMaxMeasText.Text = iter.SenRangeUnitMax.ToString();
-                            break;
-                        case "Moving":
-                            MovUnitCombo.SelectedItem = iter.SensorUnit;
-                            break;
-                        case "Speed":
-                            SpdUnitCombo.SelectedItem = iter.SensorUnit;
-                            break;
-                        default: break;
-                    }
+                        }
+                        break;
+                    case "Slot1":
+                        SlotTypeCombo1.SelectedItem = iter.Type;
+                        SlotMinRanText1.Text = iter.ModRangeUnitMin.ToString();
+                        SlotMaxRanText1.Text = iter.ModRangeUnitMax.ToString();
+                        SlotNameText1.Text = PACNET.Sys.GetModuleName(1);
+                        break;
+                    case "Slot2":
+                        SlotTypeCombo2.SelectedItem = iter.Type;
+                        SlotMinRanText2.Text = iter.ModRangeUnitMin.ToString();
+                        SlotMaxRanText2.Text = iter.ModRangeUnitMax.ToString();
+                        SlotNameText2.Text = PACNET.Sys.GetModuleName(2);
+                        break;
+                    case "Slot3":
+                        SlotTypeCombo3.SelectedItem = iter.Type;
+                        SlotMinRanText3.Text = iter.ModRangeUnitMin.ToString();
+                        SlotMaxRanText3.Text = iter.ModRangeUnitMax.ToString();
+                        SlotNameText3.Text = PACNET.Sys.GetModuleName(3);
+                        break;
+                    case "StrainLoad":
+                        SLUnitCombo.SelectedItem = iter.SensorUnit;
+                        SLminMeasText.Text = iter.SenRangeUnitMin.ToString();
+                        SLmaxMeasText.Text = iter.SenRangeUnitMax.ToString();
+                        break;
+                    case "Pressure":
+                        PressUnitCombo.SelectedItem = iter.SensorUnit;
+                        PressMinMeasText.Text = iter.SenRangeUnitMin.ToString();
+                        PressMaxMeasText.Text = iter.SenRangeUnitMax.ToString();
+                        break;
+                    case "Moving":
+                        MovUnitCombo.SelectedItem = iter.SensorUnit;
+                        break;
+                    case "Speed":
+                        SpdUnitCombo.SelectedItem = iter.SensorUnit;
+                        break;
+                    default:
+                        Error.instance.HandleErrorMessage("Error config string: " + iter.Name);
+                        break;
                 }
             }
         }
+        #endregion
 
+        #region Fill combobox with items
         private void FillItems(ComboBox ctrl, string[] items) { for (int i = 0; i < items.Length; i++) ctrl.Items.Add(items[i]); }
+        #endregion
 
+        #region Restore previous text
         private void RestorePrevText(TextBox ctrl, Config itr)
         {
             if ((ctrl.Name == "SlotMinRanText1" && itr.Name == "Slot1") |
@@ -185,8 +196,9 @@ namespace stend
             if (ctrl.Name == "SlvIDText" && itr.Name == "Eth") ctrl.Text = itr.slaveID.ToString();
             if (ctrl.Name == "SlvIPText" && itr.Name == "Eth") ctrl.Text = itr.slaveIP;
         }
+        #endregion
 
-        //Form events
+        #region Combobox event
         private void ComboBoxSelected(object sender, EventArgs e)
         {
            ComboBox ctrl = sender as ComboBox;
@@ -205,7 +217,7 @@ namespace stend
                {
                    itr.ethProtocol = ctrl.SelectedItem.ToString();
 
-                   //enable/disable controls
+                   //enable/disable textbox controls
                    if (ctrl.SelectedItem.ToString() == "ModbusTCP")
                    {
                        TcpMasterCheck.Enabled = true;
@@ -231,48 +243,53 @@ namespace stend
                    itr.Type = ctrl.SelectedItem.ToString();
            }
         }
+        #endregion
 
+        #region Unit combobox event
         private void UnitComboEvents(object sender, EventArgs e)
         {
             ComboBox ctrl = sender as ComboBox;
            
             foreach (Config itr in currCfg)
             {
-                if (ctrl.SelectedItem.ToString() != itr.SensorUnit)
+                if (ctrl.SelectedItem.ToString() != itr.SensorUnit && (ctrl.Name == "SLUnitCombo" && itr.Name == "StrainLoad") | 
+                    (ctrl.Name == "PressUnitCombo" && itr.Name == "Pressure"))
                 {
-                    if (itr.Name == "StrainLoad" | itr.Name == "Pressure")
-                    {
-                        itr.SensorUnit = ctrl.SelectedItem.ToString();
+                    itr.SensorUnit = ctrl.SelectedItem.ToString();
 
-                        foreach (KeyValuePair<string, string[]> keyVal in Units)
+                    foreach (KeyValuePair<string, string[]> keyVal in Units)
+                    {
+                        //convert unit
+                        if (keyVal.Key == itr.SensorUnit)
                         {
-                            if (keyVal.Key == itr.SensorUnit)
+                            float val = float.Parse(keyVal.Value[0]);
+                            float min = itr.SenRangeUnitMin * val;
+                            float max = itr.SenRangeUnitMax * val;
+                            itr.SenRangeUnitMin = (float)Math.Round(min, 1);
+                            itr.SenRangeUnitMax = (float)Math.Round(max, 1);
+                            
+                            if (ctrl.Name == "SLUnitCombo")
                             {
-                                float val = float.Parse(keyVal.Value[0]);
-                                float min = itr.SenRangeUnitMin * val;
-                                float max = itr.SenRangeUnitMax * val;
-                                itr.SenRangeUnitMin = (float)Math.Round(min, 1);
-                                itr.SenRangeUnitMax = (float)Math.Round(max, 1);
-                                if (ctrl.Name == "SLUnitCombo")
-                                {
-                                    SLminMeasText.Text = itr.SenRangeUnitMin.ToString();
-                                    SLmaxMeasText.Text = itr.SenRangeUnitMax.ToString();
-                                }
-                                if(ctrl.Name == "PressUnitCombo")
-                                {
-                                    PressMinMeasText.Text = itr.SenRangeUnitMin.ToString();
-                                    PressMaxMeasText.Text = itr.SenRangeUnitMax.ToString();
-                                }
+                                SLminMeasText.Text = itr.SenRangeUnitMin.ToString();
+                                SLmaxMeasText.Text = itr.SenRangeUnitMax.ToString();
+                            }
+
+                            else if (ctrl.Name == "PressUnitCombo")
+                            {
+                                PressMinMeasText.Text = itr.SenRangeUnitMin.ToString();
+                                PressMaxMeasText.Text = itr.SenRangeUnitMax.ToString();
                             }
                         }
                     }
-                        
-                    if(ctrl.Name == "MovUnitCombo" && itr.Name == "Moving") itr.SensorUnit = ctrl.SelectedItem.ToString();
-                    if (ctrl.Name == "SpdUnitCombo" && itr.Name == "Speed") itr.SensorUnit = ctrl.SelectedItem.ToString();
                 }
+                        
+                if(ctrl.Name == "MovUnitCombo" && itr.Name == "Moving") itr.SensorUnit = ctrl.SelectedItem.ToString();
+                if (ctrl.Name == "SpdUnitCombo" && itr.Name == "Speed") itr.SensorUnit = ctrl.SelectedItem.ToString();
             }
         }
+        #endregion
 
+        #region textbox event
         private void TextEvent(object sender, KeyEventArgs e)
         {
             TextBox ctrl = sender as TextBox;
@@ -315,7 +332,9 @@ namespace stend
                 }
             }
         }
+        #endregion
 
+        #region textbox lost focus
         private void TextLostFocus(object sender, EventArgs e)
         {
             TextBox ctrl = sender as TextBox;
@@ -329,43 +348,56 @@ namespace stend
             fw.WriteFile<Hardware>("System_Disk2\\StandGA\\System\\hardware.xml", currCfg);
 
             //return currCfg to main form
-           // MainForm form = this.Owner as MainForm;
-           // form.MainForm_Init(currCfg);
+            MainForm form = this.Owner as MainForm;
+            form.MainForm_Init(currCfg);
             this.Close();
         }
+        #endregion
 
+        #region lir-916 button click
         private void LirSetting_Click(object sender, EventArgs e)
+        {
+
+            foreach (Config itr in currCfg)
+            {
+                if (itr.Name == "COM3" && itr.uartProtocol != "Generic")
+                {
+                    LirProgForm form = new LirProgForm(itr.uartProtocol, itr.uartBaudrate);
+                    form.Show();
+                    break;
+                }
+                else Error.instance.HandleWarningMessage("Select lir protocol for COM3");
+            }
+        }
+        #endregion
+
+        #region cancel button click
+        private void CancelBtn_Click(object sender, EventArgs e) { this.Close(); }
+        #endregion
+
+        #region modbus master checkbox event
+        private void TcpMasterCheck_CheckStateChanged(object sender, EventArgs e)
         {
             foreach (Config itr in currCfg)
             {
-                if (itr.Name == "COM3" && itr.uartBaudrate == "19200" &&(itr.uartProtocol == "Lir_ASCII" || itr.uartProtocol == "Lir_BCD"))
+                if (itr.Name == "Eth")
                 {
-                    //LirProgForm form = new LirProgForm("COM3", itr.uartProtocol, itr.uartBaudrate);
-                    //form.Show();
-                    break;
+                    if (TcpMasterCheck.Checked == true)
+                    {
+                        itr.asMaster = true;
+                        SlvIDText.ReadOnly = false;
+                        SlvIPText.ReadOnly = false;
+                    }
+                    else
+                    {
+                        itr.asMaster = false;
+                        SlvIDText.ReadOnly = true;
+                        SlvIPText.ReadOnly = true;
+                    }
                 }
-                else
-                {
-                    Error.instance.HandleWarningMessage("Select 'Lir_ASCII' or 'Lir_BCD' protocol for COM3 and baudrate '19200'");
-                    break;
-                }
+                break;
             }
         }
-
-        private void CancelBtn_Click(object sender, EventArgs e) { this.Close(); }
-
-        private void TcpMasterCheck_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (TcpMasterCheck.Checked == true)
-            {
-                SlvIDText.ReadOnly = false;
-                SlvIPText.ReadOnly = false;
-            }
-            else
-            {
-                SlvIDText.ReadOnly = true;
-                SlvIPText.ReadOnly = true;
-            }
-        }
+        #endregion
     }
 }

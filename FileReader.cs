@@ -9,13 +9,14 @@ using System.Globalization;
 
 namespace stend
 {
-    abstract class FileReader
+    abstract class FileReader: IDisposable
     {
         public T ReadFile<T>(string filenamePath) { return Read<T>(filenamePath); }
         public string[] ReadFile(string filenamePath, int numLines) { return Read(filenamePath, numLines); }
 
         protected abstract T Read<T>(string filenamePath);
         protected abstract string[] Read(string filenamePath, int numLines);
+        public void Dispose() { }
     }
 
     class XMLFileReader : FileReader

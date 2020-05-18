@@ -5,7 +5,7 @@ using System.Text;
 
 namespace stend
 {
-    class ConfigFileParser 
+    class ConfigFileParser:IDisposable
     {
         //Comboboxes items
         private Dictionary<string, Dictionary<string, string[]>> parseCfg;
@@ -61,5 +61,6 @@ namespace stend
             Error.instance.HandleErrorMessage(settingName + " Not Found");
             return null;
         }
+        public void Dispose() { }
     }
 }

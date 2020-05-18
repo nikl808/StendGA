@@ -35,7 +35,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.ProgBtn = new System.Windows.Forms.Button();
             this.intSetPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +69,7 @@
             this.BitUpDown.Name = "BitUpDown";
             this.BitUpDown.Size = new System.Drawing.Size(56, 24);
             this.BitUpDown.TabIndex = 26;
+            this.BitUpDown.ValueChanged += new System.EventHandler(this.BitUpDown_ValueChanged);
             // 
             // NetUpDown
             // 
@@ -91,6 +92,7 @@
             0,
             0,
             0});
+            this.NetUpDown.ValueChanged += new System.EventHandler(this.NetUpDown_ValueChanged);
             // 
             // label4
             // 
@@ -115,13 +117,14 @@
             this.label2.Size = new System.Drawing.Size(113, 20);
             this.label2.Text = "Network address:";
             // 
-            // button1
+            // ProgBtn
             // 
-            this.button1.Location = new System.Drawing.Point(3, 220);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(88, 38);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Write";
+            this.ProgBtn.Location = new System.Drawing.Point(3, 220);
+            this.ProgBtn.Name = "ProgBtn";
+            this.ProgBtn.Size = new System.Drawing.Size(88, 38);
+            this.ProgBtn.TabIndex = 4;
+            this.ProgBtn.Text = "Write";
+            this.ProgBtn.Click += new System.EventHandler(this.ProgButton_Click);
             // 
             // LirProgForm
             // 
@@ -129,7 +132,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(271, 268);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.ProgBtn);
             this.Controls.Add(this.intSetPanel);
             this.Controls.Add(this.label6);
             this.MaximizeBox = false;
@@ -150,6 +153,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button ProgBtn;
     }
 }

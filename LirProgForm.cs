@@ -11,17 +11,18 @@ namespace stend
 {
     public partial class LirProgForm : Form
     {
-        string progCom;
+        #region class field
         string protocol;
         string baudrate;
         Dictionary<string, string> progRequest = new Dictionary<string,string>();
+        #endregion
 
-        public LirProgForm(string extCom,string prot,string baud)
+        #region constructor
+        public LirProgForm(string protoc,string baud)
         {
             InitializeComponent();
-            progCom = extCom;
-            if (prot == "ascii") protocol = "00";
-            else if (prot == "bcd") protocol = "01";
+            if (protoc == "Lir_ASCII") protocol = "00";
+            else if (protoc == "Lir_BCD") protocol = "01";
             switch (baud)
             {
                 case "19200":
@@ -43,9 +44,12 @@ namespace stend
                     baudrate = "05";
                     break;
             }
+            LirProgForm_Init();
         }
+        #endregion
 
-        private void LinInterfaceSetup_Load(object sender, EventArgs e)
+        #region form initialization
+        private void LirProgForm_Init()
         {            
             byte[] first = Encoding.ASCII.GetBytes("#p#");
 
@@ -55,17 +59,15 @@ namespace stend
             progRequest.Add("speed", baudrate);
             progRequest.Add("bit", "00");
         }
+        #endregion
 
-        private void BitUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            progRequest["bit"] = (Convert.ToInt32(BitUpDown.Value)).ToString("x2");
-        }
+        #region domain updown event
+        private void BitUpDown_ValueChanged(object sender, EventArgs e) { progRequest["bit"] = (Convert.ToInt32(BitUpDown.Value)).ToString("x2"); }
 
-        private void NetUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            progRequest["addr"] = (Convert.ToInt32(NetUpDown.Value)).ToString("x2");
-        }
+        private void NetUpDown_ValueChanged(object sender, EventArgs e) { progRequest["addr"] = (Convert.ToInt32(NetUpDown.Value)).ToString("x2"); }
+        #endregion
 
+        #region Write button click
         private void ProgButton_Click(object sender, EventArgs e)
         {
             // build message
@@ -77,19 +79,16 @@ namespace stend
             byte[] send = StringToByteArray(raw);
             byte[] receive = new byte[6];
 
-            //open com
-            IntPtr hOpen;
-            hOpen = PACNET.UART.Open(progCom + ",19200,N,8,1");
-            if (hOpen == (IntPtr)(-1)) MessageBox.Show("Cannot open: " + progCom);
-
-            //send message
-            if (!PACNET.UART.BinSend(hOpen, send, 8)) MessageBox.Show("Error: send uart message");
-
-            //recieve com
-            if (!PACNET.UART.BinRecv(hOpen, receive, 6)) MessageBox.Show("Error: the interface does not respond");
-
-            //close com
-            PACNET.UART.Close(hOpen);
+            //open com and send data
+            using (XPacComport comport = new XPacComport())
+            {
+                comport.ComPort = "COM3";
+                comport.Baudrate = "19200";
+                comport.Parity = "N,8,1";
+                comport.ReceiveMsgLenght = 6;
+                comport.OpenCom();
+                comport.SendToCom(send);
+            }
 
             //compare
             byte[] snd = new byte[4];
@@ -98,12 +97,13 @@ namespace stend
             for (int i = 0; i < rcv.Length; i++) rcv[i] = receive[i + 1];
 
             var res = snd.SequenceEqual(rcv);
-            if (!res) MessageBox.Show(progCom + ": the interface is not programmed");
-            else MessageBox.Show(progCom + ": the interface is programmed");
-
+            if (!res) Error.instance.HandleErrorMessage ("Lir-916 is not programmed");
+                
+            else Error.instance.HandleWarningMessage("OK");
         }
+        #endregion
 
-        //service function
+        #region String-to-array converter
         private static byte[] StringToByteArray(String hex)
         {
             int NumberChars = hex.Length;
@@ -112,5 +112,6 @@ namespace stend
                 bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
             return bytes;
         }
+        #endregion
     }
 }
