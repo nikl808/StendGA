@@ -35,9 +35,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.SlotMinRanText1 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.SlotTypeCombo1 = new System.Windows.Forms.ComboBox();
             this.SlotNameText1 = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.ContrPanel3 = new System.Windows.Forms.Panel();
@@ -45,9 +43,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.SlotMinRanText3 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.SlotTypeCombo3 = new System.Windows.Forms.ComboBox();
             this.SlotNameText3 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label76 = new System.Windows.Forms.Label();
             this.ContrPanel2 = new System.Windows.Forms.Panel();
@@ -55,9 +51,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.SlotMinRanText2 = new System.Windows.Forms.TextBox();
             this.label75 = new System.Windows.Forms.Label();
-            this.SlotTypeCombo2 = new System.Windows.Forms.ComboBox();
             this.SlotNameText2 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -75,6 +69,10 @@
             this.label27 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.AddrText3 = new System.Windows.Forms.TextBox();
+            this.AddrText2 = new System.Windows.Forms.TextBox();
+            this.AddrText1 = new System.Windows.Forms.TextBox();
+            this.Address = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.LirSetBtn = new System.Windows.Forms.Button();
             this.UProtocCombo3 = new System.Windows.Forms.ComboBox();
@@ -95,6 +93,8 @@
             this.SpdUnitCombo = new System.Windows.Forms.ComboBox();
             this.label39 = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.DiscrText = new System.Windows.Forms.TextBox();
             this.label72 = new System.Windows.Forms.Label();
             this.MovUnitCombo = new System.Windows.Forms.ComboBox();
             this.label38 = new System.Windows.Forms.Label();
@@ -139,7 +139,7 @@
             this.SettingTab.Location = new System.Drawing.Point(0, 0);
             this.SettingTab.Name = "SettingTab";
             this.SettingTab.SelectedIndex = 0;
-            this.SettingTab.Size = new System.Drawing.Size(457, 384);
+            this.SettingTab.Size = new System.Drawing.Size(417, 359);
             this.SettingTab.TabIndex = 0;
             // 
             // ControllerPage
@@ -150,7 +150,7 @@
             this.ControllerPage.Controls.Add(this.label1);
             this.ControllerPage.Location = new System.Drawing.Point(4, 25);
             this.ControllerPage.Name = "ControllerPage";
-            this.ControllerPage.Size = new System.Drawing.Size(449, 355);
+            this.ControllerPage.Size = new System.Drawing.Size(409, 330);
             this.ControllerPage.Text = "Controller";
             // 
             // ContrPanel1
@@ -159,18 +159,16 @@
             this.ContrPanel1.Controls.Add(this.label2);
             this.ContrPanel1.Controls.Add(this.SlotMinRanText1);
             this.ContrPanel1.Controls.Add(this.label8);
-            this.ContrPanel1.Controls.Add(this.SlotTypeCombo1);
             this.ContrPanel1.Controls.Add(this.SlotNameText1);
-            this.ContrPanel1.Controls.Add(this.label7);
             this.ContrPanel1.Controls.Add(this.label6);
             this.ContrPanel1.Controls.Add(this.label3);
-            this.ContrPanel1.Location = new System.Drawing.Point(47, 72);
+            this.ContrPanel1.Location = new System.Drawing.Point(28, 86);
             this.ContrPanel1.Name = "ContrPanel1";
-            this.ContrPanel1.Size = new System.Drawing.Size(113, 261);
+            this.ContrPanel1.Size = new System.Drawing.Size(113, 204);
             // 
             // SlotMaxRanText1
             // 
-            this.SlotMaxRanText1.Location = new System.Drawing.Point(3, 227);
+            this.SlotMaxRanText1.Location = new System.Drawing.Point(3, 170);
             this.SlotMaxRanText1.Name = "SlotMaxRanText1";
             this.SlotMaxRanText1.Size = new System.Drawing.Size(100, 23);
             this.SlotMaxRanText1.TabIndex = 26;
@@ -179,14 +177,14 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(3, 204);
+            this.label2.Location = new System.Drawing.Point(3, 147);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 20);
             this.label2.Text = "Max. range";
             // 
             // SlotMinRanText1
             // 
-            this.SlotMinRanText1.Location = new System.Drawing.Point(3, 170);
+            this.SlotMinRanText1.Location = new System.Drawing.Point(3, 113);
             this.SlotMinRanText1.Name = "SlotMinRanText1";
             this.SlotMinRanText1.Size = new System.Drawing.Size(100, 23);
             this.SlotMinRanText1.TabIndex = 24;
@@ -195,18 +193,10 @@
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(3, 147);
+            this.label8.Location = new System.Drawing.Point(3, 90);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 20);
             this.label8.Text = "Min. range";
-            // 
-            // SlotTypeCombo1
-            // 
-            this.SlotTypeCombo1.Location = new System.Drawing.Point(3, 113);
-            this.SlotTypeCombo1.Name = "SlotTypeCombo1";
-            this.SlotTypeCombo1.Size = new System.Drawing.Size(67, 23);
-            this.SlotTypeCombo1.TabIndex = 16;
-            this.SlotTypeCombo1.SelectedIndexChanged += new System.EventHandler(this.ComboBoxSelected);
             // 
             // SlotNameText1
             // 
@@ -215,13 +205,6 @@
             this.SlotNameText1.ReadOnly = true;
             this.SlotNameText1.Size = new System.Drawing.Size(100, 23);
             this.SlotNameText1.TabIndex = 9;
-            // 
-            // label7
-            // 
-            this.label7.Location = new System.Drawing.Point(3, 90);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(50, 20);
-            this.label7.Text = "Type";
             // 
             // label6
             // 
@@ -245,18 +228,16 @@
             this.ContrPanel3.Controls.Add(this.label5);
             this.ContrPanel3.Controls.Add(this.SlotMinRanText3);
             this.ContrPanel3.Controls.Add(this.label14);
-            this.ContrPanel3.Controls.Add(this.SlotTypeCombo3);
             this.ContrPanel3.Controls.Add(this.SlotNameText3);
-            this.ContrPanel3.Controls.Add(this.label16);
             this.ContrPanel3.Controls.Add(this.label17);
             this.ContrPanel3.Controls.Add(this.label76);
-            this.ContrPanel3.Location = new System.Drawing.Point(284, 72);
+            this.ContrPanel3.Location = new System.Drawing.Point(265, 86);
             this.ContrPanel3.Name = "ContrPanel3";
-            this.ContrPanel3.Size = new System.Drawing.Size(113, 261);
+            this.ContrPanel3.Size = new System.Drawing.Size(113, 204);
             // 
             // SlotMaxRanText3
             // 
-            this.SlotMaxRanText3.Location = new System.Drawing.Point(3, 227);
+            this.SlotMaxRanText3.Location = new System.Drawing.Point(3, 170);
             this.SlotMaxRanText3.Name = "SlotMaxRanText3";
             this.SlotMaxRanText3.Size = new System.Drawing.Size(100, 23);
             this.SlotMaxRanText3.TabIndex = 33;
@@ -265,14 +246,14 @@
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(3, 204);
+            this.label5.Location = new System.Drawing.Point(3, 147);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(83, 20);
             this.label5.Text = "Max. range";
             // 
             // SlotMinRanText3
             // 
-            this.SlotMinRanText3.Location = new System.Drawing.Point(3, 170);
+            this.SlotMinRanText3.Location = new System.Drawing.Point(3, 113);
             this.SlotMinRanText3.Name = "SlotMinRanText3";
             this.SlotMinRanText3.Size = new System.Drawing.Size(100, 23);
             this.SlotMinRanText3.TabIndex = 32;
@@ -281,18 +262,10 @@
             // 
             // label14
             // 
-            this.label14.Location = new System.Drawing.Point(3, 147);
+            this.label14.Location = new System.Drawing.Point(3, 90);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(71, 20);
             this.label14.Text = "Min. range";
-            // 
-            // SlotTypeCombo3
-            // 
-            this.SlotTypeCombo3.Location = new System.Drawing.Point(3, 113);
-            this.SlotTypeCombo3.Name = "SlotTypeCombo3";
-            this.SlotTypeCombo3.Size = new System.Drawing.Size(67, 23);
-            this.SlotTypeCombo3.TabIndex = 18;
-            this.SlotTypeCombo3.SelectedIndexChanged += new System.EventHandler(this.ComboBoxSelected);
             // 
             // SlotNameText3
             // 
@@ -301,13 +274,6 @@
             this.SlotNameText3.ReadOnly = true;
             this.SlotNameText3.Size = new System.Drawing.Size(100, 23);
             this.SlotNameText3.TabIndex = 17;
-            // 
-            // label16
-            // 
-            this.label16.Location = new System.Drawing.Point(3, 90);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(50, 20);
-            this.label16.Text = "Type";
             // 
             // label17
             // 
@@ -331,18 +297,16 @@
             this.ContrPanel2.Controls.Add(this.label12);
             this.ContrPanel2.Controls.Add(this.SlotMinRanText2);
             this.ContrPanel2.Controls.Add(this.label75);
-            this.ContrPanel2.Controls.Add(this.SlotTypeCombo2);
             this.ContrPanel2.Controls.Add(this.SlotNameText2);
-            this.ContrPanel2.Controls.Add(this.label11);
             this.ContrPanel2.Controls.Add(this.label10);
             this.ContrPanel2.Controls.Add(this.label4);
-            this.ContrPanel2.Location = new System.Drawing.Point(165, 72);
+            this.ContrPanel2.Location = new System.Drawing.Point(146, 86);
             this.ContrPanel2.Name = "ContrPanel2";
-            this.ContrPanel2.Size = new System.Drawing.Size(113, 261);
+            this.ContrPanel2.Size = new System.Drawing.Size(113, 204);
             // 
             // SlotMaxRanText2
             // 
-            this.SlotMaxRanText2.Location = new System.Drawing.Point(3, 227);
+            this.SlotMaxRanText2.Location = new System.Drawing.Point(3, 170);
             this.SlotMaxRanText2.Name = "SlotMaxRanText2";
             this.SlotMaxRanText2.Size = new System.Drawing.Size(100, 23);
             this.SlotMaxRanText2.TabIndex = 33;
@@ -351,14 +315,14 @@
             // 
             // label12
             // 
-            this.label12.Location = new System.Drawing.Point(3, 204);
+            this.label12.Location = new System.Drawing.Point(3, 147);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(83, 20);
             this.label12.Text = "Max. range";
             // 
             // SlotMinRanText2
             // 
-            this.SlotMinRanText2.Location = new System.Drawing.Point(3, 170);
+            this.SlotMinRanText2.Location = new System.Drawing.Point(3, 113);
             this.SlotMinRanText2.Name = "SlotMinRanText2";
             this.SlotMinRanText2.Size = new System.Drawing.Size(100, 23);
             this.SlotMinRanText2.TabIndex = 32;
@@ -367,18 +331,10 @@
             // 
             // label75
             // 
-            this.label75.Location = new System.Drawing.Point(3, 147);
+            this.label75.Location = new System.Drawing.Point(3, 90);
             this.label75.Name = "label75";
             this.label75.Size = new System.Drawing.Size(83, 20);
             this.label75.Text = "Min. range";
-            // 
-            // SlotTypeCombo2
-            // 
-            this.SlotTypeCombo2.Location = new System.Drawing.Point(3, 113);
-            this.SlotTypeCombo2.Name = "SlotTypeCombo2";
-            this.SlotTypeCombo2.Size = new System.Drawing.Size(67, 23);
-            this.SlotTypeCombo2.TabIndex = 18;
-            this.SlotTypeCombo2.SelectedIndexChanged += new System.EventHandler(this.ComboBoxSelected);
             // 
             // SlotNameText2
             // 
@@ -387,13 +343,6 @@
             this.SlotNameText2.ReadOnly = true;
             this.SlotNameText2.Size = new System.Drawing.Size(100, 23);
             this.SlotNameText2.TabIndex = 17;
-            // 
-            // label11
-            // 
-            this.label11.Location = new System.Drawing.Point(3, 90);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(50, 20);
-            this.label11.Text = "Type";
             // 
             // label10
             // 
@@ -427,7 +376,7 @@
             this.NetworkPage.Controls.Add(this.panel4);
             this.NetworkPage.Location = new System.Drawing.Point(4, 25);
             this.NetworkPage.Name = "NetworkPage";
-            this.NetworkPage.Size = new System.Drawing.Size(449, 355);
+            this.NetworkPage.Size = new System.Drawing.Size(409, 330);
             this.NetworkPage.Text = "Network";
             // 
             // panel5
@@ -443,7 +392,7 @@
             this.panel5.Controls.Add(this.EProtocCombo);
             this.panel5.Controls.Add(this.label27);
             this.panel5.Controls.Add(this.label26);
-            this.panel5.Location = new System.Drawing.Point(21, 3);
+            this.panel5.Location = new System.Drawing.Point(3, 3);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(401, 131);
             // 
@@ -541,6 +490,10 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.AddrText3);
+            this.panel4.Controls.Add(this.AddrText2);
+            this.panel4.Controls.Add(this.AddrText1);
+            this.panel4.Controls.Add(this.Address);
             this.panel4.Controls.Add(this.label9);
             this.panel4.Controls.Add(this.LirSetBtn);
             this.panel4.Controls.Add(this.UProtocCombo3);
@@ -555,9 +508,40 @@
             this.panel4.Controls.Add(this.label21);
             this.panel4.Controls.Add(this.label20);
             this.panel4.Controls.Add(this.label18);
-            this.panel4.Location = new System.Drawing.Point(90, 140);
+            this.panel4.Location = new System.Drawing.Point(3, 140);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(256, 185);
+            this.panel4.Size = new System.Drawing.Size(330, 185);
+            // 
+            // AddrText3
+            // 
+            this.AddrText3.Location = new System.Drawing.Point(262, 117);
+            this.AddrText3.Name = "AddrText3";
+            this.AddrText3.ReadOnly = true;
+            this.AddrText3.Size = new System.Drawing.Size(53, 23);
+            this.AddrText3.TabIndex = 32;
+            // 
+            // AddrText2
+            // 
+            this.AddrText2.Location = new System.Drawing.Point(262, 83);
+            this.AddrText2.Name = "AddrText2";
+            this.AddrText2.ReadOnly = true;
+            this.AddrText2.Size = new System.Drawing.Size(53, 23);
+            this.AddrText2.TabIndex = 31;
+            // 
+            // AddrText1
+            // 
+            this.AddrText1.Location = new System.Drawing.Point(262, 49);
+            this.AddrText1.Name = "AddrText1";
+            this.AddrText1.ReadOnly = true;
+            this.AddrText1.Size = new System.Drawing.Size(53, 23);
+            this.AddrText1.TabIndex = 29;
+            // 
+            // Address
+            // 
+            this.Address.Location = new System.Drawing.Point(262, 25);
+            this.Address.Name = "Address";
+            this.Address.Size = new System.Drawing.Size(65, 20);
+            this.Address.Text = "Lir Addr.";
             // 
             // label9
             // 
@@ -677,7 +661,7 @@
             this.InputsPage.Controls.Add(this.panel7);
             this.InputsPage.Location = new System.Drawing.Point(4, 25);
             this.InputsPage.Name = "InputsPage";
-            this.InputsPage.Size = new System.Drawing.Size(449, 355);
+            this.InputsPage.Size = new System.Drawing.Size(409, 330);
             this.InputsPage.Text = "Inputs";
             // 
             // panel11
@@ -685,7 +669,7 @@
             this.panel11.Controls.Add(this.label73);
             this.panel11.Controls.Add(this.SpdUnitCombo);
             this.panel11.Controls.Add(this.label39);
-            this.panel11.Location = new System.Drawing.Point(171, 211);
+            this.panel11.Location = new System.Drawing.Point(263, 209);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(103, 110);
             // 
@@ -715,12 +699,28 @@
             // 
             // panel10
             // 
+            this.panel10.Controls.Add(this.label13);
+            this.panel10.Controls.Add(this.DiscrText);
             this.panel10.Controls.Add(this.label72);
             this.panel10.Controls.Add(this.MovUnitCombo);
             this.panel10.Controls.Add(this.label38);
-            this.panel10.Location = new System.Drawing.Point(62, 211);
+            this.panel10.Location = new System.Drawing.Point(39, 209);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(103, 110);
+            this.panel10.Size = new System.Drawing.Size(218, 110);
+            // 
+            // label13
+            // 
+            this.label13.Location = new System.Drawing.Point(104, 37);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(75, 20);
+            this.label13.Text = "discreteness";
+            // 
+            // DiscrText
+            // 
+            this.DiscrText.Location = new System.Drawing.Point(104, 60);
+            this.DiscrText.Name = "DiscrText";
+            this.DiscrText.Size = new System.Drawing.Size(90, 23);
+            this.DiscrText.TabIndex = 10;
             // 
             // label72
             // 
@@ -755,7 +755,7 @@
             this.panel8.Controls.Add(this.PressMinMeasText);
             this.panel8.Controls.Add(this.PressUnitCombo);
             this.panel8.Controls.Add(this.label36);
-            this.panel8.Location = new System.Drawing.Point(62, 113);
+            this.panel8.Location = new System.Drawing.Point(39, 111);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(327, 92);
             // 
@@ -824,7 +824,7 @@
             this.panel7.Controls.Add(this.SLmaxMeasText);
             this.panel7.Controls.Add(this.SLUnitCombo);
             this.panel7.Controls.Add(this.label35);
-            this.panel7.Location = new System.Drawing.Point(62, 15);
+            this.panel7.Location = new System.Drawing.Point(39, 13);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(327, 92);
             // 
@@ -886,7 +886,7 @@
             // 
             // OkBtn
             // 
-            this.OkBtn.Location = new System.Drawing.Point(273, 390);
+            this.OkBtn.Location = new System.Drawing.Point(233, 367);
             this.OkBtn.Name = "OkBtn";
             this.OkBtn.Size = new System.Drawing.Size(82, 32);
             this.OkBtn.TabIndex = 1;
@@ -895,7 +895,7 @@
             // 
             // CancelBtn
             // 
-            this.CancelBtn.Location = new System.Drawing.Point(368, 390);
+            this.CancelBtn.Location = new System.Drawing.Point(328, 367);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(82, 32);
             this.CancelBtn.TabIndex = 3;
@@ -907,7 +907,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(457, 429);
+            this.ClientSize = new System.Drawing.Size(417, 407);
             this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.OkBtn);
             this.Controls.Add(this.SettingTab);
@@ -941,16 +941,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel ContrPanel2;
         private System.Windows.Forms.TextBox SlotNameText2;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel ContrPanel1;
         private System.Windows.Forms.TextBox SlotNameText1;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox SlotTypeCombo2;
-        private System.Windows.Forms.ComboBox SlotTypeCombo1;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label22;
@@ -1005,9 +1001,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox SlotMinRanText3;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.ComboBox SlotTypeCombo3;
         private System.Windows.Forms.TextBox SlotNameText3;
-        private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label76;
         private System.Windows.Forms.TextBox SlotMaxRanText2;
@@ -1022,5 +1016,11 @@
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.CheckBox TcpMasterCheck;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox DiscrText;
+        private System.Windows.Forms.TextBox AddrText3;
+        private System.Windows.Forms.TextBox AddrText2;
+        private System.Windows.Forms.TextBox AddrText1;
+        private System.Windows.Forms.Label Address;
     }
 }

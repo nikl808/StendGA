@@ -18,7 +18,7 @@ namespace stend
         #endregion
 
         #region constructor
-        public LirProgForm(string protoc,string baud)
+        public LirProgForm(string protoc,string baud,string addr)
         {
             InitializeComponent();
             if (protoc == "Lir_ASCII") protocol = "00";
@@ -44,17 +44,18 @@ namespace stend
                     baudrate = "05";
                     break;
             }
-            LirProgForm_Init();
+            LirProgForm_Init(addr);
         }
         #endregion
 
         #region form initialization
-        private void LirProgForm_Init()
+        private void LirProgForm_Init(string addr)
         {            
             byte[] first = Encoding.ASCII.GetBytes("#p#");
+            int address = int.Parse(addr);
 
             progRequest.Add("const" ,(BitConverter.ToString(first).Replace("-","")));
-            progRequest.Add("addr", "01");
+            progRequest.Add("addr", address.ToString("x2"));
             progRequest.Add("protocol", protocol);
             progRequest.Add("speed", baudrate);
             progRequest.Add("bit", "00");
@@ -63,8 +64,6 @@ namespace stend
 
         #region domain updown event
         private void BitUpDown_ValueChanged(object sender, EventArgs e) { progRequest["bit"] = (Convert.ToInt32(BitUpDown.Value)).ToString("x2"); }
-
-        private void NetUpDown_ValueChanged(object sender, EventArgs e) { progRequest["addr"] = (Convert.ToInt32(NetUpDown.Value)).ToString("x2"); }
         #endregion
 
         #region Write button click

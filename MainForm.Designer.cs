@@ -34,19 +34,18 @@
             this.SettingsMenu = new System.Windows.Forms.MenuItem();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.ControlPage = new System.Windows.Forms.TabPage();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.SpdLabel = new System.Windows.Forms.Label();
+            this.MovLabel = new System.Windows.Forms.Label();
+            this.ComprLabel = new System.Windows.Forms.Label();
+            this.StrLabel = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.StrainLoadLabel = new System.Windows.Forms.Label();
+            this.SpdText = new System.Windows.Forms.TextBox();
+            this.MovingText = new System.Windows.Forms.TextBox();
+            this.StrText = new System.Windows.Forms.TextBox();
+            this.ComprText = new System.Windows.Forms.TextBox();
+            this.StrainLoadText = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -65,7 +64,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.LogPage = new System.Windows.Forms.TabPage();
             this.LogList = new System.Windows.Forms.ListBox();
-            this.statusBar1 = new System.Windows.Forms.StatusBar();
+            this.statusBar = new System.Windows.Forms.StatusBar();
+            this.ConEnCheck = new System.Windows.Forms.CheckBox();
             this.MainTabControl.SuspendLayout();
             this.ControlPage.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -95,135 +95,131 @@
             this.MainTabControl.Location = new System.Drawing.Point(0, 44);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(798, 507);
+            this.MainTabControl.Size = new System.Drawing.Size(769, 349);
             this.MainTabControl.TabIndex = 0;
             // 
             // ControlPage
             // 
-            this.ControlPage.Controls.Add(this.checkBox1);
+            this.ControlPage.Controls.Add(this.ConEnCheck);
             this.ControlPage.Controls.Add(this.panel3);
             this.ControlPage.Controls.Add(this.panel2);
             this.ControlPage.Controls.Add(this.panel1);
             this.ControlPage.Location = new System.Drawing.Point(4, 25);
             this.ControlPage.Name = "ControlPage";
-            this.ControlPage.Size = new System.Drawing.Size(790, 478);
+            this.ControlPage.Size = new System.Drawing.Size(761, 320);
             this.ControlPage.Text = "Control";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.checkBox1.Location = new System.Drawing.Point(3, 18);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(128, 27);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "Local control";
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.label14);
-            this.panel3.Controls.Add(this.label13);
-            this.panel3.Controls.Add(this.label11);
-            this.panel3.Controls.Add(this.label10);
+            this.panel3.Controls.Add(this.SpdLabel);
+            this.panel3.Controls.Add(this.MovLabel);
+            this.panel3.Controls.Add(this.ComprLabel);
+            this.panel3.Controls.Add(this.StrLabel);
             this.panel3.Controls.Add(this.button7);
-            this.panel3.Controls.Add(this.label9);
-            this.panel3.Controls.Add(this.textBox6);
-            this.panel3.Controls.Add(this.textBox4);
-            this.panel3.Controls.Add(this.textBox3);
-            this.panel3.Controls.Add(this.textBox2);
-            this.panel3.Controls.Add(this.textBox1);
+            this.panel3.Controls.Add(this.StrainLoadLabel);
+            this.panel3.Controls.Add(this.SpdText);
+            this.panel3.Controls.Add(this.MovingText);
+            this.panel3.Controls.Add(this.StrText);
+            this.panel3.Controls.Add(this.ComprText);
+            this.panel3.Controls.Add(this.StrainLoadText);
             this.panel3.Controls.Add(this.label8);
             this.panel3.Controls.Add(this.label7);
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.label3);
             this.panel3.Controls.Add(this.label4);
-            this.panel3.Location = new System.Drawing.Point(439, 64);
+            this.panel3.Location = new System.Drawing.Point(439, 39);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(348, 272);
+            this.panel3.Size = new System.Drawing.Size(320, 272);
             // 
-            // label14
+            // SpdLabel
             // 
-            this.label14.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.label14.Location = new System.Drawing.Point(213, 200);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(37, 20);
-            this.label14.Text = "n/a";
+            this.SpdLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
+            this.SpdLabel.Location = new System.Drawing.Point(194, 200);
+            this.SpdLabel.Name = "SpdLabel";
+            this.SpdLabel.Size = new System.Drawing.Size(37, 20);
+            this.SpdLabel.Text = "n/a";
             // 
-            // label13
+            // MovLabel
             // 
-            this.label13.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.label13.Location = new System.Drawing.Point(213, 165);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(37, 20);
-            this.label13.Text = "n/a";
+            this.MovLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
+            this.MovLabel.Location = new System.Drawing.Point(194, 165);
+            this.MovLabel.Name = "MovLabel";
+            this.MovLabel.Size = new System.Drawing.Size(37, 20);
+            this.MovLabel.Text = "n/a";
             // 
-            // label11
+            // ComprLabel
             // 
-            this.label11.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.label11.Location = new System.Drawing.Point(213, 89);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(37, 20);
-            this.label11.Text = "n/a";
+            this.ComprLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
+            this.ComprLabel.Location = new System.Drawing.Point(194, 89);
+            this.ComprLabel.Name = "ComprLabel";
+            this.ComprLabel.Size = new System.Drawing.Size(37, 20);
+            this.ComprLabel.Text = "n/a";
             // 
-            // label10
+            // StrLabel
             // 
-            this.label10.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.label10.Location = new System.Drawing.Point(213, 127);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(37, 20);
-            this.label10.Text = "n/a";
+            this.StrLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
+            this.StrLabel.Location = new System.Drawing.Point(194, 127);
+            this.StrLabel.Name = "StrLabel";
+            this.StrLabel.Size = new System.Drawing.Size(37, 20);
+            this.StrLabel.Text = "n/a";
             // 
             // button7
             // 
             this.button7.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.button7.Location = new System.Drawing.Point(256, 162);
+            this.button7.Location = new System.Drawing.Point(237, 162);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(72, 23);
             this.button7.TabIndex = 25;
             this.button7.Text = "Zero";
             // 
-            // label9
+            // StrainLoadLabel
             // 
-            this.label9.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.label9.Location = new System.Drawing.Point(213, 50);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(37, 20);
-            this.label9.Text = "n/a";
+            this.StrainLoadLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
+            this.StrainLoadLabel.Location = new System.Drawing.Point(194, 50);
+            this.StrainLoadLabel.Name = "StrainLoadLabel";
+            this.StrainLoadLabel.Size = new System.Drawing.Size(37, 20);
+            this.StrainLoadLabel.Text = "n/a";
             // 
-            // textBox6
+            // SpdText
             // 
-            this.textBox6.Location = new System.Drawing.Point(107, 197);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(100, 23);
-            this.textBox6.TabIndex = 11;
+            this.SpdText.Location = new System.Drawing.Point(89, 197);
+            this.SpdText.Name = "SpdText";
+            this.SpdText.ReadOnly = true;
+            this.SpdText.Size = new System.Drawing.Size(100, 23);
+            this.SpdText.TabIndex = 11;
             // 
-            // textBox4
+            // MovingText
             // 
-            this.textBox4.Location = new System.Drawing.Point(107, 162);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 23);
-            this.textBox4.TabIndex = 9;
+            this.MovingText.Location = new System.Drawing.Point(89, 162);
+            this.MovingText.Name = "MovingText";
+            this.MovingText.ReadOnly = true;
+            this.MovingText.Size = new System.Drawing.Size(100, 23);
+            this.MovingText.TabIndex = 9;
             // 
-            // textBox3
+            // StrText
             // 
-            this.textBox3.Location = new System.Drawing.Point(106, 124);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 23);
-            this.textBox3.TabIndex = 8;
+            this.StrText.Location = new System.Drawing.Point(88, 124);
+            this.StrText.Name = "StrText";
+            this.StrText.ReadOnly = true;
+            this.StrText.Size = new System.Drawing.Size(100, 23);
+            this.StrText.TabIndex = 8;
             // 
-            // textBox2
+            // ComprText
             // 
-            this.textBox2.Location = new System.Drawing.Point(106, 86);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 23);
-            this.textBox2.TabIndex = 7;
+            this.ComprText.Location = new System.Drawing.Point(88, 86);
+            this.ComprText.Name = "ComprText";
+            this.ComprText.ReadOnly = true;
+            this.ComprText.Size = new System.Drawing.Size(100, 23);
+            this.ComprText.TabIndex = 7;
             // 
-            // textBox1
+            // StrainLoadText
             // 
-            this.textBox1.Location = new System.Drawing.Point(106, 47);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 23);
-            this.textBox1.TabIndex = 6;
+            this.StrainLoadText.Location = new System.Drawing.Point(88, 47);
+            this.StrainLoadText.Name = "StrainLoadText";
+            this.StrainLoadText.ReadOnly = true;
+            this.StrainLoadText.Size = new System.Drawing.Size(100, 23);
+            this.StrainLoadText.TabIndex = 6;
             // 
             // label8
             // 
@@ -272,7 +268,7 @@
             this.label4.Location = new System.Drawing.Point(15, 50);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 20);
-            this.label4.Text = "Load cell";
+            this.label4.Text = "Str. load";
             // 
             // panel2
             // 
@@ -280,7 +276,7 @@
             this.panel2.Controls.Add(this.button6);
             this.panel2.Controls.Add(this.button5);
             this.panel2.Controls.Add(this.button4);
-            this.panel2.Location = new System.Drawing.Point(3, 64);
+            this.panel2.Location = new System.Drawing.Point(3, 39);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(430, 119);
             // 
@@ -300,6 +296,7 @@
             this.button6.Size = new System.Drawing.Size(119, 41);
             this.button6.TabIndex = 2;
             this.button6.Text = "Hi. pressure";
+            this.button6.Click += new System.EventHandler(this.MovBtn_click);
             // 
             // button5
             // 
@@ -308,6 +305,7 @@
             this.button5.Size = new System.Drawing.Size(119, 41);
             this.button5.TabIndex = 1;
             this.button5.Text = "Low pressure";
+            this.button5.Click += new System.EventHandler(this.MovBtn_click);
             // 
             // button4
             // 
@@ -316,6 +314,7 @@
             this.button4.Size = new System.Drawing.Size(119, 41);
             this.button4.TabIndex = 0;
             this.button4.Text = "On/Off";
+            this.button4.Click += new System.EventHandler(this.MovBtn_click);
             // 
             // panel1
             // 
@@ -323,7 +322,7 @@
             this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
-            this.panel1.Location = new System.Drawing.Point(3, 207);
+            this.panel1.Location = new System.Drawing.Point(3, 182);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(430, 129);
             // 
@@ -343,6 +342,7 @@
             this.button3.Size = new System.Drawing.Size(119, 41);
             this.button3.TabIndex = 2;
             this.button3.Text = "Stop";
+            this.button3.Click += new System.EventHandler(this.PmpBtn_click);
             // 
             // button2
             // 
@@ -351,6 +351,7 @@
             this.button2.Size = new System.Drawing.Size(119, 41);
             this.button2.TabIndex = 1;
             this.button2.Text = "Backward";
+            this.button2.Click += new System.EventHandler(this.PmpBtn_click);
             // 
             // button1
             // 
@@ -359,37 +360,45 @@
             this.button1.Size = new System.Drawing.Size(119, 41);
             this.button1.TabIndex = 0;
             this.button1.Text = "Forward";
+            this.button1.Click += new System.EventHandler(this.PmpBtn_click);
             // 
             // LogPage
             // 
             this.LogPage.Controls.Add(this.LogList);
             this.LogPage.Location = new System.Drawing.Point(4, 25);
             this.LogPage.Name = "LogPage";
-            this.LogPage.Size = new System.Drawing.Size(790, 478);
+            this.LogPage.Size = new System.Drawing.Size(761, 320);
             this.LogPage.Text = "Log";
             // 
             // LogList
             // 
-            this.LogList.Location = new System.Drawing.Point(-1, 0);
+            this.LogList.Location = new System.Drawing.Point(-1, 13);
             this.LogList.Name = "LogList";
-            this.LogList.Size = new System.Drawing.Size(792, 466);
+            this.LogList.Size = new System.Drawing.Size(763, 306);
             this.LogList.TabIndex = 0;
             this.LogList.Tag = "LogListBox";
             // 
-            // statusBar1
+            // statusBar
             // 
-            this.statusBar1.Location = new System.Drawing.Point(0, 551);
-            this.statusBar1.Name = "statusBar1";
-            this.statusBar1.Size = new System.Drawing.Size(798, 24);
-            this.statusBar1.Text = "statusBar1";
+            this.statusBar.Location = new System.Drawing.Point(0, 393);
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(769, 24);
+            // 
+            // ConEnCheck
+            // 
+            this.ConEnCheck.Location = new System.Drawing.Point(3, 13);
+            this.ConEnCheck.Name = "ConEnCheck";
+            this.ConEnCheck.Size = new System.Drawing.Size(119, 20);
+            this.ConEnCheck.TabIndex = 3;
+            this.ConEnCheck.Text = "Enable control";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(798, 575);
-            this.Controls.Add(this.statusBar1);
+            this.ClientSize = new System.Drawing.Size(769, 417);
+            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.MainTabControl);
             this.MaximizeBox = false;
             this.Menu = this.mainMenu1;
@@ -425,25 +434,25 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label StrainLoadLabel;
+        private System.Windows.Forms.TextBox SpdText;
+        private System.Windows.Forms.TextBox MovingText;
+        private System.Windows.Forms.TextBox StrText;
+        private System.Windows.Forms.TextBox ComprText;
+        private System.Windows.Forms.TextBox StrainLoadText;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label SpdLabel;
+        private System.Windows.Forms.Label MovLabel;
+        private System.Windows.Forms.Label ComprLabel;
+        private System.Windows.Forms.Label StrLabel;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.StatusBar statusBar1;
+        private System.Windows.Forms.StatusBar statusBar;
+        private System.Windows.Forms.CheckBox ConEnCheck;
     }
 }
 

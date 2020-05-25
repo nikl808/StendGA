@@ -46,14 +46,15 @@ namespace stend
         public virtual string uartBaudrate { get; set; }
         public virtual string uartProtocol { get; set; }        
         public virtual string ethProtocol { get; set; }
+        public virtual string uartAddr { get; set; }
         public virtual string slaveIP { get; set; }
-        public virtual string Type { get; set; }
         public virtual string SensorUnit { get; set; }
         public virtual float SenRangeUnitMin { get; set; }
         public virtual float SenRangeUnitMax { get; set; }
         public virtual int ModRangeUnitMin { get; set; }
         public virtual int ModRangeUnitMax { get; set; }
         public virtual int slaveID { get; set; }
+       
         public virtual bool asMaster { get; set; }
     }
 
@@ -62,14 +63,16 @@ namespace stend
     {
         public override string uartBaudrate { get; set; }
         public override string uartProtocol { get; set; }
+        public override string uartAddr { get; set; }
         
         public uConfig() { }
 
-        public uConfig(string comName, string baudrate,string protocol)
+        public uConfig(string comName, string baudrate,string protocol, string addr)
             : base(comName)
         {
             uartBaudrate = baudrate;
-            uartProtocol = protocol;   
+            uartProtocol = protocol;
+            uartAddr = addr;
         }
     }
 
@@ -98,14 +101,12 @@ namespace stend
     {
         public override int ModRangeUnitMin { get; set; }
         public override int ModRangeUnitMax { get; set; }
-        public override string Type { get; set; }
         
         public mConfig() { }
 
-        public mConfig(string Slot, string type, int rangeUnitMin, int rangeUnitMax)
+        public mConfig(string Slot, int rangeUnitMin, int rangeUnitMax)
             :base(Slot)
         {
-            Type = type;
             ModRangeUnitMin = rangeUnitMin;
             ModRangeUnitMax = rangeUnitMax;
         }
@@ -129,6 +130,8 @@ namespace stend
         }
     }
 
+    /*
+     * delete
     static class ConfigClone
     {
         public static Hardware Clone(Hardware obj)
@@ -141,5 +144,5 @@ namespace stend
                 return (Hardware)xs.Deserialize(ms);
             }
         }
-    }
+    }*/
 }

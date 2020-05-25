@@ -24,10 +24,10 @@ namespace stend
         #endregion
 
         #region constructor
-        public SettingsForm(Hardware config)
+        public SettingsForm()
         {
             InitializeComponent();
-            currCfg = ConfigClone.Clone(config);
+            using (XMLFileReader fw = new XMLFileReader()) currCfg = fw.ReadFile<Hardware>("System_Disk2\\StandGA\\System\\hardware.xml");
             SettingsForm_Init();
         }
         #endregion
@@ -51,11 +51,6 @@ namespace stend
             {
                 switch (keyVal.Key)
                 {
-                    case "ModuleType":
-                        FillItems(SlotTypeCombo1, (string[])keyVal.Value.Clone());
-                        FillItems(SlotTypeCombo2, (string[])keyVal.Value.Clone());
-                        FillItems(SlotTypeCombo3, (string[])keyVal.Value.Clone());
-                        break;
                     case "Baudrate":
                         FillItems(BaudCombo1, (string[])keyVal.Value.Clone());
                         FillItems(BaudCombo2, (string[])keyVal.Value.Clone());
@@ -95,14 +90,17 @@ namespace stend
                     case "COM3":
                         BaudCombo1.SelectedItem = iter.uartBaudrate;
                         UProtocCombo1.SelectedItem = iter.uartProtocol;
+                        AddrText1.Text = iter.uartAddr;
                         break;
                     case "COM4":
                         BaudCombo2.SelectedItem = iter.uartBaudrate;
                         UProtocCombo2.SelectedItem = iter.uartProtocol;
+                        AddrText2.Text = iter.uartAddr;
                         break;
                     case "COM5":
                         BaudCombo3.SelectedItem = iter.uartBaudrate;
                         UProtocCombo3.SelectedItem = iter.uartProtocol;
+                        AddrText3.Text = iter.uartAddr;
                         break;
                     case "Eth":
                         EProtocCombo.SelectedItem = iter.ethProtocol;
@@ -131,19 +129,16 @@ namespace stend
                         }
                         break;
                     case "Slot1":
-                        SlotTypeCombo1.SelectedItem = iter.Type;
                         SlotMinRanText1.Text = iter.ModRangeUnitMin.ToString();
                         SlotMaxRanText1.Text = iter.ModRangeUnitMax.ToString();
                         SlotNameText1.Text = PACNET.Sys.GetModuleName(1);
                         break;
                     case "Slot2":
-                        SlotTypeCombo2.SelectedItem = iter.Type;
                         SlotMinRanText2.Text = iter.ModRangeUnitMin.ToString();
                         SlotMaxRanText2.Text = iter.ModRangeUnitMax.ToString();
                         SlotNameText2.Text = PACNET.Sys.GetModuleName(2);
                         break;
                     case "Slot3":
-                        SlotTypeCombo3.SelectedItem = iter.Type;
                         SlotMinRanText3.Text = iter.ModRangeUnitMin.ToString();
                         SlotMaxRanText3.Text = iter.ModRangeUnitMax.ToString();
                         SlotNameText3.Text = PACNET.Sys.GetModuleName(3);
@@ -160,6 +155,7 @@ namespace stend
                         break;
                     case "Moving":
                         MovUnitCombo.SelectedItem = iter.SensorUnit;
+                        DiscrText.Text = iter.SenRangeUnitMin.ToString();
                         break;
                     case "Speed":
                         SpdUnitCombo.SelectedItem = iter.SensorUnit;
@@ -179,6 +175,10 @@ namespace stend
         #region Restore previous text
         private void RestorePrevText(TextBox ctrl, Config itr)
         {
+            if((ctrl.Name == "AddrText1" && itr.Name == "COM3") |
+               (ctrl.Name == "AddrText2" && itr.Name == "COM4") |
+               (ctrl.Name == "AddrText3" && itr.Name == "COM5")) ctrl.Text = itr.uartAddr;
+
             if ((ctrl.Name == "SlotMinRanText1" && itr.Name == "Slot1") |
                 (ctrl.Name == "SlotMinRanText2" && itr.Name == "Slot2") |
                 (ctrl.Name == "SlotMinRanText3" && itr.Name == "Slot3")) ctrl.Text = itr.ModRangeUnitMin.ToString();
@@ -195,6 +195,7 @@ namespace stend
 
             if (ctrl.Name == "SlvIDText" && itr.Name == "Eth") ctrl.Text = itr.slaveID.ToString();
             if (ctrl.Name == "SlvIPText" && itr.Name == "Eth") ctrl.Text = itr.slaveIP;
+            if (ctrl.Name == "DiscrText" && itr.Name == "Moving") ctrl.Text = itr.SenRangeUnitMin.ToString();
         }
         #endregion
 
@@ -237,10 +238,6 @@ namespace stend
                        }
                    }
                }
-
-               if ((ctrl.SelectedItem.ToString() != itr.Type) && (ctrl.Name == "SlotTypeCombo1" && itr.Name == "Slot1") |
-                   (ctrl.Name == "SlotTypeCombo2" && itr.Name == "Slot2") | (ctrl.Name == "SlotTypeCombo3" && itr.Name == "Slot3"))
-                   itr.Type = ctrl.SelectedItem.ToString();
            }
         }
         #endregion
@@ -253,7 +250,7 @@ namespace stend
             foreach (Config itr in currCfg)
             {
                 if (ctrl.SelectedItem.ToString() != itr.SensorUnit && (ctrl.Name == "SLUnitCombo" && itr.Name == "StrainLoad") | 
-                    (ctrl.Name == "PressUnitCombo" && itr.Name == "Pressure"))
+                    (ctrl.Name == "PressUnitCombo" && itr.Name == "Pressure") | (ctrl.Name == "MovUnitCombo" && itr.Name == "Moving"))
                 {
                     itr.SensorUnit = ctrl.SelectedItem.ToString();
 
@@ -267,7 +264,7 @@ namespace stend
                             float max = itr.SenRangeUnitMax * val;
                             itr.SenRangeUnitMin = (float)Math.Round(min, 1);
                             itr.SenRangeUnitMax = (float)Math.Round(max, 1);
-                            
+
                             if (ctrl.Name == "SLUnitCombo")
                             {
                                 SLminMeasText.Text = itr.SenRangeUnitMin.ToString();
@@ -279,11 +276,12 @@ namespace stend
                                 PressMinMeasText.Text = itr.SenRangeUnitMin.ToString();
                                 PressMaxMeasText.Text = itr.SenRangeUnitMax.ToString();
                             }
+
+                            else if (ctrl.Name == "MovUnitCombo") DiscrText.Text = itr.SenRangeUnitMin.ToString();
                         }
                     }
                 }
-                        
-                if(ctrl.Name == "MovUnitCombo" && itr.Name == "Moving") itr.SensorUnit = ctrl.SelectedItem.ToString();
+
                 if (ctrl.Name == "SpdUnitCombo" && itr.Name == "Speed") itr.SensorUnit = ctrl.SelectedItem.ToString();
             }
         }
@@ -300,10 +298,11 @@ namespace stend
             {
                 foreach (Config itr in currCfg)
                 {
-                    //check value range (-32768 to +23767,0 to 65535) and slaveID
+                    //check text
                     if (OnlNum.IsMatch(ctrl.Text) && !IpReg.IsMatch(ctrl.Text))
                     {
                         int val = Int32.Parse(ctrl.Text);
+                        //check value range (-32768 to +23767,0 to 65535)
                         if ((val >= ushort.MinValue | val <= ushort.MaxValue) | (val >= short.MinValue | val <= short.MaxValue))
                         {
                             if ((ctrl.Name == "SlotMinRanText1" && itr.Name == "Slot1") |
@@ -313,7 +312,15 @@ namespace stend
                             if ((ctrl.Name == "SlotMaxRanText1" && itr.Name == "Slot1") |
                                 (ctrl.Name == "SlotMaxRanText2" && itr.Name == "Slot2") |
                                 (ctrl.Name == "SlotMaxRanText3" && itr.Name == "Slot3")) itr.ModRangeUnitMax = val;
-                                
+                        }
+                        
+                        //check SlaveId value and units values
+                        else
+                        {
+                            if ((ctrl.Name == "AddrText1" && itr.Name == "COM1") |
+                                (ctrl.Name == "AddrText2" && itr.Name == "COM2") |
+                                (ctrl.Name == "AddrText3" && itr.Name == "COM3")) itr.uartAddr = val.ToString();
+
                             if ((ctrl.Name == "SLminMeasText" && itr.Name == "StrainLoad") |
                                 (ctrl.Name == "PressMinMeasText" && itr.Name == "Pressure")) itr.SenRangeUnitMin = val;
 
@@ -321,6 +328,8 @@ namespace stend
                                 (ctrl.Name == "PressMaxMeasText" && itr.Name == "Pressure")) itr.SenRangeUnitMax = val;
 
                             if (ctrl.Name == "SlvIDText" && itr.Name == "Eth") itr.slaveID = int.Parse(ctrl.Text);
+
+                            if (ctrl.Name == "DiscrText" && itr.Name == "Moving") itr.SenRangeUnitMin = int.Parse(ctrl.Text);
                         }
                     }
 
@@ -341,7 +350,9 @@ namespace stend
 
             foreach (Config itr in currCfg) { RestorePrevText(ctrl, itr); }
         }
+        #endregion
 
+        #region ok button click
         private void OkBtn_Click(object sender, EventArgs e)
         {
             XMLFileWriter fw = new XMLFileWriter();
@@ -349,7 +360,7 @@ namespace stend
 
             //return currCfg to main form
             MainForm form = this.Owner as MainForm;
-            form.MainForm_Init(currCfg);
+            form.MainForm_Init();
             this.Close();
         }
         #endregion
@@ -362,7 +373,7 @@ namespace stend
             {
                 if (itr.Name == "COM3" && itr.uartProtocol != "Generic")
                 {
-                    LirProgForm form = new LirProgForm(itr.uartProtocol, itr.uartBaudrate);
+                    LirProgForm form = new LirProgForm(itr.uartProtocol, itr.uartBaudrate,itr.uartAddr);
                     form.Show();
                     break;
                 }
