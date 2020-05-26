@@ -6,12 +6,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace stend
 {
     public partial class MainForm : Form
     {
+        private Timer timer;
         private XPacBackplane backplane;
         private XPacComport lirCom;
         private ModbusTcpSlave slave;
@@ -20,19 +20,22 @@ namespace stend
         private AnalogSensor Stretch;
         private LirMoving moving;
         private LirSpeed speed;
-
+       // private BindingList<string> errors = new BindingList<string>();
+       
         #region constructor
         public MainForm()
         {
             InitializeComponent();
-            //init error list event
-            Error.instance._list += ListBoxEvent;
+            
+            timer = new Timer();
+            timer.Interval = 50;
+            timer.Tick += MainHandler;
             
             MainForm_Init();
-
-            //Start handling
-            TimerCallback cb = new TimerCallback(MainHandler);
-            System.Threading.Timer timer = new System.Threading.Timer(cb,null,0,5);
+            //init error list event
+            Error.instance._list += ErrorEvent;
+            //LogList.DataSource = errors;
+            
         }
         #endregion
 
@@ -49,19 +52,21 @@ namespace stend
             backplane.Baudrate = "115200";
             backplane.Parity = "N,8,1";
             backplane.ReceiveMsgLenght = 0;
-           
-            lirCom = new XPacComport();
 
+            lirCom = new XPacComport();
+            
             foreach (Config itr in cfg)
             {
                 //setup com for lir
-                if (itr.uartProtocol == "Lir_ASCII" | itr.uartProtocol == "Lir_BCD")
+                if (itr.Name == "COM3")
                 {
                     lirCom.ComPort = itr.Name;
                     lirCom.Baudrate = itr.uartBaudrate;
                     lirCom.Parity = "N,8,1";
+
                     if (itr.uartProtocol == "Lir_ASCII") lirCom.ReceiveMsgLenght = 8;
                     else if (itr.uartProtocol == "Lir_BCD") lirCom.ReceiveMsgLenght = 6;
+                    else if (itr.uartProtocol == "Generic") lirCom.ReceiveMsgLenght = 50;
                 }
 
                 //Init Labels
@@ -73,9 +78,9 @@ namespace stend
                 }
                 else if (itr.Name == "Moving") MovLabel.Text = itr.SensorUnit;
                 else if (itr.Name == "Speed") SpdLabel.Text = itr.SensorUnit;
-                    
+
                 //setup modbus slave
-                else if (itr.Name == "Eth" && itr.asMaster == false) slave = new ModbusTcpSlave((byte)itr.slaveID);
+                else if (itr.Name == "Eth" && itr.asMaster == false) slave = new ModbusTcpSlave(itr.slaveID);
             }
 
             //Create sensors
@@ -86,6 +91,7 @@ namespace stend
             speed = new LirSpeed(lirCom, cfg, lirCom.ComPort, "Speed");
 
             //open backplane
+            statusBar.Text = "";
             if (!backplane.OpenCom()) statusBar.Text += "Backplane: FAIL";
             else statusBar.Text += "Backplane: OK";
 
@@ -95,16 +101,21 @@ namespace stend
 
             //start modbus slave
             //slave.StartSlave();
+            
+            timer.Enabled = true;
         }
         #endregion
 
-        #region ListBox event
-        private void ListBoxEvent(object sender, MsgListEvent e){ LogList.Items.Add(e.MsgLine); }
+        #region Error event
+        private void ErrorEvent(object sender, MsgListEvent e){/*errors.Add(e.MsgLine);*/ }
         #endregion
 
         #region SettingForm event
         private void SettingsMenu_Click(object sender, EventArgs e)
         {
+            backplane.Dispose();
+            lirCom.Dispose();
+            timer.Enabled = false;
             SettingsForm form = new SettingsForm();
             form.Owner = this;
             form.Show();
@@ -112,25 +123,24 @@ namespace stend
         #endregion
 
         #region main program handler
-        public void MainHandler(object obj)
+        public void MainHandler(object sender, EventArgs e)
         {
             float strLoad, press, stretch, mov, spd;
 
             strLoad = StrainLoad.Read();
-            press = Pressure.Read();
-            stretch = Stretch.Read();
-            mov = moving.Read();
-            spd = speed.Read();
+            //press = Pressure.Read();
+            //stretch = Stretch.Read();
+            //mov = moving.Read();
+            //spd = speed.Read();
 
             //Display readable values
-            if (ConEnCheck.Checked == true)
-            {
-                StrainLoadText.Text = strLoad.ToString();
-                ComprText.Text = press.ToString();
-                StrText.Text = stretch.ToString();
-                MovingText.Text = mov.ToString();
-                SpdText.Text = spd.ToString();
-            }
+            
+                //StrainLoadText.Text = strLoad.ToString();
+                //ComprText.Text = press.ToString();
+                //StrText.Text = stretch.ToString();
+                //MovingText.Text = mov.ToString();
+                //SpdText.Text = spd.ToString();
+            
         }
         #endregion
 

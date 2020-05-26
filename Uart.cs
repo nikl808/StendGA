@@ -12,7 +12,7 @@ namespace stend
         public string ComPort { get; set; }
         public string Baudrate { get; set; }
         public string Parity { get; set; }
-        public int ReceiveMsgLenght { get; set; }
+        public uint ReceiveMsgLenght { get; set; }
 
         public bool OpenCom()
         {
@@ -73,7 +73,7 @@ namespace stend
                 Error.instance.HandleErrorLog("ERROR::UART:: " + ComPort + ":", "fail send data");
                 return new byte[0];
             }
-            ret = UART.Recv(hPort, receive);
+            ret = UART.BinRecv(hPort, receive, ReceiveMsgLenght);
             if (!ret) 
             {
                 Error.instance.HandleErrorLog("ERROR::UART:: " + ComPort + ":", "fail receive data");

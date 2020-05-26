@@ -34,6 +34,7 @@
             this.SettingsMenu = new System.Windows.Forms.MenuItem();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.ControlPage = new System.Windows.Forms.TabPage();
+            this.ConEnCheck = new System.Windows.Forms.CheckBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.SpdLabel = new System.Windows.Forms.Label();
             this.MovLabel = new System.Windows.Forms.Label();
@@ -65,7 +66,6 @@
             this.LogPage = new System.Windows.Forms.TabPage();
             this.LogList = new System.Windows.Forms.ListBox();
             this.statusBar = new System.Windows.Forms.StatusBar();
-            this.ConEnCheck = new System.Windows.Forms.CheckBox();
             this.MainTabControl.SuspendLayout();
             this.ControlPage.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -108,6 +108,14 @@
             this.ControlPage.Name = "ControlPage";
             this.ControlPage.Size = new System.Drawing.Size(761, 320);
             this.ControlPage.Text = "Control";
+            // 
+            // ConEnCheck
+            // 
+            this.ConEnCheck.Location = new System.Drawing.Point(3, 13);
+            this.ConEnCheck.Name = "ConEnCheck";
+            this.ConEnCheck.Size = new System.Drawing.Size(119, 20);
+            this.ConEnCheck.TabIndex = 3;
+            this.ConEnCheck.Text = "Enable control";
             // 
             // panel3
             // 
@@ -383,14 +391,6 @@
             this.statusBar.Location = new System.Drawing.Point(0, 393);
             this.statusBar.Name = "statusBar";
             this.statusBar.Size = new System.Drawing.Size(769, 24);
-            // 
-            // ConEnCheck
-            // 
-            this.ConEnCheck.Location = new System.Drawing.Point(3, 13);
-            this.ConEnCheck.Name = "ConEnCheck";
-            this.ConEnCheck.Size = new System.Drawing.Size(119, 20);
-            this.ConEnCheck.TabIndex = 3;
-            this.ConEnCheck.Text = "Enable control";
             // 
             // MainForm
             // 

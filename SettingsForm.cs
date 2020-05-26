@@ -53,13 +53,9 @@ namespace stend
                 {
                     case "Baudrate":
                         FillItems(BaudCombo1, (string[])keyVal.Value.Clone());
-                        FillItems(BaudCombo2, (string[])keyVal.Value.Clone());
-                        FillItems(BaudCombo3, (string[])keyVal.Value.Clone());
                         break;
                     case "UartProtocol":
                         FillItems(UProtocCombo1, (string[])keyVal.Value.Clone());
-                        FillItems(UProtocCombo2, (string[])keyVal.Value.Clone());
-                        FillItems(UProtocCombo3, (string[])keyVal.Value.Clone());
                         break;
                     case "EthProtocol":
                         FillItems(EProtocCombo, (string[])keyVal.Value.Clone());
@@ -92,16 +88,6 @@ namespace stend
                         UProtocCombo1.SelectedItem = iter.uartProtocol;
                         AddrText1.Text = iter.uartAddr;
                         break;
-                    case "COM4":
-                        BaudCombo2.SelectedItem = iter.uartBaudrate;
-                        UProtocCombo2.SelectedItem = iter.uartProtocol;
-                        AddrText2.Text = iter.uartAddr;
-                        break;
-                    case "COM5":
-                        BaudCombo3.SelectedItem = iter.uartBaudrate;
-                        UProtocCombo3.SelectedItem = iter.uartProtocol;
-                        AddrText3.Text = iter.uartAddr;
-                        break;
                     case "Eth":
                         EProtocCombo.SelectedItem = iter.ethProtocol;
                         SlvIDText.Text = iter.slaveID.ToString();
@@ -121,7 +107,7 @@ namespace stend
                         if (iter.ethProtocol == "ModbusTCP" && TcpMasterCheck.Enabled == false)
                         {
                             TcpMasterCheck.Enabled = true;
-                            if (TcpMasterCheck.Checked == true && (SlvIDText.ReadOnly == true | SlvIPText.ReadOnly == true))
+                            if (TcpMasterCheck.Checked && (SlvIDText.ReadOnly | SlvIPText.ReadOnly))
                             {
                                 SlvIDText.ReadOnly = false;
                                 SlvIPText.ReadOnly = false;
@@ -175,9 +161,7 @@ namespace stend
         #region Restore previous text
         private void RestorePrevText(TextBox ctrl, Config itr)
         {
-            if((ctrl.Name == "AddrText1" && itr.Name == "COM3") |
-               (ctrl.Name == "AddrText2" && itr.Name == "COM4") |
-               (ctrl.Name == "AddrText3" && itr.Name == "COM5")) ctrl.Text = itr.uartAddr;
+            if(ctrl.Name == "AddrText1" && itr.Name == "COM3") ctrl.Text = itr.uartAddr;
 
             if ((ctrl.Name == "SlotMinRanText1" && itr.Name == "Slot1") |
                 (ctrl.Name == "SlotMinRanText2" && itr.Name == "Slot2") |
@@ -206,12 +190,10 @@ namespace stend
 
            foreach (Config itr in currCfg)
            {
-               if ((ctrl.SelectedItem.ToString() != itr.uartBaudrate) && (ctrl.Name == "BaudCombo1" && itr.Name == "COM3") |
-                   (ctrl.Name == "BaudCombo2" && itr.Name == "COM4") | (ctrl.Name == "BaudCombo3" && itr.Name == "COM5"))
+               if ((ctrl.SelectedItem.ToString() != itr.uartBaudrate) && (ctrl.Name == "BaudCombo1" && itr.Name == "COM3"))
                    itr.uartBaudrate = ctrl.SelectedItem.ToString();
 
-               if ((ctrl.SelectedItem.ToString() != itr.uartProtocol) && (ctrl.Name == "UProtocCombo1" && itr.Name == "COM3") |
-                   (ctrl.Name == "UProtocCombo2" && itr.Name == "COM4") | (ctrl.Name == "UProtocCombo3" && itr.Name == "COM5")) 
+               if ((ctrl.SelectedItem.ToString() != itr.uartProtocol) && (ctrl.Name == "UProtocCombo1" && itr.Name == "COM3"))
                    itr.uartProtocol = ctrl.SelectedItem.ToString();
 
                if ((ctrl.SelectedItem.ToString() != itr.ethProtocol) && (ctrl.Name == "EProtocCombo" && itr.Name == "Eth"))
@@ -222,7 +204,7 @@ namespace stend
                    if (ctrl.SelectedItem.ToString() == "ModbusTCP")
                    {
                        TcpMasterCheck.Enabled = true;
-                       if (TcpMasterCheck.Checked == true && (SlvIDText.ReadOnly == true | SlvIPText.ReadOnly == true))
+                       if (TcpMasterCheck.Checked && (SlvIDText.ReadOnly | SlvIPText.ReadOnly))
                        {
                            SlvIDText.ReadOnly = false;
                            SlvIPText.ReadOnly = false;
@@ -231,7 +213,7 @@ namespace stend
                    else if (ctrl.SelectedItem.ToString() == "Generic")
                    {
                        TcpMasterCheck.Enabled = false;
-                       if (SlvIDText.ReadOnly == false | SlvIPText.ReadOnly == false)
+                       if (!SlvIDText.ReadOnly | !SlvIPText.ReadOnly)
                        {
                            SlvIDText.ReadOnly = true;
                            SlvIPText.ReadOnly = true;
@@ -262,8 +244,12 @@ namespace stend
                             float val = float.Parse(keyVal.Value[0]);
                             float min = itr.SenRangeUnitMin * val;
                             float max = itr.SenRangeUnitMax * val;
-                            itr.SenRangeUnitMin = (float)Math.Round(min, 1);
-                            itr.SenRangeUnitMax = (float)Math.Round(max, 1);
+                            if (ctrl.Name == "MovUnitCombo") itr.SenRangeUnitMax = min;
+                            else
+                            {
+                                itr.SenRangeUnitMin = (float)Math.Round(min, 1);
+                                itr.SenRangeUnitMax = (float)Math.Round(max, 1);
+                            }
 
                             if (ctrl.Name == "SLUnitCombo")
                             {
@@ -276,8 +262,6 @@ namespace stend
                                 PressMinMeasText.Text = itr.SenRangeUnitMin.ToString();
                                 PressMaxMeasText.Text = itr.SenRangeUnitMax.ToString();
                             }
-
-                            else if (ctrl.Name == "MovUnitCombo") DiscrText.Text = itr.SenRangeUnitMin.ToString();
                         }
                     }
                 }
@@ -301,40 +285,79 @@ namespace stend
                     //check text
                     if (OnlNum.IsMatch(ctrl.Text) && !IpReg.IsMatch(ctrl.Text))
                     {
-                        int val = Int32.Parse(ctrl.Text);
-                        //check value range (-32768 to +23767,0 to 65535)
-                        if ((val >= ushort.MinValue | val <= ushort.MaxValue) | (val >= short.MinValue | val <= short.MaxValue))
+                        int val = 0;
+                        //check value range (-32768 to +32767,0 to 65535)
+                        try 
+                        { 
+                            short s = short.Parse(ctrl.Text);
+                            val = s;
+                        }
+                        catch(OverflowException) 
                         {
-                            if ((ctrl.Name == "SlotMinRanText1" && itr.Name == "Slot1") |
-                                (ctrl.Name == "SlotMinRanText2" && itr.Name == "Slot2") |
-                                (ctrl.Name == "SlotMinRanText3" && itr.Name == "Slot3")) itr.ModRangeUnitMin = val;
-
-                            if ((ctrl.Name == "SlotMaxRanText1" && itr.Name == "Slot1") |
-                                (ctrl.Name == "SlotMaxRanText2" && itr.Name == "Slot2") |
-                                (ctrl.Name == "SlotMaxRanText3" && itr.Name == "Slot3")) itr.ModRangeUnitMax = val;
+                            try
+                            {
+                                ushort u = ushort.Parse(ctrl.Text);
+                                val = u;
+                            }
+                            catch (OverflowException) { val = 0; }
                         }
                         
-                        //check SlaveId value and units values
-                        else
+                        if ((ctrl.Name == "SlotMinRanText1" && itr.Name == "Slot1") |
+                                (ctrl.Name == "SlotMinRanText2" && itr.Name == "Slot2") |
+                                (ctrl.Name == "SlotMinRanText3" && itr.Name == "Slot3"))
                         {
-                            if ((ctrl.Name == "AddrText1" && itr.Name == "COM1") |
-                                (ctrl.Name == "AddrText2" && itr.Name == "COM2") |
-                                (ctrl.Name == "AddrText3" && itr.Name == "COM3")) itr.uartAddr = val.ToString();
+                            itr.ModRangeUnitMin = val;
+                            break;
+                        }
 
-                            if ((ctrl.Name == "SLminMeasText" && itr.Name == "StrainLoad") |
-                                (ctrl.Name == "PressMinMeasText" && itr.Name == "Pressure")) itr.SenRangeUnitMin = val;
+                        if ((ctrl.Name == "SlotMaxRanText1" && itr.Name == "Slot1") |
+                            (ctrl.Name == "SlotMaxRanText2" && itr.Name == "Slot2") |
+                            (ctrl.Name == "SlotMaxRanText3" && itr.Name == "Slot3"))
+                        {
+                            itr.ModRangeUnitMax = val;
+                            break;
+                        }
 
-                            if ((ctrl.Name == "SLmaxMeasText" && itr.Name == "StrainLoad") |
-                                (ctrl.Name == "PressMaxMeasText" && itr.Name == "Pressure")) itr.SenRangeUnitMax = val;
+                        //check SlaveId value and units values
+                        if (ctrl.Name == "AddrText1" && itr.Name == "COM3")
+                        {
+                            itr.uartAddr = val.ToString();
+                            break;
+                        }
 
-                            if (ctrl.Name == "SlvIDText" && itr.Name == "Eth") itr.slaveID = int.Parse(ctrl.Text);
+                        if ((ctrl.Name == "SLminMeasText" && itr.Name == "StrainLoad") |
+                            (ctrl.Name == "PressMinMeasText" && itr.Name == "Pressure"))
+                        {
+                            itr.SenRangeUnitMin = val;
+                            break;
+                        }
 
-                            if (ctrl.Name == "DiscrText" && itr.Name == "Moving") itr.SenRangeUnitMin = int.Parse(ctrl.Text);
+                        if ((ctrl.Name == "SLmaxMeasText" && itr.Name == "StrainLoad") |
+                            (ctrl.Name == "PressMaxMeasText" && itr.Name == "Pressure"))
+                        {
+                            itr.SenRangeUnitMax = val;
+                            break;
+                        }
+
+                        if (ctrl.Name == "SlvIDText" && itr.Name == "Eth")
+                        {
+                            itr.slaveID = byte.Parse(ctrl.Text);
+                            break;
+                        }
+
+                        if (ctrl.Name == "DiscrText" && itr.Name == "Moving")
+                        {
+                            itr.SenRangeUnitMin = int.Parse(ctrl.Text);
+                            break;
                         }
                     }
 
                     //check ip address
-                    else if (IpReg.IsMatch(ctrl.Text) && (ctrl.Name == "SlvIPText" && itr.Name == "Eth")) itr.slaveIP = ctrl.Text;
+                    else if (IpReg.IsMatch(ctrl.Text) && (ctrl.Name == "SlvIPText" && itr.Name == "Eth"))
+                    {
+                        itr.slaveIP = ctrl.Text;
+                        break;
+                    }
 
                     //restore previous text
                     else RestorePrevText(ctrl, itr);
@@ -393,20 +416,21 @@ namespace stend
             {
                 if (itr.Name == "Eth")
                 {
-                    if (TcpMasterCheck.Checked == true)
+                    if (TcpMasterCheck.Checked)
                     {
                         itr.asMaster = true;
                         SlvIDText.ReadOnly = false;
                         SlvIPText.ReadOnly = false;
+                        break;
                     }
                     else
                     {
                         itr.asMaster = false;
                         SlvIDText.ReadOnly = true;
                         SlvIPText.ReadOnly = true;
+                        break;
                     }
                 }
-                break;
             }
         }
         #endregion

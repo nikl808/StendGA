@@ -46,7 +46,7 @@ namespace stend
         public void HandleErrorMessage(string error) { MessageBox.Show(error, "Error: "); }
         
         //Create new string message with custom error
-        public void HandleErrorLog(string caption, string text){ AddNewLine(caption,text); }
+        public void HandleErrorLog(string caption, string text){ AddNewLine(text,caption); }
                 
         //Create new string message with system/modbus errors
         public void HandleExceptionLog(Exception ex)

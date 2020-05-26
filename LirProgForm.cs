@@ -74,7 +74,7 @@ namespace stend
                          progRequest["addr"] +
                          progRequest["protocol"] +
                          progRequest["speed"] +
-                         progRequest["bit"] + "0D";
+                         progRequest["bit"];
             byte[] send = StringToByteArray(raw);
             byte[] receive = new byte[6];
 
@@ -86,7 +86,7 @@ namespace stend
                 comport.Parity = "N,8,1";
                 comport.ReceiveMsgLenght = 6;
                 comport.OpenCom();
-                comport.SendToCom(send);
+                receive = comport.SendToCom(send);
             }
 
             //compare

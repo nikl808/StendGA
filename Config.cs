@@ -53,7 +53,7 @@ namespace stend
         public virtual float SenRangeUnitMax { get; set; }
         public virtual int ModRangeUnitMin { get; set; }
         public virtual int ModRangeUnitMax { get; set; }
-        public virtual int slaveID { get; set; }
+        public virtual byte slaveID { get; set; }
        
         public virtual bool asMaster { get; set; }
     }
@@ -79,14 +79,14 @@ namespace stend
     //tcp config
     public class tConfig : Config
     {
-        public override int slaveID { get; set; }
+        public override byte slaveID { get; set; }
         public override string ethProtocol { get; set; }
         public override string slaveIP { get; set; }
         public override bool asMaster { get; set; }
         
         public tConfig() { }
         
-        public tConfig(string ethName, string protocol, int ID, string slaveAddr, bool isMaster)
+        public tConfig(string ethName, string protocol, byte ID, string slaveAddr, bool isMaster)
             :base(ethName)
         {
             slaveID = ID;
@@ -129,20 +129,4 @@ namespace stend
             SenRangeUnitMax = measureMax;
         }
     }
-
-    /*
-     * delete
-    static class ConfigClone
-    {
-        public static Hardware Clone(Hardware obj)
-        {
-            using (var ms = new MemoryStream())
-            {
-                XmlSerializer xs = new XmlSerializer(typeof(Hardware));
-                xs.Serialize(ms, obj);
-                ms.Position = 0;
-                return (Hardware)xs.Deserialize(ms);
-            }
-        }
-    }*/
 }
