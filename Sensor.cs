@@ -3,22 +3,25 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace stend
 {
     abstract class Sensor
      {
          protected Uart currCom;
+         protected static TimeSpan ts;
+         protected static double currCoord;
          
          public Sensor(Uart port) { currCom = port; }
 
-         public float Read() { return ReadSensor(); }
+         public double Read() { return ReadSensor(); }
 
          //default implementation
-         protected virtual float ReadSensor() 
+         protected virtual double ReadSensor() 
          {
              Error.instance.HandleErrorMessage("Sensor: wrong operation");
-             return 0.0f;
+             return 0.0;
          }
      }
 
@@ -56,13 +59,13 @@ namespace stend
              }
          }
 
-         protected override float ReadSensor()
+         protected override double ReadSensor()
          {
              int currVal = 0;
              currCom.ReadSlot(slot, channel, numChan, ref currVal);
-
-             float AiValue = (float)((currVal - startHw) / hwRange) * sensRange + startSens;
-             return (float)Math.Round(AiValue, 3);
+             
+             var AiValue = (double)(currVal - startHw) / hwRange * sensRange + startSens;
+             return Math.Round(AiValue, 3);
          }
      }
 
@@ -70,100 +73,103 @@ namespace stend
      class LirMoving : Sensor
      {
          public bool zero { get; set; }
-         private float zeroCoord = 0.0f;
+         private double zeroCoord = 0.0f;
          private float unit;
          private string addr;
          private string protocol;
-         
+         private Stopwatch timer;
+
          public LirMoving(Uart port, Hardware hw, string hwName, string SensorName) : base(port) 
          {
+             timer = new Stopwatch();
+
              foreach (Config cfg in hw)
              {
                  if (cfg.Name == currCom.ComPort)
                  {
                      protocol = cfg.uartProtocol;
                      addr = cfg.uartAddr;
-                     break;
                  }
 
-                 else if (cfg.Name == SensorName)
-                 {
-                     unit = cfg.SenRangeUnitMin;
-                     break;
-                 }
-             } 
+                 else if (cfg.Name == SensorName) unit = cfg.SenRangeUnitMax;
+             }
          }
 
-         protected override float ReadSensor()
+         protected override double ReadSensor()
          {
-             float currCoord = 0;
              byte[] receive;
 
              if (protocol == "Lir_ASCII")
              {
                  receive = currCom.SendToCom(new byte[3] { 35, Convert.ToByte(addr, 16), 97 });
-                 if (receive != null) ASCIItoValue(receive);
+                 if (receive.Length != 0)
+                 {
+                     timer.Stop();
+                     ts = timer.Elapsed;
+                     currCoord = ASCIItoValue(receive);
+                 }
              }
              else if (protocol == "Lir_BCD")
              {
                  receive = currCom.SendToCom(new byte[2] { 52, Convert.ToByte(addr, 16) });
-                 if (receive != null) BCDtoValue(receive);
+                 if (receive.Length != 0)
+                 {
+                     timer.Stop();
+                     ts = timer.Elapsed;
+                     currCoord = BCDtoValue(receive);
+                 }
              }
 
              if (zero) zeroCoord = currCoord;
-           
-             return currCoord = (currCoord - zeroCoord) * unit;
-         }
+             
+             currCoord = (currCoord - zeroCoord) * unit;
 
-         //converters
-         private float ASCIItoValue(byte[] bte)
-         {
-             string receiveCom = Encoding.ASCII.GetString(bte, 0, 8);
-             receiveCom = Regex.Replace(receiveCom, @"[>\r\n\t\0]", "");
-             float currCoord = float.Parse(receiveCom);
+             timer.Start();
+             currCoord = Math.Round(currCoord, 3);
              return currCoord;
          }
 
-         private float BCDtoValue(byte[] bte)
+         //converters
+         private double ASCIItoValue(byte[] bte)
+         {
+             string receiveCom = Encoding.ASCII.GetString(bte, 0, 8);
+             receiveCom = Regex.Replace(receiveCom, @"[>\r\n\t]", "");
+
+             return double.Parse(receiveCom);
+         }
+
+         private double BCDtoValue(byte[] bte)
          {
              string receiveCom = BitConverter.ToString(bte);
              string[] arr = receiveCom.Split('-');
              Array.Copy(arr, 1, arr, 0, arr.Length - 1);
              StringBuilder reverse = new StringBuilder();
-             for (int i = arr.Length - 1; i >= 0; i--)
-                 if (!arr[i].Contains("0B")) reverse.Append(arr[i]);
-             float currCoord = float.Parse(reverse.ToString());
-             return currCoord;
+             for (int i = arr.Length - 1; i >= 0; i--) if (!arr[i].Contains("0B")) reverse.Append(arr[i]);
+             return double.Parse(reverse.ToString());
          }
      }
 
-     //modify to callback
      class LirSpeed : Sensor
      {
-         private float prevCoord = 0.0f;
-         private float currTime = 0.0f;
-         private float prevTime = 0.0f;
-         private float currValue = 0.0f;
+         private double prevCoord = 0.0f;
          private string unit;
 
-         public LirSpeed(Uart port, Hardware hw, string hwName, string SensorName) : base(port)
+         public LirSpeed(Uart port, Hardware hw, string SensorName) : base(port)
          {
-             foreach (Config cfg in hw)
-             {
-                 if (cfg.Name == hwName) unit = cfg.SensorUnit;
-                 break;
-             }
+             foreach (Config cfg in hw) if (cfg.Name == SensorName) unit = cfg.SensorUnit;
          }
 
-         protected override float ReadSensor()
+         protected override double ReadSensor()
          {
-             float speed = 0.0f;
-             if (unit == "mm/s") speed = (currValue - prevCoord) * (1000 / currTime - prevTime);
-             else if (unit == "m/s") speed = (currValue - prevCoord) * (currTime - prevTime);
+             double speed = 0.0f;
+             int timespan = 0;
+             if (ts.Milliseconds == 0) timespan = 1;
+             else timespan = ts.Milliseconds;
+ 
+             speed = Math.Abs((currCoord - prevCoord) / (timespan*0.001));
              
-             prevCoord = currValue;
-             prevTime = currTime;
-             return speed;
+             prevCoord = currCoord;
+             return Math.Round(speed,3);
          }
      }
 }

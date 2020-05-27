@@ -61,7 +61,7 @@ namespace stend
         public virtual void Dispose() { UART.Close(hPort); }
     }
 
-    class XPacComport : Uart
+    class XPacComportGeneric : Uart
     {     
         protected override byte[] Send(byte[] data)
         {
@@ -73,8 +73,30 @@ namespace stend
                 Error.instance.HandleErrorLog("ERROR::UART:: " + ComPort + ":", "fail send data");
                 return new byte[0];
             }
-            ret = UART.BinRecv(hPort, receive, ReceiveMsgLenght);
+            ret = UART.BinRecv(hPort, receive,ReceiveMsgLenght);
             if (!ret) 
+            {
+                Error.instance.HandleErrorLog("ERROR::UART:: " + ComPort + ":", "fail receive data");
+                return new byte[0];
+            }
+            return receive;
+        }
+    }
+
+    class XPacComportSpec : Uart
+    {
+        protected override byte[] Send(byte[] data)
+        {
+            byte[] receive = new byte[ReceiveMsgLenght];
+
+            bool ret = UART.BinSend(hPort, data, (uint)data.Length);
+            if (!ret)
+            {
+                Error.instance.HandleErrorLog("ERROR::UART:: " + ComPort + ":", "fail send data");
+                return new byte[0];
+            }
+            ret = UART.Recv(hPort, receive);
+            if (!ret)
             {
                 Error.instance.HandleErrorLog("ERROR::UART:: " + ComPort + ":", "fail receive data");
                 return new byte[0];

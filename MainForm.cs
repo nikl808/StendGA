@@ -13,7 +13,7 @@ namespace stend
     {
         private Timer timer;
         private XPacBackplane backplane;
-        private XPacComport lirCom;
+        private Uart lirCom;
         private ModbusTcpSlave slave;
         private AnalogSensor StrainLoad;
         private AnalogSensor Pressure;
@@ -28,7 +28,7 @@ namespace stend
             InitializeComponent();
             
             timer = new Timer();
-            timer.Interval = 50;
+            timer.Interval = 10;
             timer.Tick += MainHandler;
             
             MainForm_Init();
@@ -53,20 +53,29 @@ namespace stend
             backplane.Parity = "N,8,1";
             backplane.ReceiveMsgLenght = 0;
 
-            lirCom = new XPacComport();
-            
             foreach (Config itr in cfg)
             {
                 //setup com for lir
                 if (itr.Name == "COM3")
                 {
+                    if (itr.uartProtocol == "Lir_ASCII")
+                    {
+                        lirCom = new XPacComportSpec();
+                        lirCom.ReceiveMsgLenght = 13;
+                    }
+                    else if (itr.uartProtocol == "Lir_BCD")
+                    {
+                        lirCom = new XPacComportGeneric(); 
+                        lirCom.ReceiveMsgLenght = 6;
+                    }
+                    else if (itr.uartProtocol == "Generic")
+                    {
+                        lirCom = new XPacComportGeneric();
+                        lirCom.ReceiveMsgLenght = 50;
+                    }
                     lirCom.ComPort = itr.Name;
                     lirCom.Baudrate = itr.uartBaudrate;
                     lirCom.Parity = "N,8,1";
-
-                    if (itr.uartProtocol == "Lir_ASCII") lirCom.ReceiveMsgLenght = 8;
-                    else if (itr.uartProtocol == "Lir_BCD") lirCom.ReceiveMsgLenght = 6;
-                    else if (itr.uartProtocol == "Generic") lirCom.ReceiveMsgLenght = 50;
                 }
 
                 //Init Labels
@@ -88,7 +97,7 @@ namespace stend
             Pressure= new AnalogSensor(backplane, cfg, "Slot1", "Pressure",0,8);
             Stretch = new AnalogSensor(backplane, cfg, "Slot1", "Pressure",1,8);
             moving = new LirMoving(lirCom, cfg, lirCom.ComPort, "Moving");
-            speed = new LirSpeed(lirCom, cfg, lirCom.ComPort, "Speed");
+            speed = new LirSpeed(lirCom, cfg, "Speed");
 
             //open backplane
             statusBar.Text = "";
@@ -125,22 +134,21 @@ namespace stend
         #region main program handler
         public void MainHandler(object sender, EventArgs e)
         {
-            float strLoad, press, stretch, mov, spd;
+            double strLoad, press, stretch, mov, spd;
 
             strLoad = StrainLoad.Read();
-            //press = Pressure.Read();
-            //stretch = Stretch.Read();
-            //mov = moving.Read();
-            //spd = speed.Read();
+            press = Pressure.Read();
+            stretch = Stretch.Read();
+            mov = moving.Read();
+            spd = speed.Read();
 
             //Display readable values
             
-                //StrainLoadText.Text = strLoad.ToString();
-                //ComprText.Text = press.ToString();
-                //StrText.Text = stretch.ToString();
-                //MovingText.Text = mov.ToString();
-                //SpdText.Text = spd.ToString();
-            
+                StrainLoadText.Text = strLoad.ToString();
+                ComprText.Text = press.ToString();
+                StrText.Text = stretch.ToString();
+                MovingText.Text = mov.ToString();
+                SpdText.Text = spd.ToString();
         }
         #endregion
 

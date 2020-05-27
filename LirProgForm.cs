@@ -79,7 +79,7 @@ namespace stend
             byte[] receive = new byte[6];
 
             //open com and send data
-            using (XPacComport comport = new XPacComport())
+            using (XPacComportGeneric comport = new XPacComportGeneric())
             {
                 comport.ComPort = "COM3";
                 comport.Baudrate = "19200";
