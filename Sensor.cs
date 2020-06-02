@@ -7,6 +7,7 @@ using System.Diagnostics;
 
 namespace stend
 {
+    #region Sensor
     abstract class Sensor
      {
          protected Uart currCom;
@@ -24,16 +25,17 @@ namespace stend
              return 0.0;
          }
      }
+    #endregion
 
-     //Read analog input signals from module
-     class AnalogSensor : Sensor
+    #region Analog inputs
+    class AnalogSensor : Sensor
      {
-         private int startHw;
-         private int hwRange;
          private int slot;
          private int channel;
+         private int nullHw;
          private int numChan;
-         private float startSens;
+         private float nullSens;
+         private int hwRange;
          private float sensRange;
          
          public AnalogSensor(Uart port, Hardware hw, string hwName, string SensorName, int chan, int numCh) : base(port)
@@ -46,7 +48,7 @@ namespace stend
                  if (cfg.Name == hwName)
                  {
                      hwRange = cfg.ModRangeUnitMax - cfg.ModRangeUnitMin;
-                     startHw = cfg.ModRangeUnitMin;
+                     nullHw = cfg.ModRangeUnitMin;
                      if (hwName == "Slot1") slot = 1;
                      else if (hwName == "Slot2") slot = 2;
                      else if (hwName == "Slot3") slot = 3;
@@ -54,7 +56,7 @@ namespace stend
                  else if (cfg.Name == SensorName)
                  {
                      sensRange = cfg.SenRangeUnitMax - cfg.SenRangeUnitMin;
-                     startSens = cfg.SenRangeUnitMin;
+                     nullSens = cfg.SenRangeUnitMin;
                  }
              }
          }
@@ -62,17 +64,20 @@ namespace stend
          protected override double ReadSensor()
          {
              int currVal = 0;
+             //Read controller module
              currCom.ReadSlot(slot, channel, numChan, ref currVal);
-             
-             var AiValue = (double)(currVal - startHw) / hwRange * sensRange + startSens;
+             //calc linear scale
+             var AiValue = (double)(currVal - nullHw) / hwRange * sensRange + nullSens;
              return Math.Round(AiValue, 3);
          }
      }
+    #endregion
 
-     //Read lir-da coordinates
-     class LirMoving : Sensor
+    #region lir moving
+    class LirMoving : Sensor
      {
-         public bool zero { get; set; }
+         public bool SetZero { get; set; }
+         public bool SetActual { get; set; }
          private double zeroCoord = 0.0f;
          private float unit;
          private string addr;
@@ -82,6 +87,7 @@ namespace stend
          public LirMoving(Uart port, Hardware hw, string hwName, string SensorName) : base(port) 
          {
              timer = new Stopwatch();
+             SetActual = true;
 
              foreach (Config cfg in hw)
              {
@@ -120,10 +126,16 @@ namespace stend
                  }
              }
 
-             if (zero) zeroCoord = currCoord;
+             if (SetZero)
+             {
+                 zeroCoord = currCoord;
+                 SetZero = false;
+             }
+             else if (SetActual) zeroCoord = 0;
              
              currCoord = (currCoord - zeroCoord) * unit;
 
+             timer.Reset();
              timer.Start();
              currCoord = Math.Round(currCoord, 3);
              return currCoord;
@@ -148,15 +160,22 @@ namespace stend
              return double.Parse(reverse.ToString());
          }
      }
+    #endregion
 
-     class LirSpeed : Sensor
+    #region lir speed
+    class LirSpeed : Sensor
      {
          private double prevCoord = 0.0f;
-         private string unit;
-
+         private string movUnit;
+         private string spdUnit;
+         
          public LirSpeed(Uart port, Hardware hw, string SensorName) : base(port)
          {
-             foreach (Config cfg in hw) if (cfg.Name == SensorName) unit = cfg.SensorUnit;
+             foreach (Config cfg in hw) 
+             {
+                 if (cfg.Name == SensorName) spdUnit = cfg.SensorUnit;
+                 if (cfg.Name == "Moving") movUnit =  cfg.SensorUnit;
+             }
          }
 
          protected override double ReadSensor()
@@ -165,11 +184,16 @@ namespace stend
              int timespan = 0;
              if (ts.Milliseconds == 0) timespan = 1;
              else timespan = ts.Milliseconds;
- 
-             speed = Math.Abs((currCoord - prevCoord) / (timespan*0.001));
+
+             if (prevCoord != currCoord)
+             {
+                 if ((movUnit == "m" && spdUnit == "m/s") | (movUnit == "mm" && spdUnit == "mm/s")) speed = Math.Abs((currCoord - prevCoord) / (timespan * 0.001));
+                 else speed = Math.Abs((currCoord - prevCoord) * 0.001 / (timespan * 0.001));
+                 prevCoord = currCoord;
+             }
              
-             prevCoord = currCoord;
              return Math.Round(speed,3);
          }
      }
+    #endregion
 }

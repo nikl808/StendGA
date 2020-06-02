@@ -83,15 +83,6 @@ namespace stend
             slave.Dispose();
         }
 
-         private void Modbus_Request_Event(object sender, Modbus.Device.ModbusSlaveRequestEventArgs e)
-        {
-            //request from master
-            byte fc = e.Message.FunctionCode;
-            byte[] data = e.Message.MessageFrame;
-            byte[] byteStartAddress = new byte[] { data[3], data[2] };
-            byte[] byteNum = new byte[] { data[5], data[4] };
-            Int16 StartAddress = BitConverter.ToInt16(byteStartAddress, 0);
-            Int16 NumOfPoint = BitConverter.ToInt16(byteNum, 0);
-        }
+         private void Modbus_Request_Event(object sender, Modbus.Device.ModbusSlaveRequestEventArgs e) { }
     }
 }

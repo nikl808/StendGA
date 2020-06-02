@@ -29,6 +29,7 @@ namespace stend
         public byte[] SendToCom(byte[] data) { return Send(data); }
         public byte[] SendToCom(string Command) { return Send(Command); }
         public void ReadSlot(int slot,int channel,int totalch, ref int val) { Read(slot,channel,totalch,ref val); }
+        public void WriteSlot(int slot, int totalch, uint val){ Write(slot, totalch, val); }
 
         //Send data array to com
         protected virtual byte[] Send(byte[] data)
@@ -42,6 +43,11 @@ namespace stend
         { 
             Error.instance.HandleErrorMessage("UART: wrong operation"); 
             val = 0;
+        }
+
+        protected virtual void Write(int slot, int totalch, uint val)
+        {
+            Error.instance.HandleErrorMessage("UART: wrong operation");
         }
 
         //Send command to comprt
@@ -115,6 +121,12 @@ namespace stend
                 Error.instance.HandleErrorLog("ERROR::BACKPLANE:: ", "Can't read slot " + slot.ToString());
                 val = 0;
             }
+        }
+
+        protected override void Write(int slot,int totalch, uint val)
+        {
+            bool ret = PACNET.PAC_IO.WriteDO(hPort, slot, totalch, val);
+            if (!ret) Error.instance.HandleErrorLog("ERROR::BACKPLANE:: ", "Can't write value: " + "to slot " + slot.ToString());
         }
     }
 }

@@ -40,7 +40,7 @@
             this.MovLabel = new System.Windows.Forms.Label();
             this.ComprLabel = new System.Windows.Forms.Label();
             this.StrLabel = new System.Windows.Forms.Label();
-            this.button7 = new System.Windows.Forms.Button();
+            this.ZABtn = new System.Windows.Forms.Button();
             this.StrainLoadLabel = new System.Windows.Forms.Label();
             this.SpdText = new System.Windows.Forms.TextBox();
             this.MovingText = new System.Windows.Forms.TextBox();
@@ -55,14 +55,14 @@
             this.label4 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.HiPressBtn = new System.Windows.Forms.Button();
+            this.LoPressBtn = new System.Windows.Forms.Button();
+            this.OilOnOffBtn = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.MovStpBtn = new System.Windows.Forms.Button();
+            this.MovBkwdBtn = new System.Windows.Forms.Button();
+            this.MovFwdBtn = new System.Windows.Forms.Button();
             this.LogPage = new System.Windows.Forms.TabPage();
             this.LogList = new System.Windows.Forms.ListBox();
             this.statusBar = new System.Windows.Forms.StatusBar();
@@ -116,6 +116,7 @@
             this.ConEnCheck.Size = new System.Drawing.Size(119, 20);
             this.ConEnCheck.TabIndex = 3;
             this.ConEnCheck.Text = "Enable control";
+            this.ConEnCheck.CheckStateChanged += new System.EventHandler(this.ConEnCheck_CheckStateChanged);
             // 
             // panel3
             // 
@@ -123,7 +124,7 @@
             this.panel3.Controls.Add(this.MovLabel);
             this.panel3.Controls.Add(this.ComprLabel);
             this.panel3.Controls.Add(this.StrLabel);
-            this.panel3.Controls.Add(this.button7);
+            this.panel3.Controls.Add(this.ZABtn);
             this.panel3.Controls.Add(this.StrainLoadLabel);
             this.panel3.Controls.Add(this.SpdText);
             this.panel3.Controls.Add(this.MovingText);
@@ -143,55 +144,57 @@
             // SpdLabel
             // 
             this.SpdLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.SpdLabel.Location = new System.Drawing.Point(194, 200);
+            this.SpdLabel.Location = new System.Drawing.Point(190, 200);
             this.SpdLabel.Name = "SpdLabel";
-            this.SpdLabel.Size = new System.Drawing.Size(37, 20);
+            this.SpdLabel.Size = new System.Drawing.Size(45, 20);
             this.SpdLabel.Text = "n/a";
             // 
             // MovLabel
             // 
             this.MovLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.MovLabel.Location = new System.Drawing.Point(194, 165);
+            this.MovLabel.Location = new System.Drawing.Point(190, 165);
             this.MovLabel.Name = "MovLabel";
-            this.MovLabel.Size = new System.Drawing.Size(37, 20);
+            this.MovLabel.Size = new System.Drawing.Size(45, 20);
             this.MovLabel.Text = "n/a";
             // 
             // ComprLabel
             // 
             this.ComprLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.ComprLabel.Location = new System.Drawing.Point(194, 89);
+            this.ComprLabel.Location = new System.Drawing.Point(190, 89);
             this.ComprLabel.Name = "ComprLabel";
-            this.ComprLabel.Size = new System.Drawing.Size(37, 20);
+            this.ComprLabel.Size = new System.Drawing.Size(45, 20);
             this.ComprLabel.Text = "n/a";
             // 
             // StrLabel
             // 
             this.StrLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.StrLabel.Location = new System.Drawing.Point(194, 127);
+            this.StrLabel.Location = new System.Drawing.Point(190, 127);
             this.StrLabel.Name = "StrLabel";
-            this.StrLabel.Size = new System.Drawing.Size(37, 20);
+            this.StrLabel.Size = new System.Drawing.Size(45, 20);
             this.StrLabel.Text = "n/a";
             // 
-            // button7
+            // ZABtn
             // 
-            this.button7.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.button7.Location = new System.Drawing.Point(237, 162);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(72, 23);
-            this.button7.TabIndex = 25;
-            this.button7.Text = "Zero";
+            this.ZABtn.Enabled = false;
+            this.ZABtn.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
+            this.ZABtn.Location = new System.Drawing.Point(237, 162);
+            this.ZABtn.Name = "ZABtn";
+            this.ZABtn.Size = new System.Drawing.Size(72, 23);
+            this.ZABtn.TabIndex = 25;
+            this.ZABtn.Text = "zero/act.";
+            this.ZABtn.Click += new System.EventHandler(this.ZABtn_Click);
             // 
             // StrainLoadLabel
             // 
             this.StrainLoadLabel.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular);
-            this.StrainLoadLabel.Location = new System.Drawing.Point(194, 50);
+            this.StrainLoadLabel.Location = new System.Drawing.Point(190, 50);
             this.StrainLoadLabel.Name = "StrainLoadLabel";
-            this.StrainLoadLabel.Size = new System.Drawing.Size(37, 20);
+            this.StrainLoadLabel.Size = new System.Drawing.Size(45, 20);
             this.StrainLoadLabel.Text = "n/a";
             // 
             // SpdText
             // 
-            this.SpdText.Location = new System.Drawing.Point(89, 197);
+            this.SpdText.Location = new System.Drawing.Point(85, 197);
             this.SpdText.Name = "SpdText";
             this.SpdText.ReadOnly = true;
             this.SpdText.Size = new System.Drawing.Size(100, 23);
@@ -199,7 +202,7 @@
             // 
             // MovingText
             // 
-            this.MovingText.Location = new System.Drawing.Point(89, 162);
+            this.MovingText.Location = new System.Drawing.Point(85, 162);
             this.MovingText.Name = "MovingText";
             this.MovingText.ReadOnly = true;
             this.MovingText.Size = new System.Drawing.Size(100, 23);
@@ -207,7 +210,7 @@
             // 
             // StrText
             // 
-            this.StrText.Location = new System.Drawing.Point(88, 124);
+            this.StrText.Location = new System.Drawing.Point(84, 124);
             this.StrText.Name = "StrText";
             this.StrText.ReadOnly = true;
             this.StrText.Size = new System.Drawing.Size(100, 23);
@@ -215,7 +218,7 @@
             // 
             // ComprText
             // 
-            this.ComprText.Location = new System.Drawing.Point(88, 86);
+            this.ComprText.Location = new System.Drawing.Point(84, 86);
             this.ComprText.Name = "ComprText";
             this.ComprText.ReadOnly = true;
             this.ComprText.Size = new System.Drawing.Size(100, 23);
@@ -223,7 +226,7 @@
             // 
             // StrainLoadText
             // 
-            this.StrainLoadText.Location = new System.Drawing.Point(88, 47);
+            this.StrainLoadText.Location = new System.Drawing.Point(84, 47);
             this.StrainLoadText.Name = "StrainLoadText";
             this.StrainLoadText.ReadOnly = true;
             this.StrainLoadText.Size = new System.Drawing.Size(100, 23);
@@ -281,9 +284,9 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.button6);
-            this.panel2.Controls.Add(this.button5);
-            this.panel2.Controls.Add(this.button4);
+            this.panel2.Controls.Add(this.HiPressBtn);
+            this.panel2.Controls.Add(this.LoPressBtn);
+            this.panel2.Controls.Add(this.OilOnOffBtn);
             this.panel2.Location = new System.Drawing.Point(3, 39);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(430, 119);
@@ -297,39 +300,42 @@
             this.label2.Size = new System.Drawing.Size(100, 32);
             this.label2.Text = "Oil pump";
             // 
-            // button6
+            // HiPressBtn
             // 
-            this.button6.Location = new System.Drawing.Point(288, 50);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(119, 41);
-            this.button6.TabIndex = 2;
-            this.button6.Text = "Hi. pressure";
-            this.button6.Click += new System.EventHandler(this.MovBtn_click);
+            this.HiPressBtn.Enabled = false;
+            this.HiPressBtn.Location = new System.Drawing.Point(288, 50);
+            this.HiPressBtn.Name = "HiPressBtn";
+            this.HiPressBtn.Size = new System.Drawing.Size(119, 41);
+            this.HiPressBtn.TabIndex = 2;
+            this.HiPressBtn.Text = "Hi. pressure";
+            this.HiPressBtn.Click += new System.EventHandler(this.PmpBtn_click);
             // 
-            // button5
+            // LoPressBtn
             // 
-            this.button5.Location = new System.Drawing.Point(153, 50);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(119, 41);
-            this.button5.TabIndex = 1;
-            this.button5.Text = "Low pressure";
-            this.button5.Click += new System.EventHandler(this.MovBtn_click);
+            this.LoPressBtn.Enabled = false;
+            this.LoPressBtn.Location = new System.Drawing.Point(153, 50);
+            this.LoPressBtn.Name = "LoPressBtn";
+            this.LoPressBtn.Size = new System.Drawing.Size(119, 41);
+            this.LoPressBtn.TabIndex = 1;
+            this.LoPressBtn.Text = "Low pressure";
+            this.LoPressBtn.Click += new System.EventHandler(this.PmpBtn_click);
             // 
-            // button4
+            // OilOnOffBtn
             // 
-            this.button4.Location = new System.Drawing.Point(17, 50);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(119, 41);
-            this.button4.TabIndex = 0;
-            this.button4.Text = "On/Off";
-            this.button4.Click += new System.EventHandler(this.MovBtn_click);
+            this.OilOnOffBtn.Enabled = false;
+            this.OilOnOffBtn.Location = new System.Drawing.Point(17, 50);
+            this.OilOnOffBtn.Name = "OilOnOffBtn";
+            this.OilOnOffBtn.Size = new System.Drawing.Size(119, 41);
+            this.OilOnOffBtn.TabIndex = 0;
+            this.OilOnOffBtn.Text = "On/Off";
+            this.OilOnOffBtn.Click += new System.EventHandler(this.PmpBtn_click);
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.button3);
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.MovStpBtn);
+            this.panel1.Controls.Add(this.MovBkwdBtn);
+            this.panel1.Controls.Add(this.MovFwdBtn);
             this.panel1.Location = new System.Drawing.Point(3, 182);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(430, 129);
@@ -343,32 +349,35 @@
             this.label1.Size = new System.Drawing.Size(210, 29);
             this.label1.Text = "Cylinder movement";
             // 
-            // button3
+            // MovStpBtn
             // 
-            this.button3.Location = new System.Drawing.Point(288, 57);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(119, 41);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Stop";
-            this.button3.Click += new System.EventHandler(this.PmpBtn_click);
+            this.MovStpBtn.Enabled = false;
+            this.MovStpBtn.Location = new System.Drawing.Point(288, 57);
+            this.MovStpBtn.Name = "MovStpBtn";
+            this.MovStpBtn.Size = new System.Drawing.Size(119, 41);
+            this.MovStpBtn.TabIndex = 2;
+            this.MovStpBtn.Text = "Stop";
+            this.MovStpBtn.Click += new System.EventHandler(this.MovBtn_click);
             // 
-            // button2
+            // MovBkwdBtn
             // 
-            this.button2.Location = new System.Drawing.Point(153, 57);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(119, 41);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Backward";
-            this.button2.Click += new System.EventHandler(this.PmpBtn_click);
+            this.MovBkwdBtn.Enabled = false;
+            this.MovBkwdBtn.Location = new System.Drawing.Point(153, 57);
+            this.MovBkwdBtn.Name = "MovBkwdBtn";
+            this.MovBkwdBtn.Size = new System.Drawing.Size(119, 41);
+            this.MovBkwdBtn.TabIndex = 1;
+            this.MovBkwdBtn.Text = "Backward";
+            this.MovBkwdBtn.Click += new System.EventHandler(this.MovBtn_click);
             // 
-            // button1
+            // MovFwdBtn
             // 
-            this.button1.Location = new System.Drawing.Point(17, 57);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(119, 41);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Forward";
-            this.button1.Click += new System.EventHandler(this.PmpBtn_click);
+            this.MovFwdBtn.Enabled = false;
+            this.MovFwdBtn.Location = new System.Drawing.Point(17, 57);
+            this.MovFwdBtn.Name = "MovFwdBtn";
+            this.MovFwdBtn.Size = new System.Drawing.Size(119, 41);
+            this.MovFwdBtn.TabIndex = 0;
+            this.MovFwdBtn.Text = "Forward";
+            this.MovFwdBtn.Click += new System.EventHandler(this.MovBtn_click);
             // 
             // LogPage
             // 
@@ -405,6 +414,7 @@
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "StendGA";
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
             this.MainTabControl.ResumeLayout(false);
             this.ControlPage.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
@@ -425,14 +435,14 @@
         private System.Windows.Forms.ListBox LogList;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button HiPressBtn;
+        private System.Windows.Forms.Button LoPressBtn;
+        private System.Windows.Forms.Button OilOnOffBtn;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button MovStpBtn;
+        private System.Windows.Forms.Button MovBkwdBtn;
+        private System.Windows.Forms.Button MovFwdBtn;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label StrainLoadLabel;
         private System.Windows.Forms.TextBox SpdText;
@@ -450,7 +460,7 @@
         private System.Windows.Forms.Label MovLabel;
         private System.Windows.Forms.Label ComprLabel;
         private System.Windows.Forms.Label StrLabel;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button ZABtn;
         private System.Windows.Forms.StatusBar statusBar;
         private System.Windows.Forms.CheckBox ConEnCheck;
     }

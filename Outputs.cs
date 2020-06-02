@@ -7,38 +7,55 @@ namespace stend
 {
     class Outputs
     {
-        public IOutputState State { get; set; }
- 
-        public Outputs(IOutputState state) { State = state; }
- 
-        public void ChannelOn() { State.On(this); }
+        private XPacBackplane backp;
+        private Utils bits;
+        private int currSlot;
+        private int numCh;
+        private uint isOn;
+        private uint pumpState;
+        private uint outputsState;
         
-        public void ChannelOff() { State.Off(this); }
+        public Outputs(XPacBackplane bp, int slot, int totalch) 
+        { 
+            backp = bp;
+            bits = new Utils();
+            currSlot = slot;
+            numCh = totalch;
+        }
+
+        public void SetChannel(int channel) 
+        {
+            uint currState = 0;
+
+            if (channel == 0)
+            {
+                if (bits.IsBit(isOn, 0)) bits.InvBit(ref isOn, 0);
+                else bits.SetBit(out isOn, channel);
+                backp.WriteSlot(currSlot, numCh, isOn);
+                outputsState = isOn;
+            }
+
+            //if pump is on
+            if (bits.IsBit(isOn, 0))
+            {
+                if (channel == 1 | channel == 2) bits.SetBit(out pumpState, channel);
+
+                //if pump pressure is selected
+                if (pumpState != 0)
+                {
+                    bits.SetBit(out currState, channel);
+                    currState |= isOn | pumpState;
+                    backp.WriteSlot(currSlot, numCh, currState);
+                    outputsState = currState;
+                }
+            }
+            else ResetAll();
+        }
+
+        public void ResetAll() 
+        { 
+            backp.WriteSlot(currSlot, numCh, 0x0);
+            pumpState = 0;
+        }
     }
-
-    interface IOutputState
-    {
-        void On(Outputs channel);
-        void Off(Outputs channel);
-    }
-
-
-    class DOState : IOutputState
-    {
-        public void On(Outputs channel) { channel.State = new DOState(); }
-        public void Off(Outputs channel) { channel.State = new DOState(); }
-    }
-
-
-    /*
-    static void Main(string[] args)
-    {
-        Water water = new Water(new LiquidWaterState());
-        water.Heat();
-        water.Frost();
-        water.Frost();
- 
-        Console.Read();
-    }
- */
 }
