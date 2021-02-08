@@ -46,14 +46,15 @@ namespace stend
         public virtual string uartBaudrate { get; set; }
         public virtual string uartProtocol { get; set; }        
         public virtual string ethProtocol { get; set; }
+        public virtual string uartAddr { get; set; }
         public virtual string slaveIP { get; set; }
-        public virtual string Type { get; set; }
         public virtual string SensorUnit { get; set; }
         public virtual float SenRangeUnitMin { get; set; }
         public virtual float SenRangeUnitMax { get; set; }
         public virtual int ModRangeUnitMin { get; set; }
         public virtual int ModRangeUnitMax { get; set; }
-        public virtual int slaveID { get; set; }
+        public virtual byte slaveID { get; set; }
+       
         public virtual bool asMaster { get; set; }
     }
 
@@ -62,28 +63,30 @@ namespace stend
     {
         public override string uartBaudrate { get; set; }
         public override string uartProtocol { get; set; }
+        public override string uartAddr { get; set; }
         
         public uConfig() { }
 
-        public uConfig(string comName, string baudrate,string protocol)
+        public uConfig(string comName, string baudrate,string protocol, string addr)
             : base(comName)
         {
             uartBaudrate = baudrate;
-            uartProtocol = protocol;   
+            uartProtocol = protocol;
+            uartAddr = addr;
         }
     }
 
     //tcp config
     public class tConfig : Config
     {
-        public override int slaveID { get; set; }
+        public override byte slaveID { get; set; }
         public override string ethProtocol { get; set; }
         public override string slaveIP { get; set; }
         public override bool asMaster { get; set; }
         
         public tConfig() { }
         
-        public tConfig(string ethName, string protocol, int ID, string slaveAddr, bool isMaster)
+        public tConfig(string ethName, string protocol, byte ID, string slaveAddr, bool isMaster)
             :base(ethName)
         {
             slaveID = ID;
@@ -98,14 +101,12 @@ namespace stend
     {
         public override int ModRangeUnitMin { get; set; }
         public override int ModRangeUnitMax { get; set; }
-        public override string Type { get; set; }
         
         public mConfig() { }
 
-        public mConfig(string Slot, string type, int rangeUnitMin, int rangeUnitMax)
+        public mConfig(string Slot, int rangeUnitMin, int rangeUnitMax)
             :base(Slot)
         {
-            Type = type;
             ModRangeUnitMin = rangeUnitMin;
             ModRangeUnitMax = rangeUnitMax;
         }
@@ -126,20 +127,6 @@ namespace stend
             SensorUnit = unit;
             SenRangeUnitMin = measureMin;
             SenRangeUnitMax = measureMax;
-        }
-    }
-
-    static class ConfigClone
-    {
-        public static Hardware Clone(Hardware obj)
-        {
-            using (var ms = new MemoryStream())
-            {
-                XmlSerializer xs = new XmlSerializer(typeof(Hardware));
-                xs.Serialize(ms, obj);
-                ms.Position = 0;
-                return (Hardware)xs.Deserialize(ms);
-            }
         }
     }
 }
